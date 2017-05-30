@@ -18,6 +18,6 @@
     </packageTypes>
   </metadata>
   <files>
-    <file src="..\..\binaries\TransportAdapter.WindowsService\*.*" target="Content\net452" />
+    <file src="..\..\binaries\TransportAdapter.WindowsService\**\*.*" target="Content" />
   </files>
 </package>

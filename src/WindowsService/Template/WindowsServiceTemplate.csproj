@@ -19,5 +19,6 @@
       <Output TaskParameter="Include" ItemName="SourceFiles" />
     </CreateItem>
     <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(SolutionDir)binaries\WindowsService\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(Content)" DestinationFolder="$(SolutionDir)binaries\WindowsService\%(RelativeDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>
