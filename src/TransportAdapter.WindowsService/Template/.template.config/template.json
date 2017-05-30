@@ -1,6 +1,6 @@
 ﻿{
-    "author": "Particular Software",
-    "classifications": [ "NServiceBus", "ServiceControl", "TransportAdapter", "WindowsService", "Host" ],
+    "author": "NServiceBus Ltd",
+    "classifications": ["nservicebus", "servicecontrol", "transportadapter", "windowsservice", "host"],
     "name": "Windows Service host for ServiceControl Transport Adapter",
     "tags": {
         "language": "C#"
