@@ -1,0 +1,20 @@
+﻿{
+    "author": "Particular Software",
+    "classifications": [ "NServiceBus", "ServiceControl", "TransportAdapter", "WindowsService", "Host" ],
+    "name": "Windows Service host for ServiceControl Transport Adapter",
+    "tags": {
+        "language": "C#"
+    },
+    "identity": "NServiceBus.Templates.ServiceControl.TransportAdapter.WindowsService",
+    "shortName": "sc-adapter-service",
+    "sourceName": "ServiceControl.TransportAdapter.WindowsService",
+    "symbols": {
+        "name": {
+            "type": "parameter",
+            "datatype": "string",
+            "replaces": "ADAPTER-NAME",
+            "defaultValue": "Particular.ServiceControl.Adapter",
+            "description": "The name of the adapter."
+        }
+    }
+}

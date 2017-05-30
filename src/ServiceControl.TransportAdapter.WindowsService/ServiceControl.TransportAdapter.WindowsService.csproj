@@ -3,4 +3,16 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".template.config\template.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
 </Project>
