@@ -1,13 +1,16 @@
 ## Usage
 
-The documentation for the `dotnet new` templates is located here https://github.com/dotnet/templating/wiki/%22Runnable-Project%22-Templates.
+The documentation for the `dotnet new` templates is located [here](https://github.com/dotnet/templating/wiki/%22Runnable-Project%22-Templates).
 
-The templates are installed in
+The templates are installed locally in
 
 ```
 C:\Users\[USERNAME]\.templateengine\dotnetcli\
 ```
+
 To use them, open the Developer Command Prompt for Visual Studio 2017.
+
+NOTE: The current version of `dotnet new` command does not list the `--install` option in the help output.
 
 ## Templates
 
