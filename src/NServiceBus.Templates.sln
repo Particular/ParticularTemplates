@@ -3,7 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceControl.TransportAdapter.WindowsService", "ServiceControl.TransportAdapter.WindowsService\ServiceControl.TransportAdapter.WindowsService.csproj", "{2467923F-D1EF-4E27-AE39-7103ECEC230E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceControl.TransportAdapter.WindowsService", "ServiceControl.TransportAdapter.WindowsService\ServiceControl.TransportAdapter.WindowsService.csproj", "{2467923F-D1EF-4E27-AE39-7103ECEC230E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsService", "WindowsService", "{F9033FB4-F475-4A74-B864-BD152F856B73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceSource", "WindowsService\Source\WindowsServiceSource.csproj", "{711668CC-CC13-42AA-A20B-A32A917DCB5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceTemplate", "WindowsService\Template\WindowsServiceTemplate.csproj", "{9BA5555D-519B-4E3C-A40A-81968A362E53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F} = {711668CC-CC13-42AA-A20B-A32A917DCB5F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +24,20 @@ Global
 		{2467923F-D1EF-4E27-AE39-7103ECEC230E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2467923F-D1EF-4E27-AE39-7103ECEC230E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2467923F-D1EF-4E27-AE39-7103ECEC230E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{711668CC-CC13-42AA-A20B-A32A917DCB5F} = {F9033FB4-F475-4A74-B864-BD152F856B73}
+		{9BA5555D-519B-4E3C-A40A-81968A362E53} = {F9033FB4-F475-4A74-B864-BD152F856B73}
 	EndGlobalSection
 EndGlobal

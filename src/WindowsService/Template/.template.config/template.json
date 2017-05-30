@@ -1,0 +1,20 @@
+﻿{
+  "author": "NServiceBus Ltd",
+  "classifications": [ "nservicebus" ],
+  "name": "NServiceBus WindowsService",
+  "groupIdentity": "nservicebus",
+  "identity": "NServiceBusWindowsService",
+  "shortName": "nsbservice",
+  "tags": {
+    "language": "C#"
+  },
+  "preferNameDirectory": true,
+  "sourceName": "NServiceBusWindowsService",
+  "symbols": {
+    "endpointname": {
+      "type": "parameter",
+      "defaultValue": "NServiceBusWindowsService",
+      "replaces": "endpointname"
+    }
+  }
+}

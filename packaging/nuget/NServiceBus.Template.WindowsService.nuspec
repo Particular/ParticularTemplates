@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>NServiceBus.Template.WindowsService</id>
+    <version>$version$</version>
+    <title>NServiceBus.Template.WindowsService</title>
+    <authors>$authors$</authors>
+    <owners>$owners$</owners>
+    <licenseUrl>$licenseUrl$</licenseUrl>
+    <projectUrl>$projectUrl$</projectUrl>
+    <iconUrl>$iconUrl$</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>For self hosting NServiceBus in a windows service. Add to a new ConsoleApplication.</description>
+    <copyright>$copyright$</copyright>
+    <tags>NServiceBus, SelfHost</tags>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="..\..\binaries\WindowsService\*.*" target="Content\net452" />
+  </files>
+</package>

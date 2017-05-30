@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuSpecFileName>NServiceBus.Template.WindowsService</NuSpecFileName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" />
+    <PackageReference Include="NuGetPackager" Version="0.6.1" />
+    <Content Include=".template.config\template.json" />
+  </ItemGroup>
+
+  <Target Name="BeforeBuildPackages" BeforeTargets="BuildPackages">
+    <RemoveDir Directories="$(SolutionDir)..\binaries\WindowsService\" />
+    <CreateItem Include="$(SolutionDir)WindowsService\Source\**\*.*" Exclude="$(SolutionDir)WindowsService\Source\obj\**\*.*;$(SolutionDir)WindowsService\Source\bin\**\*.*">
+      <Output TaskParameter="Include" ItemName="SourceFiles" />
+    </CreateItem>
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(SolutionDir)binaries\WindowsService\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
