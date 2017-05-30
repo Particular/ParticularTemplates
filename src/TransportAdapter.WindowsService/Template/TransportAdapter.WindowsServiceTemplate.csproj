@@ -4,7 +4,7 @@
     <TargetFramework>net452</TargetFramework>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NuSpecFileName>NServiceBus.Template.WindowsService</NuSpecFileName>
+    <NuSpecFileName>NServiceBus.Template.TransportAdapter.WindowsService</NuSpecFileName>
   </PropertyGroup>
 
   <ItemGroup>
