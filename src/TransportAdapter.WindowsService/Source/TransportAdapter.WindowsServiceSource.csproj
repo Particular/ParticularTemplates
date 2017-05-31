@@ -2,9 +2,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net46</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.0.2" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.*" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ServiceProcess" />
