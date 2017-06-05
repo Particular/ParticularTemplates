@@ -10,7 +10,7 @@
     <projectUrl>$projectUrl$</projectUrl>
     <iconUrl>$iconUrl$</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>For self hosting ServiceControl.TransportAdapter in a windows service. Add to a new ConsoleApplication.</description>
+    <description>dotnet new template for hosting a ServiceControl.TransportAdapter in a windows service.</description>
     <copyright>$copyright$</copyright>
     <tags>NServiceBus, SelfHost</tags>
     <packageTypes>
