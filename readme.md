@@ -16,7 +16,7 @@ NOTE: The current version of `dotnet new` command does not list the `--install` 
 
 ### NServiceBus Windows Service host
 
-This template contains the code necessary to host an NServiceBus endopoint in a Windows Service. To install it use
+This template contains the code necessary to host an NServiceBus endpoint in a Windows Service. To install it use
 
 ```
 dotnet new --install NServiceBus.Templates.WindowsService::*
