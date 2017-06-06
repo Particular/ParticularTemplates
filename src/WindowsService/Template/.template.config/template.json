@@ -1,7 +1,7 @@
 ﻿{
   "author": "NServiceBus Ltd",
   "classifications": [ "nservicebus" ],
-  "name": "NServiceBus WindowsService",
+  "name": "NServiceBus Windows Service",
   "groupIdentity": "nservicebus",
   "identity": "NServiceBusWindowsService",
   "shortName": "nsbservice",

@@ -1,7 +1,7 @@
 ﻿{
   "author": "NServiceBus Ltd",
   "classifications": [ "nservicebus", "servicecontrol", "transportadapter", "windowsservice", "host" ],
-  "name": "WindowsService for ServiceControl Transport Adapter",
+  "name": "ServiceControl Transport Adapter Windows Service",
   "tags": {
     "language": "C#",
     "type": "project"
