@@ -10,12 +10,5 @@
     "type": "project"
   },
   "preferNameDirectory": true,
-  "sourceName": "NServiceBusWindowsService",
-  "symbols": {
-    "endpointname": {
-      "type": "parameter",
-      "defaultValue": "NServiceBusWindowsService",
-      "replaces": "endpointname"
-    }
-  }
+  "sourceName": "NServiceBusWindowsService"
 }

@@ -28,6 +28,7 @@ class ProgramService : ServiceBase
             // to run interactive from a console or as a windows service
             if (Environment.UserInteractive)
             {
+                Console.Title = "NServiceBusWindowsService";
                 Console.CancelKeyPress += (sender, e) =>
                 {
                     service.OnStop();
@@ -51,7 +52,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var endpointConfiguration = new EndpointConfiguration("endpointname");
+            var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
             endpointConfiguration.UseSerialization<JsonSerializer>();
             //TODO: optionally choose a different error queue. Perhaps on a remote machine
             // https://docs.particular.net/nservicebus/recoverability/

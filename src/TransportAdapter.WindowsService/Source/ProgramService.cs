@@ -28,6 +28,7 @@ class ProgramService : ServiceBase
             // to run interactive from a console or as a windows service
             if (Environment.UserInteractive)
             {
+                Console.Title = "TransportAdapter.WindowsService";
                 Console.CancelKeyPress += (sender, e) =>
                 {
                     service.OnStop();
@@ -51,7 +52,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var adapterConfig = new TransportAdapterConfig<MsmqTransport, MsmqTransport>("ADAPTER-NAME");
+            var adapterConfig = new TransportAdapterConfig<MsmqTransport, MsmqTransport>("TransportAdapter.WindowsService");
 
             adapterConfig.CustomizeEndpointTransport(t =>
             {

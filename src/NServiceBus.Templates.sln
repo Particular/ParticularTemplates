@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsService", "WindowsService", "{F9033FB4-F475-4A74-B864-BD152F856B73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceSource", "WindowsService\Source\WindowsServiceSource.csproj", "{711668CC-CC13-42AA-A20B-A32A917DCB5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBusWindowsService", "WindowsService\Source\NServiceBusWindowsService.csproj", "{711668CC-CC13-42AA-A20B-A32A917DCB5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceTemplate", "WindowsService\Template\WindowsServiceTemplate.csproj", "{9BA5555D-519B-4E3C-A40A-81968A362E53}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceTemplate", "W
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TransportAdapter.WindowsService", "TransportAdapter.WindowsService", "{A19789A8-4255-4171-9678-B4E5B77FE19E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter.WindowsServiceSource", "TransportAdapter.WindowsService\Source\TransportAdapter.WindowsServiceSource.csproj", "{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter.WindowsService", "TransportAdapter.WindowsService\Source\TransportAdapter.WindowsService.csproj", "{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter.WindowsServiceTemplate", "TransportAdapter.WindowsService\Template\TransportAdapter.WindowsServiceTemplate.csproj", "{DA9F37C6-5844-408D-9A28-3274075E70A4}"
 EndProject
