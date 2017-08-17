@@ -79,6 +79,7 @@ class ProgramService : ServiceBase
     void Exit(string failedToStart, Exception exception)
     {
         logger.Fatal(failedToStart, exception);
+
         //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
         // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
         Environment.FailFast(failedToStart, exception);

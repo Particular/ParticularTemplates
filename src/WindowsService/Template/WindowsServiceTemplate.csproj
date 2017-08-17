@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" />
-    <PackageReference Include="NuGetPackager" Version="0.6.3" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-*" />
+    <PackageReference Include="NuGetPackager" Version="0.*" />
     <Content Include=".template.config\template.json" />
   </ItemGroup>
 

@@ -53,24 +53,30 @@ class ProgramService : ServiceBase
         try
         {
             var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
-            endpointConfiguration.UseSerialization<JsonSerializer>();
+
+            //TODO: optionally choose a different serializer
+            // https://docs.particular.net/nservicebus/serialization/
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
             //TODO: optionally choose a different error queue. Perhaps on a remote machine
             // https://docs.particular.net/nservicebus/recoverability/
             endpointConfiguration.SendFailedMessagesTo("error");
+
             //TODO: optionally choose a different audit queue. Perhaps on a remote machine
             // https://docs.particular.net/nservicebus/operations/auditing
             endpointConfiguration.AuditProcessedMessagesTo("audit");
+
             endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-            //TODO: this if is here to prevent accidentally deploying to production without considering important actions
+            //TODO: this is to prevent accidentally deploying to production without considering important actions
             if (Environment.UserInteractive && Debugger.IsAttached)
             {
                 //TODO: For production use select a durable transport.
-                // https://docs.particular.net/nservicebus/transports/
+                // https://docs.particular.net/transports/
                 endpointConfiguration.UseTransport<LearningTransport>();
 
                 //TODO: For production use select a durable persistence.
-                // https://docs.particular.net/nservicebus/persistence/
+                // https://docs.particular.net/persistence/
                 endpointConfiguration.UsePersistence<LearningPersistence>();
 
                 //TODO: For production use script the installation.
@@ -111,5 +117,6 @@ class ProgramService : ServiceBase
     protected override void OnStop()
     {
         endpoint?.Stop().GetAwaiter().GetResult();
+        //TODO: perform any shutdown operations
     }
 }
