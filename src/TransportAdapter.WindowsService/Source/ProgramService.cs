@@ -26,20 +26,17 @@ class ProgramService : ServiceBase
         using (var service = new ProgramService())
         {
             // to run interactive from a console or as a windows service
-            if (Environment.UserInteractive)
+            if (ServiceHelper.IsService())
             {
-                Console.Title = "TransportAdapter.WindowsService";
-                Console.CancelKeyPress += (sender, e) =>
-                {
-                    service.OnStop();
-                };
-                service.OnStart(null);
-                Console.WriteLine("\r\nPress enter key to stop program\r\n");
-                Console.Read();
-                service.OnStop();
+                Run(service);
                 return;
             }
-            Run(service);
+            Console.Title = "TransportAdapter.WindowsService";
+            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
+            service.OnStart(null);
+            Console.WriteLine("\r\nPress enter key to stop program\r\n");
+            Console.Read();
+            service.OnStop();
         }
     }
 

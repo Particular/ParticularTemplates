@@ -5,20 +5,21 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NuSpecFileName>NServiceBus.Template.TransportAdapter.WindowsService</NuSpecFileName>
+    <SourceDir>$(SolutionDir)TransportAdapter.WindowsService\Source\</SourceDir>
+    <BinariesDir>$(SolutionDir)binaries\TransportAdapter.WindowsService\</BinariesDir>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0-*" />
     <PackageReference Include="NuGetPackager" Version="0.*" />
-    <Content Include=".template.config\template.json" />
+    <Content Include="template.json" />
   </ItemGroup>
 
   <Target Name="BeforeBuildPackages" BeforeTargets="BuildPackages">
-    <RemoveDir Directories="$(SolutionDir)..\binaries\TransportAdapter.WindowsService\" />
-    <CreateItem Include="$(SolutionDir)TransportAdapter.WindowsService\Source\**\*.*" Exclude="$(SolutionDir)TransportAdapter.WindowsService\Source\obj\**\*.*;$(SolutionDir)TransportAdapter.WindowsService\Source\bin\**\*.*">
-      <Output TaskParameter="Include" ItemName="SourceFiles" />
-    </CreateItem>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(SolutionDir)binaries\TransportAdapter.WindowsService\%(RecursiveDir)" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(Content)" DestinationFolder="$(SolutionDir)binaries\TransportAdapter.WindowsService\%(RelativeDir)" SkipUnchangedFiles="true" />
+    <RemoveDir Directories="$(BinariesDir)" />
+    <Copy SourceFiles="$(SolutionDir)ServiceHelper.cs" DestinationFolder="$(BinariesDir)" />
+    <Copy SourceFiles="$(SourceDir)TransportAdapter.WindowsService.csproj" DestinationFolder="$(BinariesDir)" />
+    <Copy SourceFiles="$(SourceDir)ProgramService.cs" DestinationFolder="$(BinariesDir)" />
+    <Copy SourceFiles="template.json" DestinationFolder="$(BinariesDir).template.config" />
   </Target>
 </Project>

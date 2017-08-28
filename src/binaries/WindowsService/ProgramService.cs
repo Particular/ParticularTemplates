@@ -26,20 +26,17 @@ class ProgramService : ServiceBase
         using (var service = new ProgramService())
         {
             // to run interactive from a console or as a windows service
-            if (Environment.UserInteractive)
+            if (ServiceHelper.IsService())
             {
-                Console.Title = "NServiceBusWindowsService";
-                Console.CancelKeyPress += (sender, e) =>
-                {
-                    service.OnStop();
-                };
-                service.OnStart(null);
-                Console.WriteLine("\r\nPress enter key to stop program\r\n");
-                Console.Read();
-                service.OnStop();
+                Run(service);
                 return;
             }
-            Run(service);
+            Console.Title = "NServiceBusWindowsService";
+            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
+            service.OnStart(null);
+            Console.WriteLine("\r\nPress enter key to stop program\r\n");
+            Console.Read();
+            service.OnStop();
         }
     }
 
@@ -53,24 +50,22 @@ class ProgramService : ServiceBase
         try
         {
             var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
-            endpointConfiguration.UseSerialization<JsonSerializer>();
-            //TODO: optionally choose a different error queue. Perhaps on a remote machine
-            // https://docs.particular.net/nservicebus/recoverability/
-            endpointConfiguration.SendFailedMessagesTo("error");
-            //TODO: optionally choose a different audit queue. Perhaps on a remote machine
-            // https://docs.particular.net/nservicebus/operations/auditing
-            endpointConfiguration.AuditProcessedMessagesTo("audit");
+
+            //TODO: optionally choose a different serializer
+            // https://docs.particular.net/nservicebus/serialization/
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
             endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-            //TODO: this if is here to prevent accidentally deploying to production without considering important actions
+            //TODO: this is to prevent accidentally deploying to production without considering important actions
             if (Environment.UserInteractive && Debugger.IsAttached)
             {
                 //TODO: For production use select a durable transport.
-                // https://docs.particular.net/nservicebus/transports/
+                // https://docs.particular.net/transports/
                 endpointConfiguration.UseTransport<LearningTransport>();
 
                 //TODO: For production use select a durable persistence.
-                // https://docs.particular.net/nservicebus/persistence/
+                // https://docs.particular.net/persistence/
                 endpointConfiguration.UsePersistence<LearningPersistence>();
 
                 //TODO: For production use script the installation.
@@ -91,6 +86,8 @@ class ProgramService : ServiceBase
         logger.Fatal(failedToStart, exception);
         //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
         // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+
+        //TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
         Environment.FailFast(failedToStart, exception);
     }
 
@@ -111,5 +108,6 @@ class ProgramService : ServiceBase
     protected override void OnStop()
     {
         endpoint?.Stop().GetAwaiter().GetResult();
+        //TODO: perform any shutdown operations
     }
 }
