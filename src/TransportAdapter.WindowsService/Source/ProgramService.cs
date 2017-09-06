@@ -49,7 +49,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var adapterConfig = new TransportAdapterConfig<MsmqTransport, MsmqTransport>("TransportAdapter.WindowsService");
+            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
 
             adapterConfig.CustomizeEndpointTransport(t =>
             {
