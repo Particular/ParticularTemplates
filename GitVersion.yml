@@ -2,4 +2,4 @@ assembly-versioning-scheme: Major
 next-version: 1.0.1
 branches:
   develop:
-    tag: alpha
+    tag: beta
