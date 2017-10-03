@@ -28,3 +28,8 @@ dotnet new -u NServiceBus.Template.TransportAdapter.WindowsService
 dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.TransportAdapter.WindowsService.xxx.nupkg
 dotnet new sc-adapter-service
 ```
+
+## Install location
+
+
+`%USERPROFILE%\.templateengine\dotnetcli\v2.0.0`
