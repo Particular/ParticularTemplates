@@ -6,8 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>

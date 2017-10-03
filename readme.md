@@ -17,7 +17,7 @@ After build templates can be installed using the following:
 ```
 dotnet new -u NServiceBus.Template.WindowsService
 dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.WindowsService.xxx.nupkg
-dotnet new NServiceBus.Template.WindowsService
+dotnet new nsbservice
 ```
 
 
@@ -26,5 +26,5 @@ dotnet new NServiceBus.Template.WindowsService
 ```
 dotnet new -u NServiceBus.Template.TransportAdapter.WindowsService
 dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.TransportAdapter.WindowsService.xxx.nupkg
-dotnet new NServiceBus.Template.TransportAdapter.WindowsService
+dotnet new sc-adapter-service
 ```
