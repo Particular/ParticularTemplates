@@ -24,10 +24,14 @@
         {
           "choice": "net462",
           "description": "Target net462"
+        },
+        {
+          "choice": "net452",
+          "description": "Target net452"
         }
       ],
-      "replaces": "net47",
-      "defaultValue": "net47"
+      "replaces": "net462",
+      "defaultValue": "net462"
     }
   }
 }
