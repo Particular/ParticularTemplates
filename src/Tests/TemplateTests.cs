@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ApprovalTests;
@@ -29,28 +30,46 @@ public class TemplateTests : IDisposable
 
     public void Dispose()
     {
-        Uninstall();
+        //  Uninstall();
     }
 
     [Test]
     public void NServiceBusWindowsService()
     {
-        //dotnet new nsbservice
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsService));
         VerifyAndBuild(targetDirectory);
     }
 
     [Test]
+    public void NServiceBusWindowsServiceDiffFramework()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDiffFramework));
+        VerifyAndBuild(targetDirectory, new Dictionary<string, string>
+        {
+            {"framework", "net462"}
+        });
+    }
+
+    [Test]
     public void ScAdapterService()
     {
-        //dotnet new scadapterservice
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
         VerifyAndBuild(targetDirectory);
     }
 
-    static void VerifyAndBuild(string targetDirectory)
+    [Test]
+    public void ScAdapterServiceDiffFramework()
     {
-        DotNetTemplatesHelper.Run("nsbservice", targetDirectory);
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
+        VerifyAndBuild(targetDirectory, new Dictionary<string, string>
+        {
+            {"framework", "net462"}
+        });
+    }
+
+    static void VerifyAndBuild(string targetDirectory, Dictionary<string, string> parameters = null)
+    {
+        DotNetTemplatesHelper.Run("nsbservice", targetDirectory, parameters);
         VerifyDirectory(targetDirectory);
         DotNetTemplatesHelper.Build(targetDirectory);
     }

@@ -10,5 +10,24 @@
     "type": "project"
   },
   "preferNameDirectory": true,
-  "sourceName": "NServiceBusWindowsService"
+  "sourceName": "NServiceBusWindowsService",
+  "symbols": {
+    "framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net47",
+          "description": "Target net47"
+        },
+        {
+          "choice": "net462",
+          "description": "Target net462"
+        }
+      ],
+      "replaces": "net47",
+      "defaultValue": "net47"
+    }
+  }
 }

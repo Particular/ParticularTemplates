@@ -1,8 +1,8 @@
-﻿NServiceBusWindowsService.csproj => 
+﻿NServiceBusWindowsServiceDiffFramework.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net47</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -45,7 +45,7 @@ class ProgramService : ServiceBase
                 Run(service);
                 return;
             }
-            Console.Title = "NServiceBusWindowsService";
+            Console.Title = "NServiceBusWindowsServiceDiffFramework";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
             Console.WriteLine("\r\nPress enter key to stop program\r\n");
@@ -63,7 +63,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
+            var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsServiceDiffFramework");
 
             //TODO: optionally choose a different serializer
             // https://docs.particular.net/nservicebus/serialization/
