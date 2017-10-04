@@ -25,10 +25,10 @@
       <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ScAdapterService.csproj" PackagePath="content/ScAdapterService" />
       <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ProgramService.cs" PackagePath="content/ScAdapterService" />
 
-      <TfmSpecificPackageFile Include="WindowsService\template.json" PackagePath="content/WindowsService/.template.config" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/WindowsService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)WindowsService\WindowsService.csproj" PackagePath="content/WindowsService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)WindowsService\ProgramService.cs" PackagePath="content/WindowsService" />
+      <TfmSpecificPackageFile Include="NServiceBusWindowsService\template.json" PackagePath="content/NServiceBusWindowsService/.template.config" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\NServiceBusWindowsService.csproj" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\ProgramService.cs" PackagePath="content/NServiceBusWindowsService" />
 
     </ItemGroup>
   </Target>

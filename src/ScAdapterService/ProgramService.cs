@@ -16,7 +16,7 @@ class ProgramService : ServiceBase
     static ProgramService()
     {
         //TODO: optionally choose a custom logging library
-        //https://docs.particular.net/nservicebus/logging/#custom-logging
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
         logger = LogManager.GetLogger<ProgramService>();
     }
@@ -31,7 +31,7 @@ class ProgramService : ServiceBase
                 Run(service);
                 return;
             }
-            Console.Title = "TransportAdapter.WindowsService";
+            Console.Title = "ScAdapterService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
             Console.WriteLine("\r\nPress enter key to stop program\r\n");

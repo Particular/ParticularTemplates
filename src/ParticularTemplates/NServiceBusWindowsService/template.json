@@ -3,12 +3,12 @@
   "classifications": [ "NServiceBus", "WindowsService" ],
   "name": "NServiceBus Windows Service",
   "groupIdentity": "nservicebus",
-  "identity": "NServiceBusWindowsService",
+  "identity": "NServiceBus.WindowsService",
   "shortName": "nsbservice",
   "tags": {
     "language": "C#",
     "type": "project"
   },
   "preferNameDirectory": true,
-  "sourceName": "WindowsService"
+  "sourceName": "NServiceBusWindowsService"
 }

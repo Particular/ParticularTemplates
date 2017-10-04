@@ -1,4 +1,16 @@
-﻿ProgramService.cs => 
+﻿NServiceBusWindowsService.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
+ProgramService.cs => 
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -17,7 +29,7 @@ class ProgramService : ServiceBase
     static ProgramService()
     {
         //TODO: optionally choose a custom logging library
-        //https://docs.particular.net/nservicebus/logging/#custom-logging
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
         logger = LogManager.GetLogger<ProgramService>();
     }
@@ -190,15 +202,3 @@ static class ServiceHelper
         public string szExeFile;
     }
 }
-WindowsService.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-</Project>

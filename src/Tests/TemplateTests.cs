@@ -33,10 +33,10 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
-    public void WindowsService()
+    public void NServiceBusWindowsService()
     {
         //dotnet new nsbservice
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(WindowsService));
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsService));
         VerifyAndBuild(targetDirectory);
     }
 
