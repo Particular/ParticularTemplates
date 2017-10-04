@@ -1,5 +1,0 @@
-<Project>
-  <ItemGroup>
-    <Compile Include="..\..\ServiceHelper.cs" Link="ServiceHelper.cs" />
-  </ItemGroup>
-</Project>

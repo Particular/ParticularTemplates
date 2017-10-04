@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\..\nugets</PackageOutputPath>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IsLibrary>false</IsLibrary>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NugetContent</TargetsForTfmSpecificContentInPackage>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-*" />
+  </ItemGroup>
+
+  <Target Name="CleanNugets" BeforeTargets="GenerateNuspec">
+    <RemoveDir Directories="$(PackageOutputPath)" />
+  </Target>
+  <Target Name="NugetContent">
+    <ItemGroup>
+
+      <TfmSpecificPackageFile Include="ScAdapterService\template.json" PackagePath="content/ScAdapterService/.template.config" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/ScAdapterService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ScAdapterService.csproj" PackagePath="content/ScAdapterService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ProgramService.cs" PackagePath="content/ScAdapterService" />
+
+      <TfmSpecificPackageFile Include="NServiceBusWindowsService\template.json" PackagePath="content/NServiceBusWindowsService/.template.config" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\NServiceBusWindowsService.csproj" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\ProgramService.cs" PackagePath="content/NServiceBusWindowsService" />
+
+    </ItemGroup>
+  </Target>
+</Project>

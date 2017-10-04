@@ -1,0 +1,32 @@
+﻿{
+  "author": "NServiceBus Ltd",
+  "classifications": [ "NServiceBus", "ServiceControl", "TransportAdapter", "WindowsService" ],
+  "name": "ServiceControl Transport Adapter Windows Service",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "identity": "ServiceControlAdapter.WindowsService",
+  "shortName": "scadapterservice",
+  "sourceName": "ScAdapterService",
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net47",
+          "description": "Target net47"
+        },
+        {
+          "choice": "net462",
+          "description": "Target net462"
+        }
+      ],
+      "replaces": "net47",
+      "defaultValue": "net47"
+    }
+  }
+}

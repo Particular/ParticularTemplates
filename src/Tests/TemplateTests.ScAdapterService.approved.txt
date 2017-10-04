@@ -1,0 +1,205 @@
+﻿ProgramService.cs => 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.ServiceProcess;
+using System.Threading.Tasks;
+using NServiceBus;
+using NServiceBus.Logging;
+
+[DesignerCategory("Code")]
+class ProgramService : ServiceBase
+{
+    IEndpointInstance endpoint;
+
+    static ILog logger;
+
+    static ProgramService()
+    {
+        //TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        logger = LogManager.GetLogger<ProgramService>();
+    }
+
+    public static void Main()
+    {
+        using (var service = new ProgramService())
+        {
+            // to run interactive from a console or as a windows service
+            if (ServiceHelper.IsService())
+            {
+                Run(service);
+                return;
+            }
+            Console.Title = "ScAdapterService";
+            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
+            service.OnStart(null);
+            Console.WriteLine("\r\nPress enter key to stop program\r\n");
+            Console.Read();
+            service.OnStop();
+        }
+    }
+
+    protected override void OnStart(string[] args)
+    {
+        AsyncOnStart().GetAwaiter().GetResult();
+    }
+
+    async Task AsyncOnStart()
+    {
+        try
+        {
+            var endpointConfiguration = new EndpointConfiguration("ScAdapterService");
+
+            //TODO: optionally choose a different serializer
+            // https://docs.particular.net/nservicebus/serialization/
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
+            endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+            //TODO: this is to prevent accidentally deploying to production without considering important actions
+            if (Environment.UserInteractive && Debugger.IsAttached)
+            {
+                //TODO: For production use select a durable transport.
+                // https://docs.particular.net/transports/
+                endpointConfiguration.UseTransport<LearningTransport>();
+
+                //TODO: For production use select a durable persistence.
+                // https://docs.particular.net/persistence/
+                endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                //TODO: For production use script the installation.
+                endpointConfiguration.EnableInstallers();
+            }
+            endpoint = await Endpoint.Start(endpointConfiguration)
+                .ConfigureAwait(false);
+            PerformStartupOperations();
+        }
+        catch (Exception exception)
+        {
+            Exit("Failed to start", exception);
+        }
+    }
+
+    void Exit(string failedToStart, Exception exception)
+    {
+        logger.Fatal(failedToStart, exception);
+        //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
+        // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+
+        //TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
+        Environment.FailFast(failedToStart, exception);
+    }
+
+    void PerformStartupOperations()
+    {
+        //TODO: perform any startup operations
+    }
+
+    Task OnCriticalError(ICriticalErrorContext context)
+    {
+        //TODO: Decide if shutting down the process is the best response to a critical error
+        // https://docs.particular.net/nservicebus/hosting/critical-errors
+        var fatalMessage = $"The following critical error was encountered:\n{context.Error}\nProcess is shutting down.";
+        Exit(fatalMessage, context.Exception);
+        return Task.FromResult(0);
+    }
+
+    protected override void OnStop()
+    {
+        endpoint?.Stop().GetAwaiter().GetResult();
+        //TODO: perform any shutdown operations
+    }
+}
+ScAdapterService.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net47</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
+ServiceHelper.cs => 
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
+static class ServiceHelper
+{
+    public static bool IsService()
+    {
+        using (var process = GetParent(Process.GetCurrentProcess()))
+        {
+            return process != null && process.ProcessName == "services";
+        }
+    }
+
+    static Process GetParent(Process child)
+    {
+        var parentId = 0;
+
+        var handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+        if (handle == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        var processInfo = new PROCESSENTRY32
+        {
+            dwSize = (uint) Marshal.SizeOf(typeof(PROCESSENTRY32))
+        };
+
+        if (!Process32First(handle, ref processInfo))
+        {
+            return null;
+        }
+
+        do
+        {
+            if (child.Id == processInfo.th32ProcessID)
+            {
+                parentId = (int) processInfo.th32ParentProcessID;
+            }
+        } while (parentId == 0 && Process32Next(handle, ref processInfo));
+
+        if (parentId > 0)
+        {
+            return Process.GetProcessById(parentId);
+        }
+        return null;
+    }
+
+    static uint TH32CS_SNAPPROCESS = 2;
+
+    [DllImport("kernel32.dll")]
+    public static extern bool Process32Next(IntPtr hSnapshot, ref PROCESSENTRY32 lppe);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags, uint th32ProcessID);
+
+    [DllImport("kernel32.dll")]
+    public static extern bool Process32First(IntPtr hSnapshot, ref PROCESSENTRY32 lppe);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PROCESSENTRY32
+    {
+        public uint dwSize;
+        public uint cntUsage;
+        public uint th32ProcessID;
+        public IntPtr th32DefaultHeapID;
+        public uint th32ModuleID;
+        public uint cntThreads;
+        public uint th32ParentProcessID;
+        public int pcPriClassBase;
+        public uint dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szExeFile;
+    }
+}
