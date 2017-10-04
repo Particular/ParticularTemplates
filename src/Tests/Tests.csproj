@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
