@@ -3,4 +3,4 @@ next-version: 1.0.0
 commit-message-incrementing: Disabled
 branches:
   develop:
-    tag: beta
+    tag: alpha
