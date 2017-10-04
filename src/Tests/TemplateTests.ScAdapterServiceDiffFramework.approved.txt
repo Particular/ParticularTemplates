@@ -112,6 +112,8 @@ class ProgramService : ServiceBase
         //TODO: perform any shutdown operations
     }
 }
+
+
 ScAdapterService.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -125,6 +127,8 @@ ScAdapterService.csproj =>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>
+
+
 ServiceHelper.cs => 
 using System;
 using System.Diagnostics;
@@ -203,3 +207,5 @@ static class ServiceHelper
         public string szExeFile;
     }
 }
+
+

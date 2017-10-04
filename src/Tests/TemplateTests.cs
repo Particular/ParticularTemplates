@@ -80,7 +80,7 @@ public class TemplateTests : IDisposable
 
         var dictionary = files.ToDictionary(
             keySelector: x => Path.GetFileName(x),
-            elementSelector: x => $"\r\n{File.ReadAllText(x)}");
+            elementSelector: x => $"\r\n{File.ReadAllText(x)}\r\n\r\n");
         Approvals.VerifyAll(dictionary);
     }
 }
