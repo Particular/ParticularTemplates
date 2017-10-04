@@ -16,7 +16,7 @@ class ProgramService : ServiceBase
     static ProgramService()
     {
         //TODO: optionally choose a custom logging library
-        //https://docs.particular.net/nservicebus/logging/#custom-logging
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
         logger = LogManager.GetLogger<ProgramService>();
     }
