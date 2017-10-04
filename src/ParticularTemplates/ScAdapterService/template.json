@@ -1,6 +1,6 @@
 ﻿{
   "author": "NServiceBus Ltd",
-  "classifications": [ "nservicebus", "servicecontrol", "transportadapter", "windowsservice", "host" ],
+  "classifications": [ "NServiceBus", "ServiceControl", "TransportAdapter", "WindowsService" ],
   "name": "ServiceControl Transport Adapter Windows Service",
   "tags": {
     "language": "C#",
@@ -9,5 +9,5 @@
   "preferNameDirectory": true,
   "identity": "ServiceControlTransportAdapterWindowsService",
   "shortName": "scadapterservice",
-  "sourceName": "TransportAdapter"
+  "sourceName": "ScAdapterService"
 }

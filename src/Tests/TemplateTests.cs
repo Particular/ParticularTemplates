@@ -37,24 +37,27 @@ public class TemplateTests : IDisposable
     {
         //dotnet new nsbservice
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(WindowsService));
-        DotNetTemplatesHelper.Run("nsbservice", targetDirectory);
-        VerifyDirectory(targetDirectory);
+        VerifyAndBuild(targetDirectory);
     }
 
     [Test]
-    public void TransportAdapter()
+    public void ScAdapterService()
     {
         //dotnet new scadapterservice
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(WindowsService));
-        DotNetTemplatesHelper.Run("scadapterservice", targetDirectory);
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
+        VerifyAndBuild(targetDirectory);
+    }
+
+    static void VerifyAndBuild(string targetDirectory)
+    {
+        DotNetTemplatesHelper.Run("nsbservice", targetDirectory);
         VerifyDirectory(targetDirectory);
+        DotNetTemplatesHelper.Build(targetDirectory);
     }
 
     static void VerifyDirectory(string targetDirectory)
     {
-        var files = Directory.EnumerateFiles(targetDirectory, "*.*")
-            .OrderByDescending(x=>Path.GetExtension(x))
-            .ThenBy(x=>x);
+        var files = Directory.EnumerateFiles(targetDirectory, "*.*");
 
         var dictionary = files.ToDictionary(
             keySelector: x => Path.GetFileName(x),

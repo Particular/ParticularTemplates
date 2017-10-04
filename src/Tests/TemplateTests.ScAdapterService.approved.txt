@@ -5,12 +5,12 @@ using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
-using ServiceControl.WindowsService;
+using ServiceControl.TransportAdapter;
 
 [DesignerCategory("Code")]
 class ProgramService : ServiceBase
 {
-    IWindowsService adapter;
+    ITransportAdapter adapter;
 
     static ILog logger;
 
@@ -32,7 +32,7 @@ class ProgramService : ServiceBase
                 Run(service);
                 return;
             }
-            Console.Title = "WindowsService.WindowsService";
+            Console.Title = "TransportAdapter.WindowsService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
             Console.WriteLine("\r\nPress enter key to stop program\r\n");
@@ -50,7 +50,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var adapterConfig = new WindowsServiceConfig<LearningTransport, LearningTransport>("WindowsService.WindowsService");
+            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
 
             adapterConfig.CustomizeEndpointTransport(t =>
             {
@@ -64,7 +64,7 @@ class ProgramService : ServiceBase
                 //e.g. specify the same connection string as ServiceControl uses.
             });
 
-            adapter = WindowsService.Create(adapterConfig);
+            adapter = TransportAdapter.Create(adapterConfig);
 
             await adapter.Start().ConfigureAwait(false);
         }
@@ -88,6 +88,18 @@ class ProgramService : ServiceBase
         adapter?.Stop().GetAwaiter().GetResult();
     }
 }
+ScAdapterService.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net46</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
 ServiceHelper.cs => 
 using System;
 using System.Diagnostics;
@@ -166,15 +178,3 @@ static class ServiceHelper
         public string szExeFile;
     }
 }
-WindowsService.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net46</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="ServiceControl.WindowsService" Version="2.0.0-*" />
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-</Project>
