@@ -9,6 +9,16 @@ public static class ProjectDirectory
         SandboxPath = Path.Combine(ProjectPath, "../../sandbox");
     }
 
+    public static string GetSandboxPath(string suffix)
+    {
+        var path = Path.Combine(SandboxPath, suffix);
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path,true);
+        }
+        return path;
+    }
+
     public static string SandboxPath;
 
     public static string ProjectPath;

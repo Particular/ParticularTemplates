@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ApprovalTests;
 using NUnit.Framework;
 
 [TestFixture]
-public class TemplateTests:IDisposable
+public class TemplateTests : IDisposable
 {
     public TemplateTests()
     {
@@ -25,7 +24,7 @@ public class TemplateTests:IDisposable
     void Uninstall()
     {
         // dotnet new --uninstall ParticularTemplates
-        //  DotNetTemplatesHelper.Uninstall("ParticularTemplates");
+        DotNetTemplatesHelper.Uninstall("ParticularTemplates");
     }
 
     public void Dispose()
@@ -37,12 +36,18 @@ public class TemplateTests:IDisposable
     public void WindowsService()
     {
         //dotnet new nsbservice
-        using (var tempDirHelper = new TempDirHelper())
-        {
-            DotNetTemplatesHelper.Run("nsbservice", ProjectDirectory.Current);
-            Debug.WriteLine(tempDirHelper.Current);
-            //Approvals.VerifyFile();
-        }
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(WindowsService));
+        DotNetTemplatesHelper.Run("nsbservice", targetDirectory);
+        VerifyDirectory(targetDirectory);
     }
 
+    static void VerifyDirectory(string targetDirectory)
+    {
+        var files = Directory.EnumerateFiles(targetDirectory, "*.*");
+
+        var dictionary = files.ToDictionary(
+            keySelector: x => Path.GetFileName(x),
+            elementSelector: x => $"\r\n{File.ReadAllText(x)}");
+        Approvals.VerifyAll(dictionary);
+    }
 }
