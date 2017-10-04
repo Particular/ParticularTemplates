@@ -7,7 +7,7 @@
     "type": "project"
   },
   "preferNameDirectory": true,
-  "identity": "NServiceBus.Templates.ServiceControl.TransportAdapter.WindowsService",
-  "shortName": "sc-adapter-service",
-  "sourceName": "TransportAdapter.WindowsService"
+  "identity": "ServiceControlTransportAdapterWindowsService",
+  "shortName": "scadapterservice",
+  "sourceName": "TransportAdapter"
 }

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\..\nugets</PackageOutputPath>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IsLibrary>false</IsLibrary>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NugetContent</TargetsForTfmSpecificContentInPackage>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-*" />
+  </ItemGroup>
+
+  <Target Name="NugetContent">
+    <ItemGroup>
+
+      <TfmSpecificPackageFile Include="TransportAdapter\template.json" PackagePath="content/TransportAdapter/.template.config" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/TransportAdapter" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)TransportAdapter\TransportAdapter.csproj" PackagePath="content/TransportAdapter" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)TransportAdapter\ProgramService.cs" PackagePath="content/TransportAdapter" />
+
+      <TfmSpecificPackageFile Include="WindowsService\template.json" PackagePath="content/WindowsService/.template.config" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/WindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)WindowsService\WindowsService.csproj" PackagePath="content/WindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)WindowsService\ProgramService.cs" PackagePath="content/WindowsService" />
+
+    </ItemGroup>
+  </Target>
+</Project>

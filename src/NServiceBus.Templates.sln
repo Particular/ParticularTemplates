@@ -1,22 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsService", "WindowsService", "{F9033FB4-F475-4A74-B864-BD152F856B73}"
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 15.0.26730.16
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticularTemplates", "ParticularTemplates\ParticularTemplates.csproj", "{39D942F2-4FF2-4505-86F3-832055C508BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBusWindowsService", "WindowsService\Source\NServiceBusWindowsService.csproj", "{711668CC-CC13-42AA-A20B-A32A917DCB5F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{1E6DD700-E344-49F1-9E50-7E3C37BBAB2A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceTemplate", "WindowsService\Template\WindowsServiceTemplate.csproj", "{9BA5555D-519B-4E3C-A40A-81968A362E53}"
-	ProjectSection(ProjectDependencies) = postProject
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F} = {711668CC-CC13-42AA-A20B-A32A917DCB5F}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter", "TransportAdapter\TransportAdapter.csproj", "{6CF8851E-859D-49CB-B74A-8E277DBD60AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TransportAdapter.WindowsService", "TransportAdapter.WindowsService", "{A19789A8-4255-4171-9678-B4E5B77FE19E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsService", "WindowsService\WindowsService.csproj", "{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter.WindowsService", "TransportAdapter.WindowsService\Source\TransportAdapter.WindowsService.csproj", "{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportAdapter.WindowsServiceTemplate", "TransportAdapter.WindowsService\Template\TransportAdapter.WindowsServiceTemplate.csproj", "{DA9F37C6-5844-408D-9A28-3274075E70A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{80846796-EB4D-48BD-B8B1-0C76406AAE0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,30 +19,31 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BA5555D-519B-4E3C-A40A-81968A362E53}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE48C4AB-CF06-44E3-9B61-22BCE1C75367}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA9F37C6-5844-408D-9A28-3274075E70A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA9F37C6-5844-408D-9A28-3274075E70A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA9F37C6-5844-408D-9A28-3274075E70A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA9F37C6-5844-408D-9A28-3274075E70A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D942F2-4FF2-4505-86F3-832055C508BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D942F2-4FF2-4505-86F3-832055C508BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D942F2-4FF2-4505-86F3-832055C508BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D942F2-4FF2-4505-86F3-832055C508BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF8851E-859D-49CB-B74A-8E277DBD60AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF8851E-859D-49CB-B74A-8E277DBD60AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF8851E-859D-49CB-B74A-8E277DBD60AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF8851E-859D-49CB-B74A-8E277DBD60AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80846796-EB4D-48BD-B8B1-0C76406AAE0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80846796-EB4D-48BD-B8B1-0C76406AAE0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80846796-EB4D-48BD-B8B1-0C76406AAE0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80846796-EB4D-48BD-B8B1-0C76406AAE0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{711668CC-CC13-42AA-A20B-A32A917DCB5F} = {F9033FB4-F475-4A74-B864-BD152F856B73}
-		{9BA5555D-519B-4E3C-A40A-81968A362E53} = {F9033FB4-F475-4A74-B864-BD152F856B73}
-		{BE48C4AB-CF06-44E3-9B61-22BCE1C75367} = {A19789A8-4255-4171-9678-B4E5B77FE19E}
-		{DA9F37C6-5844-408D-9A28-3274075E70A4} = {A19789A8-4255-4171-9678-B4E5B77FE19E}
+		{6CF8851E-859D-49CB-B74A-8E277DBD60AA} = {1E6DD700-E344-49F1-9E50-7E3C37BBAB2A}
+		{7F0C5F0E-5E1A-4D5F-8280-48E7600E00C5} = {1E6DD700-E344-49F1-9E50-7E3C37BBAB2A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3FD796A-DE9E-41ED-87FC-32E7ECF94ECF}
 	EndGlobalSection
 EndGlobal

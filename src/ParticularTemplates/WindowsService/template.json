@@ -10,5 +10,5 @@
     "type": "project"
   },
   "preferNameDirectory": true,
-  "sourceName": "NServiceBusWindowsService"
+  "sourceName": "WindowsService"
 }

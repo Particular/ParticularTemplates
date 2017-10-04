@@ -33,3 +33,9 @@ dotnet new sc-adapter-service
 
 
 `%USERPROFILE%\.templateengine\dotnetcli\v2.0.0`
+
+
+
+dotnet new -u ParticularTemplates
+dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\ParticularTemplates.1.0.1-beta0002.nupkg
+dotnet new nsbservice
