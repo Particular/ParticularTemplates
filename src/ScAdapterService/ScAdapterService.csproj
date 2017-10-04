@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Raw" Version="3.0.0-*" />
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>
