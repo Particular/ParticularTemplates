@@ -7,6 +7,7 @@
   <PropertyGroup>
     <Authors>NServiceBus Ltd</Authors>
     <Company>NServiceBus Ltd</Company>
+    <Description>dotnet new templates targeting Particular tools and libraries</Description>
     <PackageLicenseUrl>http://particular.net/LicenseAgreement</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Copyright>Copyright 2010-$([System.DateTime]::UtcNow.ToString(yyyy)) NServiceBus. All rights reserved</Copyright>
