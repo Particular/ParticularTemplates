@@ -60,7 +60,7 @@ public class TemplateTests : IDisposable
     [Test]
     public void ScAdapterServiceDiffFramework()
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDiffFramework));
         VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
         {
             {"framework", "net462"}
