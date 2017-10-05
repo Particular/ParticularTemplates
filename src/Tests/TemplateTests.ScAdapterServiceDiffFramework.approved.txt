@@ -1,4 +1,5 @@
-﻿using System;
+﻿ProgramService.cs => 
+using System;
 using System.ComponentModel;
 using System.ServiceProcess;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ class ProgramService : ServiceBase
     static ProgramService()
     {
         //TODO: optionally choose a custom logging library
-        //https://docs.particular.net/nservicebus/logging/#custom-logging
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
         logger = LogManager.GetLogger<ProgramService>();
     }
@@ -26,19 +27,17 @@ class ProgramService : ServiceBase
         using (var service = new ProgramService())
         {
             // to run interactive from a console or as a windows service
-            if (Environment.UserInteractive)
+            if (ServiceHelper.IsService())
             {
-                Console.CancelKeyPress += (sender, e) =>
-                {
-                    service.OnStop();
-                };
-                service.OnStart(null);
-                Console.WriteLine("\r\nPress enter key to stop program\r\n");
-                Console.Read();
-                service.OnStop();
+                Run(service);
                 return;
             }
-            Run(service);
+            Console.Title = "ScAdapterServiceDiffFramework";
+            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
+            service.OnStart(null);
+            Console.WriteLine("\r\nPress enter key to stop program\r\n");
+            Console.Read();
+            service.OnStop();
         }
     }
 
@@ -51,7 +50,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var adapterConfig = new TransportAdapterConfig<MsmqTransport, MsmqTransport>("ADAPTER-NAME");
+            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
 
             adapterConfig.CustomizeEndpointTransport(t =>
             {
@@ -78,6 +77,7 @@ class ProgramService : ServiceBase
     void Exit(string failedToStart, Exception exception)
     {
         logger.Fatal(failedToStart, exception);
+
         //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
         // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
         Environment.FailFast(failedToStart, exception);
@@ -88,3 +88,33 @@ class ProgramService : ServiceBase
         adapter?.Stop().GetAwaiter().GetResult();
     }
 }
+
+
+ScAdapterServiceDiffFramework.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.*" />
+    <PackageReference Include="NServiceBus" Version="6.*" />
+    <PackageReference Include="NServiceBus.Raw" Version="2.*" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
+
+
+ServiceHelperClassic.cs => 
+using System;
+
+static class ServiceHelper
+{
+    public static bool IsService()
+    {
+        return !Environment.UserInteractive;
+    }
+}
+
+

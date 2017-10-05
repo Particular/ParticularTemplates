@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.*" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="6.*" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="1.*" />
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>

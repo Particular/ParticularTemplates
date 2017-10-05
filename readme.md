@@ -1,43 +1,41 @@
-## Usage
+[`dotnet new` templates](https://github.com/dotnet/templating/wiki/%22Runnable-Project%22-Templates) for NServiceBus.
 
-The documentation for the `dotnet new` templates is located [here](https://github.com/dotnet/templating/wiki/%22Runnable-Project%22-Templates).
 
-The templates are installed locally in
+## Docuemntation
 
-```
-C:\Users\[USERNAME]\.templateengine\dotnetcli\
-```
+ * [Windows Service endpoint host](https://docs.particular.net/nservicebus/hosting/windows-service-template)
+ * [ServiceControl Transport Adapter host](https://docs.particular.net/servicecontrol/transport-adapter/template)
 
-To use them, open the Developer Command Prompt for Visual Studio 2017.
 
-NOTE: The current version of `dotnet new` command does not list the `--install` option in the help output.
+## Test locally
 
-## Templates
+After build templates can be installed using the following:
 
-### NServiceBus Windows Service host
 
-This template contains the code necessary to host an NServiceBus endopoint in a Windows Service. To install it use
+### WindowsService
 
 ```
-dotnet new --install NServiceBus.Templates.WindowsService::*
+dotnet new -u NServiceBus.Template.WindowsService
+dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.WindowsService.xxx.nupkg
+dotnet new nsbservice
 ```
 
-This installs the template under `nsbservice` alias. To add a project containing the host use
+
+### TransportAdapter
 
 ```
-dotnet new nsbservice --endpointname TheNewEndpoint
+dotnet new -u NServiceBus.Template.TransportAdapter.WindowsService
+dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.TransportAdapter.WindowsService.xxx.nupkg
+dotnet new sc-adapter-service
 ```
 
-### ServiceControl Transport Adapter Windows Service host
+## Install location
 
-This template contains the code necessary to host a ServiceControl Transport Adapter in a Windows Service. To install it use
 
-```
-dotnet new --install NServiceBus.Templates.TransportAdapter.WindowsService::*
-```
+`%USERPROFILE%\.templateengine\dotnetcli\v2.0.0`
 
-This installs the template under `sc-adapter-service` alias. To add a project containing the host use
 
-```
-dotnet new sc-adapter-service --name MyAdapter
-```
+
+dotnet new -u ParticularTemplates
+dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\ParticularTemplates.1.0.1-beta0002.nupkg
+dotnet new nsbservice

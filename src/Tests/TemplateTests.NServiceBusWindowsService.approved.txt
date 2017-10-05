@@ -1,4 +1,20 @@
-﻿using System;
+﻿NServiceBusWindowsService.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="6.*" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="1.*" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
+
+
+ProgramService.cs => 
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -16,7 +32,7 @@ class ProgramService : ServiceBase
     static ProgramService()
     {
         //TODO: optionally choose a custom logging library
-        //https://docs.particular.net/nservicebus/logging/#custom-logging
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
         logger = LogManager.GetLogger<ProgramService>();
     }
@@ -111,3 +127,17 @@ class ProgramService : ServiceBase
         //TODO: perform any shutdown operations
     }
 }
+
+
+ServiceHelperClassic.cs => 
+using System;
+
+static class ServiceHelper
+{
+    public static bool IsService()
+    {
+        return !Environment.UserInteractive;
+    }
+}
+
+

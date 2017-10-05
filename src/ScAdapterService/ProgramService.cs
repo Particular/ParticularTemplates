@@ -1,0 +1,89 @@
+﻿using System;
+using System.ComponentModel;
+using System.ServiceProcess;
+using System.Threading.Tasks;
+using NServiceBus;
+using NServiceBus.Logging;
+using ServiceControl.TransportAdapter;
+
+[DesignerCategory("Code")]
+class ProgramService : ServiceBase
+{
+    ITransportAdapter adapter;
+
+    static ILog logger;
+
+    static ProgramService()
+    {
+        //TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        logger = LogManager.GetLogger<ProgramService>();
+    }
+
+    static void Main()
+    {
+        using (var service = new ProgramService())
+        {
+            // to run interactive from a console or as a windows service
+            if (ServiceHelper.IsService())
+            {
+                Run(service);
+                return;
+            }
+            Console.Title = "ScAdapterService";
+            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
+            service.OnStart(null);
+            Console.WriteLine("\r\nPress enter key to stop program\r\n");
+            Console.Read();
+            service.OnStop();
+        }
+    }
+
+    protected override void OnStart(string[] args)
+    {
+        AsyncOnStart().GetAwaiter().GetResult();
+    }
+
+    async Task AsyncOnStart()
+    {
+        try
+        {
+            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
+
+            adapterConfig.CustomizeEndpointTransport(t =>
+            {
+                //TODO: Customize the endpoint-facing side of the adapter
+                //Use exactly same settings as in regular endpoints
+            });
+
+            adapterConfig.CustomizeServiceControlTransport(t =>
+            {
+                //TODO: Customize the ServiceControl-facing side of the adapter
+                //e.g. specify the same connection string as ServiceControl uses.
+            });
+
+            adapter = TransportAdapter.Create(adapterConfig);
+
+            await adapter.Start().ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            Exit("Failed to start", exception);
+        }
+    }
+
+    void Exit(string failedToStart, Exception exception)
+    {
+        logger.Fatal(failedToStart, exception);
+
+        //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
+        // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+        Environment.FailFast(failedToStart, exception);
+    }
+
+    protected override void OnStop()
+    {
+        adapter?.Stop().GetAwaiter().GetResult();
+    }
+}

@@ -33,3 +33,7 @@ packages/
 sandbox/
 nugets/
 src/binaries/
+
+
+# Approval tests temp file
+*.received.*
