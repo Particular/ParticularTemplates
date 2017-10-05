@@ -21,12 +21,14 @@
     <ItemGroup>
 
       <TfmSpecificPackageFile Include="ScAdapterService\template.json" PackagePath="content/ScAdapterService/.template.config" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/ScAdapterService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperCore.cs" PackagePath="content/ScAdapterService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperClassic.cs" PackagePath="content/ScAdapterService" />
       <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ScAdapterService.csproj" PackagePath="content/ScAdapterService" />
       <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ProgramService.cs" PackagePath="content/ScAdapterService" />
 
       <TfmSpecificPackageFile Include="NServiceBusWindowsService\template.json" PackagePath="content/NServiceBusWindowsService/.template.config" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelper.cs" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperCore.cs" PackagePath="content/NServiceBusWindowsService" />
+      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperClassic.cs" PackagePath="content/NServiceBusWindowsService" />
       <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\NServiceBusWindowsService.csproj" PackagePath="content/NServiceBusWindowsService" />
       <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\ProgramService.cs" PackagePath="content/NServiceBusWindowsService" />
 
