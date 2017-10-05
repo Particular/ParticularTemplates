@@ -4,7 +4,6 @@ using System.Text;
 
 public class ProcessRunner
 {
-
     public static void RunProcess(string fileName, string arguments)
     {
         var output = new StringBuilder();
@@ -37,11 +36,6 @@ public class ProcessRunner
                     output.AppendLine(args.Data);
                 }
             };
-            //process.Exited += (sender, args) =>
-            //{
-            //    process.Dispose();
-            //};
-
             process.Start();
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
