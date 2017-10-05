@@ -7,7 +7,7 @@
    "name":"NServiceBus Windows Service",
    "groupIdentity":"nservicebus",
    "identity":"NServiceBus.WindowsService",
-   "shortName":"nsbservice",
+   "shortName":"nsbwinservice",
    "tags":{
       "language":"C#",
       "type":"project"

@@ -13,10 +13,10 @@
    },
    "preferNameDirectory":true,
    "identity":"ServiceControlAdapter.WindowsService",
-   "shortName":"scadapterservice",
+   "shortName":"scadapterwinservice",
    "sourceName":"ScAdapterService",
    "symbols":{
-      "Framework":{
+      "framework":{
          "type":"parameter",
          "description":"The target framework for the project.",
          "datatype":"choice",

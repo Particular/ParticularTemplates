@@ -1,16 +1,16 @@
 ﻿ProgramService.cs => 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
+using ServiceControl.TransportAdapter;
 
 [DesignerCategory("Code")]
 class ProgramService : ServiceBase
 {
-    IEndpointInstance endpoint;
+    ITransportAdapter adapter;
 
     static ILog logger;
 
@@ -22,7 +22,7 @@ class ProgramService : ServiceBase
         logger = LogManager.GetLogger<ProgramService>();
     }
 
-    public static void Main()
+    static void Main()
     {
         using (var service = new ProgramService())
         {
@@ -50,31 +50,23 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var endpointConfiguration = new EndpointConfiguration("ScAdapterService");
+            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
 
-            //TODO: optionally choose a different serializer
-            // https://docs.particular.net/nservicebus/serialization/
-            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
-
-            endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-
-            //TODO: this is to prevent accidentally deploying to production without considering important actions
-            if (Environment.UserInteractive && Debugger.IsAttached)
+            adapterConfig.CustomizeEndpointTransport(t =>
             {
-                //TODO: For production use select a durable transport.
-                // https://docs.particular.net/transports/
-                endpointConfiguration.UseTransport<LearningTransport>();
+                //TODO: Customize the endpoint-facing side of the adapter
+                //Use exactly same settings as in regular endpoints
+            });
 
-                //TODO: For production use select a durable persistence.
-                // https://docs.particular.net/persistence/
-                endpointConfiguration.UsePersistence<LearningPersistence>();
+            adapterConfig.CustomizeServiceControlTransport(t =>
+            {
+                //TODO: Customize the ServiceControl-facing side of the adapter
+                //e.g. specify the same connection string as ServiceControl uses.
+            });
 
-                //TODO: For production use script the installation.
-                endpointConfiguration.EnableInstallers();
-            }
-            endpoint = await Endpoint.Start(endpointConfiguration)
-                .ConfigureAwait(false);
-            PerformStartupOperations();
+            adapter = TransportAdapter.Create(adapterConfig);
+
+            await adapter.Start().ConfigureAwait(false);
         }
         catch (Exception exception)
         {
@@ -85,31 +77,15 @@ class ProgramService : ServiceBase
     void Exit(string failedToStart, Exception exception)
     {
         logger.Fatal(failedToStart, exception);
+
         //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
         // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-
-        //TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
         Environment.FailFast(failedToStart, exception);
-    }
-
-    void PerformStartupOperations()
-    {
-        //TODO: perform any startup operations
-    }
-
-    Task OnCriticalError(ICriticalErrorContext context)
-    {
-        //TODO: Decide if shutting down the process is the best response to a critical error
-        // https://docs.particular.net/nservicebus/hosting/critical-errors
-        var fatalMessage = $"The following critical error was encountered:\n{context.Error}\nProcess is shutting down.";
-        Exit(fatalMessage, context.Exception);
-        return Task.FromResult(0);
     }
 
     protected override void OnStop()
     {
-        endpoint?.Stop().GetAwaiter().GetResult();
-        //TODO: perform any shutdown operations
+        adapter?.Stop().GetAwaiter().GetResult();
     }
 }
 
@@ -122,8 +98,9 @@ ScAdapterService.csproj =>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.*" />
     <PackageReference Include="NServiceBus" Version="6.*" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="1.*" />
+    <PackageReference Include="NServiceBus.Raw" Version="2.*" />
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>

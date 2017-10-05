@@ -37,14 +37,14 @@ public class TemplateTests : IDisposable
     public void NServiceBusWindowsService()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsService));
-        VerifyAndBuild(targetDirectory);
+        VerifyAndBuild("nsbwinservice", targetDirectory);
     }
 
     [Test]
     public void NServiceBusWindowsServiceDiffFramework()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDiffFramework));
-        VerifyAndBuild(targetDirectory, new Dictionary<string, string>
+        VerifyAndBuild("nsbwinservice", targetDirectory, new Dictionary<string, string>
         {
             {"framework", "net462"}
         });
@@ -54,22 +54,22 @@ public class TemplateTests : IDisposable
     public void ScAdapterService()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        VerifyAndBuild(targetDirectory);
+        VerifyAndBuild("scadapterwinservice",targetDirectory);
     }
 
     [Test]
     public void ScAdapterServiceDiffFramework()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        VerifyAndBuild(targetDirectory, new Dictionary<string, string>
+        VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
         {
             {"framework", "net462"}
         });
     }
 
-    static void VerifyAndBuild(string targetDirectory, Dictionary<string, string> parameters = null)
+    static void VerifyAndBuild(string templateName, string targetDirectory, Dictionary<string, string> parameters = null)
     {
-        DotNetTemplatesHelper.Run("nsbservice", targetDirectory, parameters);
+        DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters);
         VerifyDirectory(targetDirectory);
         DotNetTemplatesHelper.Build(targetDirectory);
     }
