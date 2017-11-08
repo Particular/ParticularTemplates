@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -9,6 +10,8 @@ using ServiceControl.TransportAdapter;
 [DesignerCategory("Code")]
 class ProgramService : ServiceBase
 {
+    const string runAsServiceArg = "--run-as-service";
+
     ITransportAdapter adapter;
 
     static ILog logger;
@@ -21,16 +24,17 @@ class ProgramService : ServiceBase
         logger = LogManager.GetLogger<ProgramService>();
     }
 
-    static void Main()
+    static void Main(string[] args)
     {
         using (var service = new ProgramService())
         {
-            // to run interactive from a console or as a windows service
-            if (ServiceHelper.IsService())
+            // pass argument at command line to run as a windows service
+            if (args.Contains(runAsServiceArg))
             {
                 Run(service);
                 return;
             }
+
             Console.Title = "ScAdapterService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);

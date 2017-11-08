@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -9,6 +10,8 @@ using NServiceBus.Logging;
 [DesignerCategory("Code")]
 class ProgramService : ServiceBase
 {
+    const string runAsServiceArg = "--run-as-service";
+
     IEndpointInstance endpoint;
 
     static ILog logger;
@@ -21,16 +24,17 @@ class ProgramService : ServiceBase
         logger = LogManager.GetLogger<ProgramService>();
     }
 
-    public static void Main()
+    public static void Main(string[] args)
     {
         using (var service = new ProgramService())
         {
-            // to run interactive from a console or as a windows service
-            if (ServiceHelper.IsService())
+            // pass argument at command line to run as a windows service
+            if (args.Contains(runAsServiceArg))
             {
                 Run(service);
                 return;
             }
+
             Console.Title = "NServiceBusWindowsService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);

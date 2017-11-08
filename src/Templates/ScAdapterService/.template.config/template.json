@@ -37,23 +37,5 @@
       "replaces": "net462",
       "defaultValue": "net462"
     }
-  },
-  "sources": [
-    {
-      "modifiers": [
-        {
-          "condition": "(framework != \"netcoreapp2.0\")",
-          "exclude": [
-            "ServiceHelperCore.cs"
-          ]
-        },
-        {
-          "condition": "(framework == \"netcoreapp2.0\")",
-          "exclude": [
-            "ServiceHelperClassic.cs"
-          ]
-        }
-      ]
-    }
-  ]
+  }
 }

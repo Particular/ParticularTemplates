@@ -12,17 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*;**\Directory.Build.props" Pack="true" PackagePath="content" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\ServiceHelperClassic.cs" Pack="true" PackagePath="content\NServiceBusWindowsService" />
-    <None Include="..\ServiceHelperCore.cs" Pack="true" PackagePath="content\NServiceBusWindowsService" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\ServiceHelperClassic.cs" Pack="true" PackagePath="content\ScAdapterService" />
-    <None Include="..\ServiceHelperCore.cs" Pack="true" PackagePath="content\ScAdapterService" />
+    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*" Pack="true" PackagePath="content" />
   </ItemGroup>
 
 </Project>
