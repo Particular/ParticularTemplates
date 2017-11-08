@@ -2,46 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <Authors>NServiceBus Ltd</Authors>
-    <Company>NServiceBus Ltd</Company>
     <Description>dotnet new templates targeting Particular tools and libraries</Description>
-    <PackageLicenseUrl>http://particular.net/LicenseAgreement</PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Copyright>Copyright 2010-$([System.DateTime]::UtcNow.ToString(yyyy)) NServiceBus. All rights reserved</Copyright>
-    <PackageIconUrl>http://s3.amazonaws.com/nuget.images/NServiceBus_32.png</PackageIconUrl>
-    <PackageProjectUrl>https://docs.particular.net/nuget/ParticularTemplates</PackageProjectUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>..\..\nugets</PackageOutputPath>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <IsLibrary>false</IsLibrary>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NugetContent</TargetsForTfmSpecificContentInPackage>
+    <PackageType>Template</PackageType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-*" PrivateAssets="All" />
+    <PackageReference Include="Particular.Packaging" Version="0.1.0" PrivateAssets="All" />
   </ItemGroup>
 
-  <Target Name="CleanNugets" BeforeTargets="GenerateNuspec">
-    <RemoveDir Directories="$(PackageOutputPath)" />
-  </Target>
-  <Target Name="NugetContent">
-    <ItemGroup>
+  <ItemGroup>
+    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*;**\Directory.Build.props" Pack="true" PackagePath="content" />
+  </ItemGroup>
 
-      <TfmSpecificPackageFile Include="ScAdapterService\template.json" PackagePath="content/ScAdapterService/.template.config" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperCore.cs" PackagePath="content/ScAdapterService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperClassic.cs" PackagePath="content/ScAdapterService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ScAdapterService.csproj" PackagePath="content/ScAdapterService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ScAdapterService\ProgramService.cs" PackagePath="content/ScAdapterService" />
+  <ItemGroup>
+    <None Include="..\ServiceHelperClassic.cs" Pack="true" PackagePath="content\NServiceBusWindowsService" />
+    <None Include="..\ServiceHelperCore.cs" Pack="true" PackagePath="content\NServiceBusWindowsService" />
+  </ItemGroup>
 
-      <TfmSpecificPackageFile Include="NServiceBusWindowsService\template.json" PackagePath="content/NServiceBusWindowsService/.template.config" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperCore.cs" PackagePath="content/NServiceBusWindowsService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)ServiceHelperClassic.cs" PackagePath="content/NServiceBusWindowsService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\NServiceBusWindowsService.csproj" PackagePath="content/NServiceBusWindowsService" />
-      <TfmSpecificPackageFile Include="$(SolutionDir)NServiceBusWindowsService\ProgramService.cs" PackagePath="content/NServiceBusWindowsService" />
+  <ItemGroup>
+    <None Include="..\ServiceHelperClassic.cs" Pack="true" PackagePath="content\ScAdapterService" />
+    <None Include="..\ServiceHelperCore.cs" Pack="true" PackagePath="content\ScAdapterService" />
+  </ItemGroup>
 
-    </ItemGroup>
-  </Target>
 </Project>
