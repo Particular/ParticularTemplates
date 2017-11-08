@@ -1,6 +1,7 @@
 ﻿ProgramService.cs => 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -10,6 +11,8 @@ using ServiceControl.TransportAdapter;
 [DesignerCategory("Code")]
 class ProgramService : ServiceBase
 {
+    const string runAsServiceArg = "--run-as-service";
+
     ITransportAdapter adapter;
 
     static ILog logger;
@@ -22,16 +25,17 @@ class ProgramService : ServiceBase
         logger = LogManager.GetLogger<ProgramService>();
     }
 
-    static void Main()
+    static void Main(string[] args)
     {
         using (var service = new ProgramService())
         {
-            // to run interactive from a console or as a windows service
-            if (ServiceHelper.IsService())
+            // pass argument at command line to run as a windows service
+            if (args.Contains(runAsServiceArg))
             {
                 Run(service);
                 return;
             }
+
             Console.Title = "ScAdapterService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
@@ -92,29 +96,23 @@ class ProgramService : ServiceBase
 
 ScAdapterService.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
-    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
-    <PackageReference Include="NServiceBus.Raw" Version="3.0.0-*" />
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Raw" Version="3.0.0-*" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
+  </ItemGroup>
+
 </Project>
-
-
-ServiceHelperClassic.cs => 
-using System;
-
-static class ServiceHelper
-{
-    public static bool IsService()
-    {
-        return !Environment.UserInteractive;
-    }
-}
 
 
