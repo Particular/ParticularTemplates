@@ -1,5 +1,4 @@
-﻿ProgramService.cs => 
-using System;
+﻿using System;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
@@ -93,27 +92,3 @@ namespace ScAdapterService
         }
     }
 }
-
-
-ScAdapterService.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
-    <PackageReference Include="NServiceBus.Raw" Version="3.0.0-*" />
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
-  </ItemGroup>
-
-</Project>
-
-

@@ -32,7 +32,6 @@ _ReSharper*/
 packages/
 sandbox/
 nugets/
-src/binaries/
 
 
 # Approval tests temp file

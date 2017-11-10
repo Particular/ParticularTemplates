@@ -16,7 +16,7 @@ public class TemplateTests : IDisposable
 
     static void Install()
     {
-        //dotnet new --install \nugets\NServiceBus.Template.WindowsService.xxx.nupkg
+        //dotnet new --install \nugets\ParticularTemplates.xxx.nupkg
         var nugets = Path.GetFullPath(Path.Combine(ProjectDirectory.ProjectPath, "../../nugets"));
         var nugetPath = Directory.EnumerateFiles(nugets, "*.nupkg").Single();
         DotNetTemplatesHelper.Install(nugetPath);

@@ -3,14 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.*" />
-    <PackageReference Include="ApprovalTests" Version="*" />
-    <PackageReference Include="ApprovalUtilities" Version="*" />
+    <PackageReference Include="ApprovalTests" Version="3.0.13" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
   </ItemGroup>
 
 </Project>

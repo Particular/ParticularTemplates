@@ -1,0 +1,40 @@
+﻿{
+  "author": "Particular Software",
+  "classifications": [
+    "NServiceBus",
+    "WindowsService"
+  ],
+  "name": "NServiceBus Windows Service",
+  "groupIdentity": "nservicebus",
+  "identity": "NServiceBus.WindowsService",
+  "shortName": "nsbwinservice",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "sourceName": "NServiceBusWindowsService",
+  "symbols": {
+    "framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net47",
+          "description": "Target net47"
+        },
+        {
+          "choice": "net462",
+          "description": "Target net462"
+        },
+        {
+          "choice": "net452",
+          "description": "Target net452"
+        }
+      ],
+      "replaces": "net462",
+      "defaultValue": "net462"
+    }
+  }
+}
