@@ -1,10 +1,140 @@
-﻿NServiceBusWindowsService.csproj => 
+﻿EndpointConfigurationExtensions.cs => 
+using System;
+using System.Diagnostics;
+using NServiceBus;
+
+namespace NServiceBusWindowsService
+{
+    // TODO: move this into a shared project for use in all endpoints
+    internal static class EndpointConfigurationExtensions
+    {
+        public static void ApplySettingsForAllEndpoints(
+            this EndpointConfiguration endpointConfiguration,
+            Action<TransportExtensions<LearningTransport>> applyEndpointSpecificSettings)
+        {
+            // TODO: ensure the most appropriate serializer is chosen
+            // https://docs.particular.net/nservicebus/serialization/
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
+            // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
+            if (Environment.UserInteractive && Debugger.IsAttached)
+            {
+                // TODO: choose a durable transport for production
+                // https://docs.particular.net/transports/
+                var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+                applyEndpointSpecificSettings?.Invoke(transportExtensions);
+
+                // TODO: choose a durable persistence for production
+                // https://docs.particular.net/persistence/
+                endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                // TODO: create a script for deployment to production
+                endpointConfiguration.EnableInstallers();
+            }
+        }
+    }
+}
+
+
+
+Host.cs => 
+using System;
+using System.Threading.Tasks;
+using NServiceBus;
+using NServiceBus.Logging;
+
+namespace NServiceBusWindowsService
+{
+    internal class Host
+    {
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        private static readonly ILog log = LogManager.GetLogger<Host>();
+
+        private IEndpointInstance endpoint;
+
+        // TODO: give the endpoint an appropriate name
+        public string EndpointName => "MyNServiceBusWindowsService";
+
+        public async Task Start()
+        {
+            try
+            {
+                var endpointConfiguration = new EndpointConfiguration(EndpointName);
+                endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+                endpointConfiguration.ApplySettingsForAllEndpoints(transport =>
+                {
+                    // TODO: apply endpoint-specific transport settings
+                });
+
+                // TODO: perform any futher start up operations before or after starting the endpoint
+                endpoint = await Endpoint.Start(endpointConfiguration);
+            }
+            catch (Exception ex)
+            {
+                await ExitProcess("Failed to start.", ex);
+            }
+        }
+
+        public async Task Stop()
+        {
+            try
+            {
+                // TODO: perform any futher shutdown operations before or after stopping the endpoint
+                await endpoint?.Stop();
+            }
+            catch (Exception ex)
+            {
+                await ExitProcess("Failed to stop correctly.", ex);
+            }
+        }
+
+        private async Task OnCriticalError(ICriticalErrorContext context)
+        {
+            // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
+            // https://docs.particular.net/nservicebus/hosting/critical-errors
+            try
+            {
+                await context.Stop();
+            }
+            finally
+            {
+                await ExitProcess($"Critical error, shutting down: {context.Error}", context.Exception);
+            }
+        }
+
+        private async Task ExitProcess(string message, Exception exception)
+        {
+            try
+            {
+                log.Fatal(message, exception);
+
+                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+                await Task.CompletedTask;
+            }
+            finally
+            {
+                // TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
+                Environment.FailFast(message, exception);
+            }
+        }
+    }
+}
+
+
+
+NServiceBusWindowsService.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- TODO: consider using a later version of C# -->
+    <LangVersion>7</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,124 +149,66 @@
 </Project>
 
 
-ProgramService.cs => 
+Program.cs => 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
-using NServiceBus;
-using NServiceBus.Logging;
 
 namespace NServiceBusWindowsService
 {
-    class ProgramService : ServiceBase
+    internal static class Program
     {
-        const string runAsServiceArg = "--run-as-service";
+        // TODO: consider using C# 7.1 or later, which will allow
+        // removal of this method, and renaming of MainAsync to Main
+        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
 
-        IEndpointInstance endpoint;
-
-        static ILog logger;
-
-        static ProgramService()
+        public async static Task MainAsync(string[] args)
         {
-            //TODO: optionally choose a custom logging library
-            // https://docs.particular.net/nservicebus/logging/#custom-logging
-            // LogManager.Use<TheLoggingFactory>();
-            logger = LogManager.GetLogger<ProgramService>();
-        }
+            var host = new Host();
 
-        public static void Main(string[] args)
-        {
-            using (var service = new ProgramService())
+            // pass this command line option to run as a windows service
+            if (args.Contains("--run-as-service"))
             {
-                // pass argument at command line to run as a windows service
-                if (args.Contains(runAsServiceArg))
+                using (var windowsService = new WindowsService(host))
                 {
-                    Run(service);
+                    ServiceBase.Run(windowsService);
                     return;
                 }
-
-                Console.Title = "NServiceBusWindowsService";
-                Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
-                service.OnStart(null);
-                Console.WriteLine("\r\nPress enter key to stop program\r\n");
-                Console.Read();
-                service.OnStop();
             }
-        }
 
-        protected override void OnStart(string[] args)
-        {
-            AsyncOnStart().GetAwaiter().GetResult();
-        }
+            Console.Title = host.EndpointName;
 
-        async Task AsyncOnStart()
-        {
-            try
-            {
-                var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
+            var tcs = new TaskCompletionSource<object>();
+            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
 
-                //TODO: optionally choose a different serializer
-                // https://docs.particular.net/nservicebus/serialization/
-                endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+            await host.Start();
+            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
 
-                endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-
-                //TODO: this is to prevent accidentally deploying to production without considering important actions
-                if (Environment.UserInteractive && Debugger.IsAttached)
-                {
-                    //TODO: For production use select a durable transport.
-                    // https://docs.particular.net/transports/
-                    endpointConfiguration.UseTransport<LearningTransport>();
-
-                    //TODO: For production use select a durable persistence.
-                    // https://docs.particular.net/persistence/
-                    endpointConfiguration.UsePersistence<LearningPersistence>();
-
-                    //TODO: For production use script the installation.
-                    endpointConfiguration.EnableInstallers();
-                }
-                endpoint = await Endpoint.Start(endpointConfiguration)
-                    .ConfigureAwait(false);
-                PerformStartupOperations();
-            }
-            catch (Exception exception)
-            {
-                Exit("Failed to start", exception);
-            }
-        }
-
-        void Exit(string failedToStart, Exception exception)
-        {
-            logger.Fatal(failedToStart, exception);
-            //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
-            // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-
-            //TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
-            Environment.FailFast(failedToStart, exception);
-        }
-
-        void PerformStartupOperations()
-        {
-            //TODO: perform any startup operations
-        }
-
-        Task OnCriticalError(ICriticalErrorContext context)
-        {
-            //TODO: Decide if shutting down the process is the best response to a critical error
-            // https://docs.particular.net/nservicebus/hosting/critical-errors
-            var fatalMessage = $"The following critical error was encountered:\n{context.Error}\nProcess is shutting down.";
-            Exit(fatalMessage, context.Exception);
-            return Task.FromResult(0);
-        }
-
-        protected override void OnStop()
-        {
-            endpoint?.Stop().GetAwaiter().GetResult();
-            //TODO: perform any shutdown operations
+            await tcs.Task;
+            await host.Stop();
         }
     }
 }
+
+
+
+WindowsService.cs => 
+using System.ServiceProcess;
+
+namespace NServiceBusWindowsService
+{
+    internal class WindowsService : ServiceBase
+    {
+        private readonly Host host;
+
+        public WindowsService(Host host) => this.host = host;
+
+        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
+
+        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
+    }
+}
+
 
 
