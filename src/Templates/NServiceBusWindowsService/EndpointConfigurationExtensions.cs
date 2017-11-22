@@ -5,7 +5,7 @@ using NServiceBus;
 namespace NServiceBusWindowsService
 {
     // TODO: move this into a shared project for use in all endpoints
-    internal static class EndpointConfigurationExtensions
+    static class EndpointConfigurationExtensions
     {
         public static void ApplySettingsForAllEndpoints(
             this EndpointConfiguration endpointConfiguration,
@@ -21,7 +21,6 @@ namespace NServiceBusWindowsService
                 // TODO: choose a durable transport for production
                 // https://docs.particular.net/transports/
                 var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
-                applyEndpointSpecificSettings?.Invoke(transportExtensions);
 
                 // TODO: choose a durable persistence for production
                 // https://docs.particular.net/persistence/
@@ -29,6 +28,8 @@ namespace NServiceBusWindowsService
 
                 // TODO: create a script for deployment to production
                 endpointConfiguration.EnableInstallers();
+
+                applyEndpointSpecificSettings?.Invoke(transportExtensions);
             }
         }
     }

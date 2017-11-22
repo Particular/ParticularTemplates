@@ -2,9 +2,9 @@ using System.ServiceProcess;
 
 namespace NServiceBusWindowsService
 {
-    internal class WindowsService : ServiceBase
+    class WindowsService : ServiceBase
     {
-        private readonly Host host;
+        readonly Host host;
 
         public WindowsService(Host host) => this.host = host;
 

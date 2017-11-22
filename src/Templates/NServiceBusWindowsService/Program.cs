@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NServiceBusWindowsService
 {
-    internal static class Program
+    static class Program
     {
         // TODO: consider using C# 7.1 or later, which will allow
         // removal of this method, and renaming of MainAsync to Main
