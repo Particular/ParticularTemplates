@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
@@ -21,20 +22,35 @@ namespace NServiceBusWindowsService
         {
             try
             {
+                // TODO: consider moving common endpoint configuration into a shared project
+                // for use by all endpoints in the system
                 var endpointConfiguration = new EndpointConfiguration(EndpointName);
-                endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-                endpointConfiguration.ApplySettingsForAllEndpoints(transport =>
+                // TODO: ensure the most appropriate serializer is chosen
+                // https://docs.particular.net/nservicebus/serialization/
+                endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
+                // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
+                if (Environment.UserInteractive && Debugger.IsAttached)
                 {
-                    // TODO: apply endpoint-specific transport settings
-                });
+                    // TODO: choose a durable transport for production
+                    // https://docs.particular.net/transports/
+                    var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+
+                    // TODO: choose a durable persistence for production
+                    // https://docs.particular.net/persistence/
+                    endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                    // TODO: create a script for deployment to production
+                    endpointConfiguration.EnableInstallers();
+                }
 
                 // TODO: perform any futher start up operations before or after starting the endpoint
                 endpoint = await Endpoint.Start(endpointConfiguration);
             }
             catch (Exception ex)
             {
-                await LogFatalAndFailFast("Failed to start.", ex);
+                await FailFast("Failed to start.", ex);
             }
         }
 
@@ -47,7 +63,7 @@ namespace NServiceBusWindowsService
             }
             catch (Exception ex)
             {
-                await LogFatalAndFailFast("Failed to stop correctly.", ex);
+                await FailFast("Failed to stop correctly.", ex);
             }
         }
 
@@ -56,27 +72,31 @@ namespace NServiceBusWindowsService
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
             // and consider setting up service recovery
-            // https://docs.particular.net/nservicebus/hosting/windows-service?version=core_7#installation-restart-recovery
+            // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
             {
                 await context.Stop();
             }
             finally
             {
-                await LogFatalAndFailFast($"Critical error, shutting down: {context.Error}", context.Exception);
+                await FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
             }
         }
 
-        async Task LogFatalAndFailFast(string message, Exception exception)
+        async Task FailFast(string message, Exception exception)
         {
-            log.Fatal(message, exception);
+            try
+            {
+                log.Fatal(message, exception);
 
-            // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
-            // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-            await Task.CompletedTask;
-
-            // TODO: https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
-            Environment.FailFast(message, exception);
+                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+                await Task.CompletedTask;
+            }
+            finally
+            {
+                Environment.FailFast(message, exception);
+            }
         }
     }
 }
