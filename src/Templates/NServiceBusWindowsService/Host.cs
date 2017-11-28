@@ -52,7 +52,7 @@ namespace NServiceBusWindowsService
             }
             catch (Exception ex)
             {
-                await FailFast("Failed to start.", ex);
+                FailFast("Failed to start.", ex);
             }
         }
 
@@ -65,7 +65,7 @@ namespace NServiceBusWindowsService
             }
             catch (Exception ex)
             {
-                await FailFast("Failed to stop correctly.", ex);
+                FailFast("Failed to stop correctly.", ex);
             }
         }
 
@@ -81,11 +81,11 @@ namespace NServiceBusWindowsService
             }
             finally
             {
-                await FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
+                FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
             }
         }
 
-        async Task FailFast(string message, Exception exception)
+        void FailFast(string message, Exception exception)
         {
             try
             {
@@ -93,7 +93,6 @@ namespace NServiceBusWindowsService
 
                 // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
                 // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-                await Task.CompletedTask;
             }
             finally
             {
