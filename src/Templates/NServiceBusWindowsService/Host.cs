@@ -16,7 +16,7 @@ namespace NServiceBusWindowsService
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "MyNServiceBusWindowsService";
+        public string EndpointName => "NServiceBusWindowsService";
 
         public async Task Start()
         {

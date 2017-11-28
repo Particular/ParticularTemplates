@@ -17,7 +17,7 @@ namespace NServiceBusWindowsServiceDiffFramework
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "MyNServiceBusWindowsServiceDiffFramework";
+        public string EndpointName => "NServiceBusWindowsServiceDiffFramework";
 
         public async Task Start()
         {
