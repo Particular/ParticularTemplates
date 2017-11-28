@@ -30,6 +30,8 @@ namespace NServiceBusWindowsService
                 // https://docs.particular.net/nservicebus/serialization/
                 endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
 
+                endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
                 // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
                 if (Environment.UserInteractive && Debugger.IsAttached)
                 {
