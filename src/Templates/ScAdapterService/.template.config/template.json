@@ -22,12 +22,20 @@
       "datatype": "choice",
       "choices": [
         {
+          "choice": "net471",
+          "description": "Target net471"
+        },
+        {
           "choice": "net47",
           "description": "Target net47"
         },
         {
           "choice": "net462",
           "description": "Target net462"
+        },
+        {
+          "choice": "net461",
+          "description": "Target net461"
         },
         {
           "choice": "net452",

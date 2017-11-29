@@ -1,11 +1,10 @@
-﻿Host.cs => 
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 using ServiceControl.TransportAdapter;
 
-namespace ScAdapterServiceDiffFramework
+namespace ScAdapterService
 {
     class Host
     {
@@ -17,7 +16,7 @@ namespace ScAdapterServiceDiffFramework
         ITransportAdapter adapter;
 
         // TODO: give the adapter an appropriate name
-        public string AdapterName => "TransportAdapter.ScAdapterServiceDiffFramework";
+        public string AdapterName => "TransportAdapter.ScAdapterService";
 
         public async Task Start()
         {
@@ -76,91 +75,3 @@ namespace ScAdapterServiceDiffFramework
         }
     }
 }
-
-
-
-Program.cs => 
-using System;
-using System.Linq;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-
-namespace ScAdapterServiceDiffFramework
-{
-    static class Program
-    {
-        // TODO: consider using C# 7.1 or later, which will allow
-        // removal of this method, and renaming of MainAsync to Main
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-
-        public async static Task MainAsync(string[] args)
-        {
-            var host = new Host();
-
-            // pass this command line option to run as a windows service
-            if (args.Contains("--run-as-service"))
-            {
-                using (var windowsService = new WindowsService(host))
-                {
-                    ServiceBase.Run(windowsService);
-                    return;
-                }
-            }
-
-            Console.Title = host.AdapterName;
-
-            var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
-
-            await host.Start();
-            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
-
-            await tcs.Task;
-            await host.Stop();
-        }
-    }
-}
-
-
-
-ScAdapterServiceDiffFramework.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
-    <PackageReference Include="NServiceBus.Raw" Version="3.0.0-*" />
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0-*" />
-  </ItemGroup>
-
-</Project>
-
-
-WindowsService.cs => 
-using System.ServiceProcess;
-
-namespace ScAdapterServiceDiffFramework
-{
-    class WindowsService : ServiceBase
-    {
-        readonly Host host;
-
-        public WindowsService(Host host) => this.host = host;
-
-        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
-
-        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
-    }
-}
-
-
-
