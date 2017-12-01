@@ -1,6 +1,7 @@
 assembly-versioning-scheme: Major
-next-version: 1.1.0
-commit-message-incrementing: Disabled
+next-version: 2.0
 branches:
   develop:
-    tag: alpha
+    tag: beta
+  release:
+    tag: rc
