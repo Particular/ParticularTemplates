@@ -1,23 +1,17 @@
 {
-    "author": "Particular Software <support@particular.net>",
-    "classifications": [
-      "NServiceBus",
-      "Docker"
-    ],
-    "name": "NServiceBus Docker Endpoint",
-    "tags": {
-      "language": "C#",
-      "type": "project"
-    },
-    "preferNameDirectory": true,
-    "identity": "NServiceBusDockerEndpoint",
-    "shortName": "nsbdockerendpt",
-    "sourceName": "NsbDockerEndpoint",
-	"symbols": {
-		"endpointName": {
-			"type": "parameter",
-			"defaultValue": "MyEndpoint",
-			"replaces": "AnEndpointName"
-		}
-	}
-  }
+  "author": "Particular Software <support@particular.net>",
+  "classifications": [
+    "NServiceBus",
+    "Docker"
+  ],
+  "name": "NServiceBus Docker Endpoint",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "groupIdentity": "nservicebus",
+  "identity": "NServiceBusDockerEndpoint",
+  "shortName": "nsbdockerendpt",
+  "sourceName": "NsbDockerEndpoint"
+}
