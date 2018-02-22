@@ -13,6 +13,7 @@
   },
   "preferNameDirectory": true,
   "identity": "ServiceControlAdapter.WindowsService",
+  "groupIdentity": "nservicebus",
   "shortName": "scadapterwinservice",
   "sourceName": "ScAdapterService",
   "symbols": {
