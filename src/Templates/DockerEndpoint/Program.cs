@@ -63,6 +63,10 @@ namespace NsbDockerEndpoint
 
                 // Wait until notified that the process should exit
                 closingEvent.WaitOne();
+
+                // TODO: perform any futher shutdown operations before or after stopping the endpoint
+
+                await endpoint.Stop();
             }
             catch (Exception ex)
             {
@@ -76,10 +80,6 @@ namespace NsbDockerEndpoint
             // https://docs.particular.net/nservicebus/hosting/critical-errors
             try
             {
-                // TODO: perform any futher shutdown operations before or after stopping the endpoint
-
-                await context.Stop();
-
                 //notify the MainAsync method to continue executing past the closingEvent.WaitOne
                 closingEvent.Set();
             }
@@ -93,10 +93,6 @@ namespace NsbDockerEndpoint
         {
             try
             {
-                // TODO: perform any futher shutdown operations before or after stopping the endpoint
-
-                endpoint.Stop().GetAwaiter().GetResult();
-
                 //notify the MainAsync method to continue executing past the closingEvent.WaitOne
                 closingEvent.Set();
             }
