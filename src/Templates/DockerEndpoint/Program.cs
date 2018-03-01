@@ -130,7 +130,7 @@ namespace NsbDockerEndpoint
 
         private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
-            if (ctrlType == CtrlTypes.CTRL_CLOSE_EVENT)
+            if (ctrlType == CtrlTypes.CTRL_CLOSE_EVENT || ctrlType == CtrlTypes.CTRL_SHUTDOWN_EVENT)
             {
                 closingEvent.Set();
             }
@@ -147,7 +147,8 @@ namespace NsbDockerEndpoint
 
         public enum CtrlTypes
         {
-            CTRL_CLOSE_EVENT = 2
+            CTRL_CLOSE_EVENT = 2,
+            CTRL_SHUTDOWN_EVENT = 6
         }
         #endregion
     }
