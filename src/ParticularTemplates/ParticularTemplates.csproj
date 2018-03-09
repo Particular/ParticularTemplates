@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Templates\**\*" Exclude="**\bin\**\*;**\obj\**\*;**\*.DotSettings" Pack="true" PackagePath="content" />
-    <None Remove="..\Templates\DockerEndpoint\.DS_Store" />
-    <None Include="..\Templates\DockerEndpoint\DockerFile" Exclude="" Pack="true" PackagePath="content\DockerEndpoint\" />
+    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*" Pack="true" PackagePath="content" />
   </ItemGroup>
+
 </Project>
