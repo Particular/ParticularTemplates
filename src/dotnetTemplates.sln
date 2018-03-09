@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\GitVersion.yml = ..\GitVersion.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBusDockerEndpoint", "Templates\DockerEndpoint\NServiceBusDockerEndpoint.csproj", "{CBB189F6-0FE5-4472-B7FE-B42BB56AE1D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBusDockerEndpoint", "Templates\NServiceBusDockerEndpoint\NServiceBusDockerEndpoint.csproj", "{CBB189F6-0FE5-4472-B7FE-B42BB56AE1D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
