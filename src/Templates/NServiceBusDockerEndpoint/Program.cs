@@ -42,7 +42,7 @@ namespace NServiceBusDockerEndpoint
         static void ProcessExit(object sender, EventArgs e)
         {
             // notify the MainAsync method to continue executing past the closingEvent.WaitOne
-            closingEvent.WaitOne();
+            closingEvent.Set();
         }
 
         static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
