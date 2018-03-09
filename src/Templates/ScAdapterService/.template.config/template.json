@@ -7,7 +7,6 @@
     "WindowsService"
   ],
   "name": "ServiceControl Transport Adapter Windows Service",
-  "groupIdentity": "nservicebus",
   "identity": "ServiceControlAdapter.WindowsService",
   "shortName": "scadapterwinservice",
   "tags": {

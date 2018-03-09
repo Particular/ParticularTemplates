@@ -5,7 +5,6 @@
     "Docker"
   ],
   "name": "NServiceBus Docker Endpoint",
-  "groupIdentity": "nservicebus",
   "identity": "NServiceBusDockerEndpoint",
   "shortName": "nsbdockerendpt",
   "tags": {
