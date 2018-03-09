@@ -1,17 +1,17 @@
 {
-  "author": "Particular Software <support@particular.net>",
+  "author": "Particular Software",
   "classifications": [
     "NServiceBus",
     "Docker"
   ],
   "name": "NServiceBus Docker Endpoint",
+  "groupIdentity": "nservicebus",
+  "identity": "NServiceBusDockerEndpoint",
+  "shortName": "nsbdockerendpt",
   "tags": {
     "language": "C#",
     "type": "project"
   },
   "preferNameDirectory": true,
-  "groupIdentity": "nservicebus",
-  "identity": "NServiceBusDockerEndpoint",
-  "shortName": "nsbdockerendpt",
   "sourceName": "NServiceBusDockerEndpoint"
 }

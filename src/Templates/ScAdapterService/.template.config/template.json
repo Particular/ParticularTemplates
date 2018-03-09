@@ -7,14 +7,14 @@
     "WindowsService"
   ],
   "name": "ServiceControl Transport Adapter Windows Service",
+  "groupIdentity": "nservicebus",
+  "identity": "ServiceControlAdapter.WindowsService",
+  "shortName": "scadapterwinservice",
   "tags": {
     "language": "C#",
     "type": "project"
   },
   "preferNameDirectory": true,
-  "identity": "ServiceControlAdapter.WindowsService",
-  "groupIdentity": "nservicebus",
-  "shortName": "scadapterwinservice",
   "sourceName": "ScAdapterService",
   "symbols": {
     "framework": {
