@@ -7,7 +7,7 @@ namespace NServiceBusDockerEndpoint
 {
     class Program
     {
-        static AutoResetEvent closingEvent = new AutoResetEvent(false);
+        static SemaphoreSlim semaphore = new SemaphoreSlim(0);
 
         // TODO: consider using C# 7.1 or later, which will allow
         // removal of this method, and renaming of MainAsync to Main
@@ -34,20 +34,20 @@ namespace NServiceBusDockerEndpoint
             await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
 
             // wait until notified that the process should exit
-            closingEvent.WaitOne();
+            await semaphore.WaitAsync();
 
             await host.Stop();
         }
 
         static void ProcessExit(object sender, EventArgs e)
         {
-            // notify the MainAsync method to continue executing past the closingEvent.WaitOne
-            closingEvent.Set();
+            // notify the MainAsync method to continue executing
+            semaphore.Release();
         }
 
         static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
-            closingEvent.Set();
+            semaphore.Release();
 
             return true;
         }
