@@ -13,5 +13,5 @@
   "groupIdentity": "nservicebus",
   "identity": "NServiceBusDockerEndpoint",
   "shortName": "nsbdockerendpt",
-  "sourceName": "NsbDockerEndpoint"
+  "sourceName": "NServiceBusDockerEndpoint"
 }

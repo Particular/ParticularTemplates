@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace NsbDockerEndpoint
+namespace NServiceBusDockerEndpoint
 {
     class Host
     {
@@ -16,7 +16,7 @@ namespace NsbDockerEndpoint
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "NsbDockerEndpoint";
+        public string EndpointName => "NServiceBusDockerEndpoint";
 
         public async Task Start()
         {

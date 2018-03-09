@@ -1,5 +1,5 @@
 # Build runtime image
 FROM microsoft/dotnet:2.0-runtime
-WORKDIR /NsbDockerEndpoint
+WORKDIR /NServiceBusDockerEndpoint
 COPY ./bin/Debug/netcoreapp2.0/publish .
-ENTRYPOINT ["dotnet", "NsbDockerEndpoint.dll"]
+ENTRYPOINT ["dotnet", "NServiceBusDockerEndpoint.dll"]

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NsbDockerEndpoint
+namespace NServiceBusDockerEndpoint
 {
     class Program
     {
