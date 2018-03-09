@@ -31,6 +31,7 @@ namespace NServiceBusDockerEndpoint
             Console.Title = host.EndpointName;
 
             await host.Start();
+            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
 
             // wait until notified that the process should exit
             closingEvent.WaitOne();
@@ -46,10 +47,7 @@ namespace NServiceBusDockerEndpoint
 
         static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
-            if (ctrlType == CtrlTypes.CTRL_CLOSE_EVENT || ctrlType == CtrlTypes.CTRL_SHUTDOWN_EVENT)
-            {
-                closingEvent.Set();
-            }
+            closingEvent.Set();
 
             return true;
         }
