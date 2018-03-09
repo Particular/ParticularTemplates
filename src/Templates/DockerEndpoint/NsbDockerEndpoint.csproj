@@ -1,20 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>NsbDockerEndpoint</RootNamespace>
-    <AssemblyName>NsbDockerEndpoint</AssemblyName>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="license.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="license.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.0.0-*" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
