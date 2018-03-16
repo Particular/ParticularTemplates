@@ -6,7 +6,7 @@
   ],
   "name": "NServiceBus Docker Endpoint",
   "identity": "NServiceBusDockerEndpoint",
-  "shortName": "nsbdockerendpt",
+  "shortName": "nsbdockerendpoint",
   "tags": {
     "language": "C#",
     "type": "project"
