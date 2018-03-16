@@ -51,10 +51,17 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
+    public void DockerService()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(DockerService));
+        VerifyAndBuild("nsbdockerendpoint", targetDirectory);
+    }
+
+    [Test]
     public void ScAdapterService()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        VerifyAndBuild("scadapterwinservice",targetDirectory);
+        VerifyAndBuild("scadapterwinservice", targetDirectory);
     }
 
     [Test]
@@ -66,7 +73,6 @@ public class TemplateTests : IDisposable
             {"framework", "net462"}
         });
     }
-
     static void VerifyAndBuild(string templateName, string targetDirectory, Dictionary<string, string> parameters = null)
     {
         DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters);
