@@ -24,6 +24,7 @@ namespace NServiceBusDockerEndpoint
             else
             {
                 AppDomain.CurrentDomain.ProcessExit += ProcessExit;
+                Console.CancelKeyPress += Cancelling;
             }
 
             var host = new Host();
@@ -37,6 +38,12 @@ namespace NServiceBusDockerEndpoint
             await semaphore.WaitAsync();
 
             await host.Stop();
+        }
+
+        static void Cancelling(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            semaphore.Release();
         }
 
         static void ProcessExit(object sender, EventArgs e)
