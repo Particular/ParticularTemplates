@@ -5,7 +5,6 @@
     "WindowsService"
   ],
   "name": "NServiceBus Windows Service",
-  "groupIdentity": "nservicebus",
   "identity": "NServiceBus.WindowsService",
   "shortName": "nsbwinservice",
   "tags": {
