@@ -51,10 +51,17 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
+    public void DockerService()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(DockerService));
+        VerifyAndBuild("nsbdockerendpoint", targetDirectory);
+    }
+
+    [Test]
     public void ScAdapterService()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        VerifyAndBuild("scadapterwinservice",targetDirectory);
+        VerifyAndBuild("scadapterwinservice", targetDirectory);
     }
 
     [Test]

@@ -32,6 +32,11 @@ dotnet new nsbwinservice
 dotnet new scadapterwinservice
 ```
 
+### Docker endpoint
+```
+dotnet new nsbdockerendpoint
+```
+
 ## Install location
 
 
