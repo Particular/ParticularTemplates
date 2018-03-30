@@ -4,13 +4,13 @@
     "NServiceBus",
     "Docker"
   ],
-  "name": "NServiceBus Docker Endpoint",
-  "identity": "NServiceBusDockerEndpoint",
-  "shortName": "nsbdockerendpoint",
+  "name": "NServiceBus Docker Container",
+  "identity": "NServiceBusDockerContainer",
+  "shortName": "nsbdockercontainer",
   "tags": {
     "language": "C#",
     "type": "project"
   },
   "preferNameDirectory": true,
-  "sourceName": "NServiceBusDockerEndpoint"
+  "sourceName": "NServiceBusDockerContainer"
 }

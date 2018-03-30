@@ -1,30 +1,16 @@
 ﻿Dockerfile => 
-# Build runtime image
-FROM microsoft/dotnet:2.0-runtime
-WORKDIR /DockerService
-COPY ./bin/Release/netcoreapp2.0/publish .
-ENTRYPOINT ["dotnet", "DockerService.dll"]
+FROM microsoft/dotnet:2.0-runtime AS base
 
+FROM microsoft/dotnet:2.0-sdk AS build
+WORKDIR /src
+COPY . .
+WORKDIR /src/NServiceBusDockerContainer
+RUN dotnet publish -c Release -o /app
 
-DockerService.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
-</Project>
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
 
 
 Host.cs => 
@@ -34,7 +20,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace DockerService
+namespace NServiceBusDockerContainer
 {
     class Host
     {
@@ -46,7 +32,7 @@ namespace DockerService
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "DockerService";
+        public string EndpointName => "NServiceBusDockerContainer";
 
         public async Task Start()
         {
@@ -140,13 +126,34 @@ license.xml =>
 <!-- this file needs to be replaced with your license file-->
 
 
+NServiceBusDockerContainer.csproj => 
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
+
+
 Program.cs => 
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DockerService
+namespace NServiceBusDockerContainer
 {
     class Program
     {
