@@ -1,120 +1,166 @@
-﻿ProgramService.cs => 
+﻿Host.cs => 
 using System;
-using System.ComponentModel;
-using System.ServiceProcess;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 using ServiceControl.TransportAdapter;
 
-[DesignerCategory("Code")]
-class ProgramService : ServiceBase
+namespace ScAdapterService
 {
-    ITransportAdapter adapter;
-
-    static ILog logger;
-
-    static ProgramService()
+    class Host
     {
-        //TODO: optionally choose a custom logging library
+        // TODO: optionally choose a custom logging library
         // https://docs.particular.net/nservicebus/logging/#custom-logging
         // LogManager.Use<TheLoggingFactory>();
-        logger = LogManager.GetLogger<ProgramService>();
-    }
+        static readonly ILog log = LogManager.GetLogger<Host>();
 
-    static void Main()
-    {
-        using (var service = new ProgramService())
+        ITransportAdapter adapter;
+
+        // TODO: give the adapter an appropriate name
+        public string AdapterName => "TransportAdapter.ScAdapterService";
+
+        public async Task Start()
         {
-            // to run interactive from a console or as a windows service
-            if (ServiceHelper.IsService())
+            try
             {
-                Run(service);
-                return;
+                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>(AdapterName);
+
+                adapterConfig.CustomizeEndpointTransport(t =>
+                {
+                    //TODO: Customize the endpoint-facing side of the adapter
+                    //Use exactly the same settings as in regular endpoints
+                });
+
+                adapterConfig.CustomizeServiceControlTransport(t =>
+                {
+                    //TODO: Customize the ServiceControl-facing side of the adapter
+                    //e.g. specify the same connection string as ServiceControl uses.
+                });
+
+                adapter = TransportAdapter.Create(adapterConfig);
+
+                await adapter.Start();
             }
-            Console.Title = "ScAdapterService";
-            Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
-            service.OnStart(null);
-            Console.WriteLine("\r\nPress enter key to stop program\r\n");
-            Console.Read();
-            service.OnStop();
-        }
-    }
-
-    protected override void OnStart(string[] args)
-    {
-        AsyncOnStart().GetAwaiter().GetResult();
-    }
-
-    async Task AsyncOnStart()
-    {
-        try
-        {
-            var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.WindowsService");
-
-            adapterConfig.CustomizeEndpointTransport(t =>
+            catch (Exception exception)
             {
-                //TODO: Customize the endpoint-facing side of the adapter
-                //Use exactly same settings as in regular endpoints
-            });
-
-            adapterConfig.CustomizeServiceControlTransport(t =>
-            {
-                //TODO: Customize the ServiceControl-facing side of the adapter
-                //e.g. specify the same connection string as ServiceControl uses.
-            });
-
-            adapter = TransportAdapter.Create(adapterConfig);
-
-            await adapter.Start().ConfigureAwait(false);
+                FailFast("Failed to start", exception);
+            }
         }
-        catch (Exception exception)
+
+        public async Task Stop()
         {
-            Exit("Failed to start", exception);
+            try
+            {
+                // TODO: perform any futher shutdown operations before or after stopping the adapter
+                await adapter?.Stop();
+            }
+            catch (Exception ex)
+            {
+                FailFast("Failed to stop correctly.", ex);
+            }
         }
-    }
 
-    void Exit(string failedToStart, Exception exception)
-    {
-        logger.Fatal(failedToStart, exception);
+        void FailFast(string message, Exception exception)
+        {
+            try
+            {
+                log.Fatal(message, exception);
 
-        //TODO: When using an external logging framework it is important to flush any pending entries prior to calling FailFast
-        // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-        Environment.FailFast(failedToStart, exception);
-    }
-
-    protected override void OnStop()
-    {
-        adapter?.Stop().GetAwaiter().GetResult();
+                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+            }
+            finally
+            {
+                Environment.FailFast(message, exception);
+            }
+        }
     }
 }
 
 
+
+Program.cs => 
+using System;
+using System.Linq;
+using System.ServiceProcess;
+using System.Threading.Tasks;
+
+namespace ScAdapterService
+{
+    static class Program
+    {
+        // TODO: consider using C# 7.1 or later, which will allow
+        // removal of this method, and renaming of MainAsync to Main
+        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
+
+        public async static Task MainAsync(string[] args)
+        {
+            var host = new Host();
+
+            // pass this command line option to run as a windows service
+            if (args.Contains("--run-as-service"))
+            {
+                using (var windowsService = new WindowsService(host))
+                {
+                    ServiceBase.Run(windowsService);
+                    return;
+                }
+            }
+
+            Console.Title = host.AdapterName;
+
+            var tcs = new TaskCompletionSource<object>();
+            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
+
+            await host.Start();
+            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
+
+            await tcs.Task;
+            await host.Stop();
+        }
+    }
+}
+
+
+
 ScAdapterService.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="1.*" />
-    <PackageReference Include="NServiceBus" Version="6.*" />
-    <PackageReference Include="NServiceBus.Raw" Version="2.*" />
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.0" />
+    <PackageReference Include="NServiceBus.Raw" Version="3.0.0" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0" />
+  </ItemGroup>
+
 </Project>
 
 
-ServiceHelperClassic.cs => 
-using System;
+WindowsService.cs => 
+using System.ServiceProcess;
 
-static class ServiceHelper
+namespace ScAdapterService
 {
-    public static bool IsService()
+    class WindowsService : ServiceBase
     {
-        return !Environment.UserInteractive;
+        readonly Host host;
+
+        public WindowsService(Host host) => this.host = host;
+
+        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
+
+        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
     }
 }
+
 
 

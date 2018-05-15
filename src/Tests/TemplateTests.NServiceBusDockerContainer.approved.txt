@@ -1,11 +1,26 @@
-﻿Host.cs => 
+﻿Dockerfile => 
+FROM microsoft/dotnet:2.0-runtime AS base
+
+FROM microsoft/dotnet:2.0-sdk AS build
+WORKDIR /src
+COPY . .
+WORKDIR /src/NServiceBusDockerContainer
+RUN dotnet publish -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
+
+
+Host.cs => 
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusDockerContainer
 {
     class Host
     {
@@ -17,7 +32,7 @@ namespace NServiceBusWindowsService
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "NServiceBusWindowsService";
+        public string EndpointName => "NServiceBusDockerContainer";
 
         public async Task Start()
         {
@@ -47,6 +62,8 @@ namespace NServiceBusWindowsService
                     // TODO: create a script for deployment to production
                     endpointConfiguration.EnableInstallers();
                 }
+
+                // TODO: replace the license.xml file with your license file
 
                 // TODO: perform any futher start up operations before or after starting the endpoint
                 endpoint = await Endpoint.Start(endpointConfiguration);
@@ -105,22 +122,26 @@ namespace NServiceBusWindowsService
 
 
 
-NServiceBusWindowsService.csproj => 
+license.xml => 
+<!-- this file needs to be replaced with your license file-->
+
+
+NServiceBusDockerContainer.csproj => 
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
+    <PackageReference Include="NServiceBus" Version="7.0.0" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0" />
+    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
@@ -128,64 +149,79 @@ NServiceBusWindowsService.csproj =>
 
 Program.cs => 
 using System;
-using System.Linq;
-using System.ServiceProcess;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusDockerContainer
 {
-    static class Program
+    class Program
     {
+        static SemaphoreSlim semaphore = new SemaphoreSlim(0);
+
         // TODO: consider using C# 7.1 or later, which will allow
         // removal of this method, and renaming of MainAsync to Main
         public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
 
-        public async static Task MainAsync(string[] args)
+        static async Task MainAsync(string[] args)
         {
-            var host = new Host();
-
-            // pass this command line option to run as a windows service
-            if (args.Contains("--run-as-service"))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                using (var windowsService = new WindowsService(host))
-                {
-                    ServiceBase.Run(windowsService);
-                    return;
-                }
+                SetConsoleCtrlHandler(ConsoleCtrlCheck, true);
+            }
+            else
+            {
+                Console.CancelKeyPress += CancelKeyPress;
+                AppDomain.CurrentDomain.ProcessExit += ProcessExit;
             }
 
-            Console.Title = host.EndpointName;
+            var host = new Host();
 
-            var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
+            Console.Title = host.EndpointName;
 
             await host.Start();
             await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
 
-            await tcs.Task;
+            // wait until notified that the process should exit
+            await semaphore.WaitAsync();
+
             await host.Stop();
+        }
+
+        static void CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            semaphore.Release();
+        }
+
+        static void ProcessExit(object sender, EventArgs e)
+        {
+            semaphore.Release();
+        }
+
+        static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+        {
+            semaphore.Release();
+
+            return true;
+        }
+
+        // imports required for a Windows container to successfully notice when a "docker stop" command
+        // has been run and allow for a graceful shutdown of the endpoint
+        [DllImport("Kernel32")]
+        static extern bool SetConsoleCtrlHandler(HandlerRoutine handler, bool add);
+
+        delegate bool HandlerRoutine(CtrlTypes ctrlType);
+
+        enum CtrlTypes
+        {
+            CTRL_C_EVENT = 0,
+            CTRL_BREAK_EVENT = 1,
+            CTRL_CLOSE_EVENT = 2,
+            CTRL_LOGOFF_EVENT = 5,
+            CTRL_SHUTDOWN_EVENT = 6
         }
     }
 }
-
-
-
-WindowsService.cs => 
-using System.ServiceProcess;
-
-namespace NServiceBusWindowsService
-{
-    class WindowsService : ServiceBase
-    {
-        readonly Host host;
-
-        public WindowsService(Host host) => this.host = host;
-
-        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
-
-        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
-    }
-}
-
 
 

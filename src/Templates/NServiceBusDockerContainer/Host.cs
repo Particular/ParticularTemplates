@@ -1,11 +1,10 @@
-﻿Host.cs => 
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusDockerContainer
 {
     class Host
     {
@@ -17,7 +16,7 @@ namespace NServiceBusWindowsService
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "NServiceBusWindowsService";
+        public string EndpointName => "NServiceBusDockerContainer";
 
         public async Task Start()
         {
@@ -47,6 +46,8 @@ namespace NServiceBusWindowsService
                     // TODO: create a script for deployment to production
                     endpointConfiguration.EnableInstallers();
                 }
+
+                // TODO: replace the license.xml file with your license file
 
                 // TODO: perform any futher start up operations before or after starting the endpoint
                 endpoint = await Endpoint.Start(endpointConfiguration);
@@ -102,90 +103,3 @@ namespace NServiceBusWindowsService
         }
     }
 }
-
-
-
-NServiceBusWindowsService.csproj => 
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0" />
-  </ItemGroup>
-
-</Project>
-
-
-Program.cs => 
-using System;
-using System.Linq;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-
-namespace NServiceBusWindowsService
-{
-    static class Program
-    {
-        // TODO: consider using C# 7.1 or later, which will allow
-        // removal of this method, and renaming of MainAsync to Main
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-
-        public async static Task MainAsync(string[] args)
-        {
-            var host = new Host();
-
-            // pass this command line option to run as a windows service
-            if (args.Contains("--run-as-service"))
-            {
-                using (var windowsService = new WindowsService(host))
-                {
-                    ServiceBase.Run(windowsService);
-                    return;
-                }
-            }
-
-            Console.Title = host.EndpointName;
-
-            var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
-
-            await host.Start();
-            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
-
-            await tcs.Task;
-            await host.Stop();
-        }
-    }
-}
-
-
-
-WindowsService.cs => 
-using System.ServiceProcess;
-
-namespace NServiceBusWindowsService
-{
-    class WindowsService : ServiceBase
-    {
-        readonly Host host;
-
-        public WindowsService(Host host) => this.host = host;
-
-        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
-
-        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
-    }
-}
-
-
-

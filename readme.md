@@ -1,41 +1,43 @@
 [`dotnet new` templates](https://github.com/dotnet/templating/wiki/%22Runnable-Project%22-Templates) for NServiceBus.
 
 
-## Docuemntation
+## Documentation
 
- * [Windows Service endpoint host](https://docs.particular.net/nservicebus/hosting/windows-service-template)
- * [ServiceControl Transport Adapter host](https://docs.particular.net/servicecontrol/transport-adapter/template)
+ * [NServiceBus Endpoint Windows Service](https://docs.particular.net/nservicebus/dotnet-templates#nservicebus-endpoint-windows-service)
+ * [ServiceControl Transport Adapter](https://docs.particular.net/nservicebus/dotnet-templates#servicecontrol-transport-adapter)
 
 
 ## Test locally
 
-After build templates can be installed using the following:
+After building the project, the templates can be installed using the following:
 
+
+### Re-Install
+
+```
+dotnet new -u ParticularTemplates
+dotnet new -i <path to project>\nugets\ParticularTemplates.xxx.nupkg
+```
 
 ### WindowsService
 
 ```
-dotnet new -u NServiceBus.Template.WindowsService
-dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.WindowsService.xxx.nupkg
-dotnet new nsbservice
+dotnet new nsbwinservice
 ```
 
 
 ### TransportAdapter
 
 ```
-dotnet new -u NServiceBus.Template.TransportAdapter.WindowsService
-dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\NServiceBus.Template.TransportAdapter.WindowsService.xxx.nupkg
-dotnet new sc-adapter-service
+dotnet new scadapterwinservice
+```
+
+### Docker endpoint
+```
+dotnet new nsbdockerendpoint
 ```
 
 ## Install location
 
 
-`%USERPROFILE%\.templateengine\dotnetcli\v2.0.0`
-
-
-
-dotnet new -u ParticularTemplates
-dotnet new -i C:\Code\Particular\NServiceBus.Templates\nugets\ParticularTemplates.1.0.1-beta0002.nupkg
-dotnet new nsbservice
+`%USERPROFILE%\.templateengine\dotnetcli\<SDK version>`

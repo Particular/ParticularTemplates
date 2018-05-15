@@ -1,0 +1,16 @@
+{
+  "author": "Particular Software",
+  "classifications": [
+    "NServiceBus",
+    "Docker"
+  ],
+  "name": "NServiceBus Docker Container",
+  "identity": "NServiceBusDockerContainer",
+  "shortName": "nsbdockercontainer",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "sourceName": "NServiceBusDockerContainer"
+}

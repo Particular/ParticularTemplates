@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 public static class DotNetTemplatesHelper
 {
-    static string dotNetCliPath = Environment.ExpandEnvironmentVariables(@"%PROGRAMFILES%\dotnet\dotnet.exe");
+    static string dotNetCli = "dotnet";
 
     public static void ExecuteNew(string parameters)
     {
-        ProcessRunner.RunProcess(dotNetCliPath, "new " + parameters);
+        ProcessRunner.RunProcess(dotNetCli, "new " + parameters);
     }
 
     public static void Uninstall(string templatePackage)
@@ -45,6 +44,6 @@ public static class DotNetTemplatesHelper
     public static void Build(string projectDirectory)
     {
         var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
-        ProcessRunner.RunProcess(dotNetCliPath, $" build {projectFile}");
+        ProcessRunner.RunProcess(dotNetCli, $" build {projectFile}");
     }
 }
