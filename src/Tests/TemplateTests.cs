@@ -47,7 +47,7 @@ public class TemplateTests : IDisposable
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDiffFramework));
         VerifyAndBuild("nsbwinservice", targetDirectory, new Dictionary<string, string>
         {
-            {"framework", "net462"}
+            {"framework", "net472"}
         });
     }
 
@@ -71,7 +71,7 @@ public class TemplateTests : IDisposable
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDiffFramework));
         VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
         {
-            {"framework", "net462"}
+            {"framework", "net472"}
         });
     }
 
