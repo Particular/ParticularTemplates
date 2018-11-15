@@ -1,0 +1,163 @@
+Host.cs =>
+using System;
+using System.Threading.Tasks;
+using NServiceBus;
+using NServiceBus.Logging;
+using ServiceControl.TransportAdapter;
+
+namespace ScAdapterServiceDotNetCore
+{
+    class Host
+    {
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger<Host>();
+
+        ITransportAdapter adapter;
+
+        // TODO: give the adapter an appropriate name
+        public string AdapterName => "TransportAdapter.ScAdapterServiceDotNetCore";
+
+        public async Task Start()
+        {
+            try
+            {
+                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>(AdapterName);
+
+                adapterConfig.CustomizeEndpointTransport(t =>
+                {
+                    //TODO: Customize the endpoint-facing side of the adapter
+                    //Use exactly the same settings as in regular endpoints
+                });
+
+                adapterConfig.CustomizeServiceControlTransport(t =>
+                {
+                    //TODO: Customize the ServiceControl-facing side of the adapter
+                    //e.g. specify the same connection string as ServiceControl uses.
+                });
+
+                adapter = TransportAdapter.Create(adapterConfig);
+
+                await adapter.Start();
+            }
+            catch (Exception exception)
+            {
+                FailFast("Failed to start", exception);
+            }
+        }
+
+        public async Task Stop()
+        {
+            try
+            {
+                // TODO: perform any futher shutdown operations before or after stopping the adapter
+                await adapter?.Stop();
+            }
+            catch (Exception ex)
+            {
+                FailFast("Failed to stop correctly.", ex);
+            }
+        }
+
+        void FailFast(string message, Exception exception)
+        {
+            try
+            {
+                log.Fatal(message, exception);
+
+                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+            }
+            finally
+            {
+                Environment.FailFast(message, exception);
+            }
+        }
+    }
+}
+
+
+
+Program.cs =>
+using System;
+using System.Linq;
+using System.ServiceProcess;
+using System.Threading.Tasks;
+
+namespace ScAdapterServiceDotNetCore
+{
+    static class Program
+    {
+        // TODO: consider using C# 7.1 or later, which will allow
+        // removal of this method, and renaming of MainAsync to Main
+        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
+
+        public async static Task MainAsync(string[] args)
+        {
+            var host = new Host();
+
+            // pass this command line option to run as a windows service
+            if (args.Contains("--run-as-service"))
+            {
+                using (var windowsService = new WindowsService(host))
+                {
+                    ServiceBase.Run(windowsService);
+                    return;
+                }
+            }
+
+            Console.Title = host.AdapterName;
+
+            var tcs = new TaskCompletionSource<object>();
+            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
+
+            await host.Start();
+            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
+
+            await tcs.Task;
+            await host.Stop();
+        }
+    }
+}
+
+
+
+ScAdapterServiceDotNetCore.csproj =>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
+    <PackageReference Include="NServiceBus.Raw" Version="3.0.0" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>
+
+
+WindowsService.cs =>
+using System.ServiceProcess;
+
+namespace ScAdapterServiceDotNetCore
+{
+    class WindowsService : ServiceBase
+    {
+        readonly Host host;
+
+        public WindowsService(Host host) => this.host = host;
+
+        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
+
+        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
+    }
+}
+
+
+

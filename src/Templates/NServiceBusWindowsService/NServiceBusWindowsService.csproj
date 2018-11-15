@@ -6,13 +6,18 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <!--#if (framework != 'netcoreapp2.1') -->
   <ItemGroup>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 
+  <!--#endif -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.1.4" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
+    <!--#if (framework == 'netcoreapp2.1') -->
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
+    <!--#endif -->
   </ItemGroup>
 
 </Project>

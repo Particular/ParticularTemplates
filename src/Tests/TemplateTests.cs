@@ -52,6 +52,16 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
+    public void NServiceBusWindowsServiceDotNetCore()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDotNetCore));
+        VerifyAndBuild("nsbwinservice", targetDirectory, new Dictionary<string, string>
+        {
+            {"framework", "netcoreapp2.1"}
+        });
+    }
+
+    [Test]
     public void NServiceBusDockerContainer()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusDockerContainer));
@@ -72,6 +82,16 @@ public class TemplateTests : IDisposable
         VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
         {
             {"framework", "net472"}
+        });
+    }
+
+    [Test]
+    public void ScAdapterServiceDotNetCore()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDotNetCore));
+        VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
+        {
+            {"framework", "netcoreapp2.1"}
         });
     }
 
