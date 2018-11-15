@@ -1,7 +1,7 @@
 Dockerfile =>
-FROM microsoft/dotnet:2.0-runtime AS base
+FROM microsoft/dotnet:2.1-runtime AS base
 
-FROM microsoft/dotnet:2.0-sdk AS build
+FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src/NServiceBusDockerContainer
@@ -131,7 +131,7 @@ NServiceBusDockerContainer.csproj =>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
