@@ -1,4 +1,4 @@
-﻿Dockerfile => 
+Dockerfile =>
 FROM microsoft/dotnet:2.0-runtime AS base
 
 FROM microsoft/dotnet:2.0-sdk AS build
@@ -13,7 +13,7 @@ COPY --from=build /app .
 ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
 
 
-Host.cs => 
+Host.cs =>
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -122,11 +122,11 @@ namespace NServiceBusDockerContainer
 
 
 
-license.xml => 
+license.xml =>
 <!-- this file needs to be replaced with your license file-->
 
 
-NServiceBusDockerContainer.csproj => 
+NServiceBusDockerContainer.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -147,7 +147,7 @@ NServiceBusDockerContainer.csproj =>
 </Project>
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;

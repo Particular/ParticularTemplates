@@ -1,4 +1,4 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -79,7 +79,7 @@ namespace ScAdapterServiceDiffFramework
 
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
@@ -123,7 +123,7 @@ namespace ScAdapterServiceDiffFramework
 
 
 
-ScAdapterServiceDiffFramework.csproj => 
+ScAdapterServiceDiffFramework.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -145,7 +145,7 @@ ScAdapterServiceDiffFramework.csproj =>
 </Project>
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
 namespace ScAdapterServiceDiffFramework

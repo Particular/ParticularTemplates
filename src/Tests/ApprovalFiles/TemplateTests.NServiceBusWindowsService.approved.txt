@@ -1,4 +1,4 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -105,7 +105,7 @@ namespace NServiceBusWindowsService
 
 
 
-NServiceBusWindowsService.csproj => 
+NServiceBusWindowsService.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -126,7 +126,7 @@ NServiceBusWindowsService.csproj =>
 </Project>
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
@@ -170,7 +170,7 @@ namespace NServiceBusWindowsService
 
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
 namespace NServiceBusWindowsService

@@ -88,7 +88,7 @@ public class TemplateTests : IDisposable
 
         foreach(var file in Directory.EnumerateFiles(targetDirectory, "*.*"))
         {
-            fileText.AppendLine($"{Path.GetFileName(file)} => ");
+            fileText.AppendLine($"{Path.GetFileName(file)} =>");
             fileText.Append(File.ReadAllText(file));
             fileText.AppendLine();
             fileText.AppendLine();
