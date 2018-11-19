@@ -1,4 +1,4 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -79,7 +79,7 @@ namespace ScAdapterService
 
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
@@ -123,7 +123,7 @@ namespace ScAdapterService
 
 
 
-ScAdapterService.csproj => 
+ScAdapterService.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -137,7 +137,7 @@ ScAdapterService.csproj =>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
     <PackageReference Include="NServiceBus.Raw" Version="3.0.0" />
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0" />
   </ItemGroup>
@@ -145,7 +145,7 @@ ScAdapterService.csproj =>
 </Project>
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
 namespace ScAdapterService

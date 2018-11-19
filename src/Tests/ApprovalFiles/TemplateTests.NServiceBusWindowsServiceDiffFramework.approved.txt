@@ -1,4 +1,4 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -105,12 +105,12 @@ namespace NServiceBusWindowsServiceDiffFramework
 
 
 
-NServiceBusWindowsServiceDiffFramework.csproj => 
+NServiceBusWindowsServiceDiffFramework.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
@@ -119,14 +119,14 @@ NServiceBusWindowsServiceDiffFramework.csproj =>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0" />
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
   </ItemGroup>
 
 </Project>
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
@@ -170,7 +170,7 @@ namespace NServiceBusWindowsServiceDiffFramework
 
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
 namespace NServiceBusWindowsServiceDiffFramework

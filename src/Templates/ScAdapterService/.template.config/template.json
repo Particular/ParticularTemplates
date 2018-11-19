@@ -22,6 +22,14 @@
       "datatype": "choice",
       "choices": [
         {
+          "choice": "netcoreapp2.1",
+          "description": "Target netcoreapp2.1"
+        },
+        {
+          "choice": "net472",
+          "description": "Target net472"
+        },
+        {
           "choice": "net471",
           "description": "Target net471"
         },
@@ -36,6 +44,10 @@
         {
           "choice": "net461",
           "description": "Target net461"
+        },
+        {
+          "choice": "net46",
+          "description": "Target net46"
         },
         {
           "choice": "net452",
