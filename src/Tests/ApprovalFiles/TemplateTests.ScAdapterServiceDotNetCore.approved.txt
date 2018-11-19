@@ -1,11 +1,11 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 using ServiceControl.TransportAdapter;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDotNetCore
 {
     class Host
     {
@@ -17,7 +17,7 @@ namespace ScAdapterService
         ITransportAdapter adapter;
 
         // TODO: give the adapter an appropriate name
-        public string AdapterName => "TransportAdapter.ScAdapterService";
+        public string AdapterName => "TransportAdapter.ScAdapterServiceDotNetCore";
 
         public async Task Start()
         {
@@ -79,13 +79,13 @@ namespace ScAdapterService
 
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDotNetCore
 {
     static class Program
     {
@@ -110,7 +110,7 @@ namespace ScAdapterService
             Console.Title = host.AdapterName;
 
             var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
+            Console.CancelKeyPress += (sender, e) => { e.Cancel = true; tcs.SetResult(null); };
 
             await host.Start();
             await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
@@ -123,32 +123,29 @@ namespace ScAdapterService
 
 
 
-ScAdapterService.csproj => 
+ScAdapterServiceDotNetCore.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
     <PackageReference Include="NServiceBus.Raw" Version="3.0.0" />
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDotNetCore
 {
     class WindowsService : ServiceBase
     {

@@ -1,11 +1,11 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace NServiceBusWindowsServiceDiffFramework
+namespace NServiceBusWindowsService
 {
     class Host
     {
@@ -17,7 +17,7 @@ namespace NServiceBusWindowsServiceDiffFramework
         IEndpointInstance endpoint;
 
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "NServiceBusWindowsServiceDiffFramework";
+        public string EndpointName => "NServiceBusWindowsService";
 
         public async Task Start()
         {
@@ -105,7 +105,7 @@ namespace NServiceBusWindowsServiceDiffFramework
 
 
 
-NServiceBusWindowsServiceDiffFramework.csproj => 
+NServiceBusWindowsService.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -119,20 +119,20 @@ NServiceBusWindowsServiceDiffFramework.csproj =>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0" />
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
   </ItemGroup>
 
 </Project>
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace NServiceBusWindowsServiceDiffFramework
+namespace NServiceBusWindowsService
 {
     static class Program
     {
@@ -157,7 +157,7 @@ namespace NServiceBusWindowsServiceDiffFramework
             Console.Title = host.EndpointName;
 
             var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { tcs.SetResult(null); };
+            Console.CancelKeyPress += (sender, e) => { e.Cancel = true; tcs.SetResult(null); };
 
             await host.Start();
             await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
@@ -170,10 +170,10 @@ namespace NServiceBusWindowsServiceDiffFramework
 
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
-namespace NServiceBusWindowsServiceDiffFramework
+namespace NServiceBusWindowsService
 {
     class WindowsService : ServiceBase
     {
