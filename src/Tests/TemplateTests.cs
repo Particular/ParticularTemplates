@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ApprovalTests;
+using System.Text;
 using NUnit.Framework;
+using Particular.Approvals;
 
 [TestFixture]
 public class TemplateTests : IDisposable
@@ -83,11 +84,17 @@ public class TemplateTests : IDisposable
 
     static void VerifyDirectory(string targetDirectory)
     {
-        var files = Directory.EnumerateFiles(targetDirectory, "*.*");
+        var fileText = new StringBuilder();
 
-        var dictionary = files.ToDictionary(
-            keySelector: x => Path.GetFileName(x),
-            elementSelector: x => $"\r\n{File.ReadAllText(x)}\r\n\r\n");
-        Approvals.VerifyAll(dictionary);
+        foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*"))
+        {
+            fileText.AppendLine($"{Path.GetFileName(file)} =>");
+            fileText.Append(File.ReadAllText(file));
+            fileText.AppendLine();
+            fileText.AppendLine();
+            fileText.AppendLine();
+        }
+
+        Approver.Verify(fileText.ToString());
     }
 }
