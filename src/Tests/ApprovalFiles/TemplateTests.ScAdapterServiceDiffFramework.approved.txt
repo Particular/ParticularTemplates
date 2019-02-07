@@ -1,4 +1,4 @@
-﻿ProgramService.cs => 
+ProgramService.cs =>
 using System;
 using System.ComponentModel;
 using System.ServiceProcess;
@@ -32,7 +32,7 @@ class ProgramService : ServiceBase
                 Run(service);
                 return;
             }
-            Console.Title = "ScAdapterService";
+            Console.Title = "ScAdapterServiceDiffFramework";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
             Console.WriteLine("\r\nPress enter key to stop program\r\n");
@@ -90,7 +90,7 @@ class ProgramService : ServiceBase
 }
 
 
-ScAdapterService.csproj => 
+ScAdapterServiceDiffFramework.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -106,7 +106,7 @@ ScAdapterService.csproj =>
 </Project>
 
 
-ServiceHelperClassic.cs => 
+ServiceHelperClassic.cs =>
 using System;
 
 static class ServiceHelper

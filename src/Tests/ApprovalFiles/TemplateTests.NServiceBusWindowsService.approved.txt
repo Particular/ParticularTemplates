@@ -1,4 +1,4 @@
-﻿NServiceBusWindowsServiceDiffFramework.csproj => 
+NServiceBusWindowsService.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,7 +13,7 @@
 </Project>
 
 
-ProgramService.cs => 
+ProgramService.cs =>
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -47,7 +47,7 @@ class ProgramService : ServiceBase
                 Run(service);
                 return;
             }
-            Console.Title = "NServiceBusWindowsServiceDiffFramework";
+            Console.Title = "NServiceBusWindowsService";
             Console.CancelKeyPress += (sender, e) => { service.OnStop(); };
             service.OnStart(null);
             Console.WriteLine("\r\nPress enter key to stop program\r\n");
@@ -65,7 +65,7 @@ class ProgramService : ServiceBase
     {
         try
         {
-            var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsServiceDiffFramework");
+            var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
 
             //TODO: optionally choose a different serializer
             // https://docs.particular.net/nservicebus/serialization/
@@ -129,7 +129,7 @@ class ProgramService : ServiceBase
 }
 
 
-ServiceHelperClassic.cs => 
+ServiceHelperClassic.cs =>
 using System;
 
 static class ServiceHelper
