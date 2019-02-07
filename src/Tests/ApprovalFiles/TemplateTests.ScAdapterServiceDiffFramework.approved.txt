@@ -1,11 +1,11 @@
-﻿Host.cs => 
+Host.cs =>
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 using ServiceControl.TransportAdapter;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDiffFramework
 {
     class Host
     {
@@ -17,7 +17,7 @@ namespace ScAdapterService
         ITransportAdapter adapter;
 
         // TODO: give the adapter an appropriate name
-        public string AdapterName => "TransportAdapter.ScAdapterService";
+        public string AdapterName => "TransportAdapter.ScAdapterServiceDiffFramework";
 
         public async Task Start()
         {
@@ -79,13 +79,13 @@ namespace ScAdapterService
 
 
 
-Program.cs => 
+Program.cs =>
 using System;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDiffFramework
 {
     static class Program
     {
@@ -123,7 +123,7 @@ namespace ScAdapterService
 
 
 
-ScAdapterService.csproj => 
+ScAdapterServiceDiffFramework.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -145,10 +145,10 @@ ScAdapterService.csproj =>
 </Project>
 
 
-WindowsService.cs => 
+WindowsService.cs =>
 using System.ServiceProcess;
 
-namespace ScAdapterService
+namespace ScAdapterServiceDiffFramework
 {
     class WindowsService : ServiceBase
     {
