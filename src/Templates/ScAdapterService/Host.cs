@@ -51,7 +51,7 @@ namespace ScAdapterService
             try
             {
                 // TODO: perform any futher shutdown operations before or after stopping the adapter
-                await adapter?.Stop();
+                await adapter.Stop();
             }
             catch (Exception ex)
             {

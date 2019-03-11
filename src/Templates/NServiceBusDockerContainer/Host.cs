@@ -63,7 +63,7 @@ namespace NServiceBusDockerContainer
             try
             {
                 // TODO: perform any futher shutdown operations before or after stopping the endpoint
-                await endpoint?.Stop();
+                await endpoint.Stop();
             }
             catch (Exception ex)
             {
