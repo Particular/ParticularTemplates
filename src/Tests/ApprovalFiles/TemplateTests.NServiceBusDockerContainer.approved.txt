@@ -136,8 +136,8 @@ NServiceBusDockerContainer.csproj =>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.2.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
+    <PackageReference Include="NServiceBus" Version="{version}" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="{version}" />
   </ItemGroup>
 
   <ItemGroup>
