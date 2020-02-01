@@ -133,10 +133,10 @@ ScAdapterServiceDotNetCore.csproj =>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.2.0" />
-    <PackageReference Include="NServiceBus.Raw" Version="3.0.0" />
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
+    <PackageReference Include="NServiceBus" Version="{version}" />
+    <PackageReference Include="NServiceBus.Raw" Version="{version}" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="{version}" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="{version}" />
   </ItemGroup>
 
 </Project>
