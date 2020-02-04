@@ -13,7 +13,7 @@
 
   <!--#endif -->
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.2.0" />
+    <PackageReference Include="NServiceBus" Version="7.2.1" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
     <!--#if (framework == 'netcoreapp2.1') -->
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
