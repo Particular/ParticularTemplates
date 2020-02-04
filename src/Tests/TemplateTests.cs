@@ -115,27 +115,6 @@ public class TemplateTests : IDisposable
             fileText.AppendLine();
         }
 
-        Approver.Verify(fileText.ToString(), line =>
-         {
-             //scrub the actual versions
-             var offset = 0;
-
-             while(true)
-             {
-                 var startIndex = line.IndexOf("Version=", offset);
-
-                 if (startIndex < 0)
-                 {
-                     break;
-                 }
-
-                 var endIndex = line.IndexOf(">", startIndex);
-                 line = line.Substring(0, startIndex) + "Version=\"{version}\" />" + line.Substring(endIndex + 1);
-
-                 offset = endIndex;
-             }
-
-             return line;
-         });
+        Approver.Verify(fileText.ToString());
     }
 }
