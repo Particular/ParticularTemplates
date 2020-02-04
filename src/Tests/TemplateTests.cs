@@ -106,7 +106,7 @@ public class TemplateTests : IDisposable
     {
         var fileText = new StringBuilder();
 
-        foreach(var file in Directory.EnumerateFiles(targetDirectory, "*.*"))
+        foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*"))
         {
             fileText.AppendLine($"{Path.GetFileName(file)} =>");
             fileText.Append(File.ReadAllText(file));
