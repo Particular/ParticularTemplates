@@ -138,7 +138,7 @@ ScAdapterService.csproj =>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.2.2" />
-    <PackageReference Include="NServiceBus.Raw" Version="3.0.2" />
+    <PackageReference Include="NServiceBus.Raw" Version="3.1.0" />
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.1" />
   </ItemGroup>
 
