@@ -1,82 +1,85 @@
-Host.cs =>
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using NServiceBus;
-using NServiceBus.Logging;
+NServiceBusWindowsServiceDiffFramework.csproj =>
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.2.3" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
+
+
+Program.cs =>
 namespace NServiceBusWindowsServiceDiffFramework
 {
-    class Host
+    using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+    using Microsoft.Extensions.Hosting;
+    using NServiceBus;
+    using NServiceBus.Logging;
+
+    static class Program
     {
-        // TODO: optionally choose a custom logging library
-        // https://docs.particular.net/nservicebus/logging/#custom-logging
-        // LogManager.Use<TheLoggingFactory>();
-        static readonly ILog log = LogManager.GetLogger<Host>();
-
-        IEndpointInstance endpoint;
-
         // TODO: give the endpoint an appropriate name
-        public string EndpointName => "NServiceBusWindowsServiceDiffFramework";
+        static string EndpointName => "NServiceBusWindowsServiceDiffFramework";
 
-        public async Task Start()
+        public static void Main(string[] args)
         {
-            try
-            {
-                // TODO: consider moving common endpoint configuration into a shared project
-                // for use by all endpoints in the system
-                var endpointConfiguration = new EndpointConfiguration(EndpointName);
+            CreateHostBuilder(args).Build().Run();
+        }
 
-                // TODO: ensure the most appropriate serializer is chosen
-                // https://docs.particular.net/nservicebus/serialization/
-                endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
-
-                endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-
-                // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
-                if (Environment.UserInteractive && Debugger.IsAttached)
+        static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .UseWindowsService()
+                .UseNServiceBus(ctx =>
                 {
-                    // TODO: choose a durable transport for production
-                    // https://docs.particular.net/transports/
-                    var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+                    // TODO: consider moving common endpoint configuration into a shared project
+                    // for use by all endpoints in the system
+                    var endpointConfiguration = new EndpointConfiguration(EndpointName);
 
-                    // TODO: choose a durable persistence for production
-                    // https://docs.particular.net/persistence/
-                    endpointConfiguration.UsePersistence<LearningPersistence>();
+                    // TODO: ensure the most appropriate serializer is chosen
+                    // https://docs.particular.net/nservicebus/serialization/
+                    endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
 
-                    // TODO: create a script for deployment to production
-                    endpointConfiguration.EnableInstallers();
-                }
+                    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-                // TODO: perform any futher start up operations before or after starting the endpoint
-                endpoint = await Endpoint.Start(endpointConfiguration);
-            }
-            catch (Exception ex)
-            {
-                FailFast("Failed to start.", ex);
-            }
+                    // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
+                    if (Environment.UserInteractive && Debugger.IsAttached)
+                    {
+                        // TODO: choose a durable transport for production
+                        // https://docs.particular.net/transports/
+                        var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+
+                        // TODO: choose a durable persistence for production
+                        // https://docs.particular.net/persistence/
+                        endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                        // TODO: create a script for deployment to production
+                        endpointConfiguration.EnableInstallers();
+                    }
+
+                    return endpointConfiguration;
+                });
         }
 
-        public async Task Stop()
-        {
-            try
-            {
-                // TODO: perform any futher shutdown operations before or after stopping the endpoint
-                await endpoint.Stop();
-            }
-            catch (Exception ex)
-            {
-                FailFast("Failed to stop correctly.", ex);
-            }
-        }
-
-        async Task OnCriticalError(ICriticalErrorContext context)
+        static async Task OnCriticalError(ICriticalErrorContext context)
         {
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
             // and consider setting up service recovery
             // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
+
             {
                 await context.Stop();
             }
@@ -86,7 +89,7 @@ namespace NServiceBusWindowsServiceDiffFramework
             }
         }
 
-        void FailFast(string message, Exception exception)
+        static void FailFast(string message, Exception exception)
         {
             try
             {
@@ -100,92 +103,12 @@ namespace NServiceBusWindowsServiceDiffFramework
                 Environment.FailFast(message, exception);
             }
         }
+
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger(typeof(Program));
     }
 }
-
-
-
-NServiceBusWindowsServiceDiffFramework.csproj =>
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.2.3" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
-  </ItemGroup>
-
-</Project>
-
-
-Program.cs =>
-using System;
-using System.Linq;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-
-namespace NServiceBusWindowsServiceDiffFramework
-{
-    static class Program
-    {
-        // TODO: consider using C# 7.1 or later, which will allow
-        // removal of this method, and renaming of MainAsync to Main
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-
-        public async static Task MainAsync(string[] args)
-        {
-            var host = new Host();
-
-            // pass this command line option to run as a windows service
-            if (args.Contains("--run-as-service"))
-            {
-                using (var windowsService = new WindowsService(host))
-                {
-                    ServiceBase.Run(windowsService);
-                    return;
-                }
-            }
-
-            Console.Title = host.EndpointName;
-
-            var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { e.Cancel = true; tcs.SetResult(null); };
-
-            await host.Start();
-            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
-
-            await tcs.Task;
-            await host.Stop();
-        }
-    }
-}
-
-
-
-WindowsService.cs =>
-using System.ServiceProcess;
-
-namespace NServiceBusWindowsServiceDiffFramework
-{
-    class WindowsService : ServiceBase
-    {
-        readonly Host host;
-
-        public WindowsService(Host host) => this.host = host;
-
-        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
-
-        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
-    }
-}
-
 
 

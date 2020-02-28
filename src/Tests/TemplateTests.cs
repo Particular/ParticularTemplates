@@ -57,7 +57,7 @@ public class TemplateTests : IDisposable
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDotNetCore));
         VerifyAndBuild("nsbwinservice", targetDirectory, new Dictionary<string, string>
         {
-            {"framework", "netcoreapp2.1"}
+            {"framework", "netcoreapp3.1"}
         });
     }
 

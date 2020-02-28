@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,18 +6,11 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <!--#if (framework != 'netcoreapp2.1') -->
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <!--#endif -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.2.3" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
-    <!--#if (framework == 'netcoreapp2.1') -->
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.7.0" />
-    <!--#endif -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
