@@ -91,7 +91,7 @@ public class TemplateTests : IDisposable
         var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDotNetCore));
         VerifyAndBuild("scadapterwinservice", targetDirectory, new Dictionary<string, string>
         {
-            {"framework", "netcoreapp2.1"}
+            {"framework", "netcoreapp3.1"}
         });
     }
 

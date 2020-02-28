@@ -1,24 +1,19 @@
-using System;
-using System.Threading.Tasks;
-using NServiceBus;
-using NServiceBus.Logging;
-using ServiceControl.TransportAdapter;
-
 namespace ScAdapterService
 {
-    class Host
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.Extensions.Hosting;
+    using NServiceBus;
+    using NServiceBus.Logging;
+    using ServiceControl.TransportAdapter;
+
+    class AdapterHostedService : IHostedService
     {
-        // TODO: optionally choose a custom logging library
-        // https://docs.particular.net/nservicebus/logging/#custom-logging
-        // LogManager.Use<TheLoggingFactory>();
-        static readonly ILog log = LogManager.GetLogger<Host>();
-
-        ITransportAdapter adapter;
-
         // TODO: give the adapter an appropriate name
         public string AdapterName => "TransportAdapter.ScAdapterService";
 
-        public async Task Start()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -46,11 +41,11 @@ namespace ScAdapterService
             }
         }
 
-        public async Task Stop()
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             try
             {
-                // TODO: perform any futher shutdown operations before or after stopping the adapter
+                // TODO: perform any further shutdown operations before or after stopping the adapter
                 await adapter.Stop();
             }
             catch (Exception ex)
@@ -59,7 +54,7 @@ namespace ScAdapterService
             }
         }
 
-        void FailFast(string message, Exception exception)
+        static void FailFast(string message, Exception exception)
         {
             try
             {
@@ -73,5 +68,12 @@ namespace ScAdapterService
                 Environment.FailFast(message, exception);
             }
         }
+
+        ITransportAdapter adapter;
+
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger<AdapterHostedService>();
     }
 }

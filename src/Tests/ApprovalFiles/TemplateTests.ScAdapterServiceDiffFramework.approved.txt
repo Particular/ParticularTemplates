@@ -1,25 +1,20 @@
-Host.cs =>
-using System;
-using System.Threading.Tasks;
-using NServiceBus;
-using NServiceBus.Logging;
-using ServiceControl.TransportAdapter;
-
+AdapterHostedService.cs =>
 namespace ScAdapterServiceDiffFramework
 {
-    class Host
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.Extensions.Hosting;
+    using NServiceBus;
+    using NServiceBus.Logging;
+    using ServiceControl.TransportAdapter;
+
+    class AdapterHostedService : IHostedService
     {
-        // TODO: optionally choose a custom logging library
-        // https://docs.particular.net/nservicebus/logging/#custom-logging
-        // LogManager.Use<TheLoggingFactory>();
-        static readonly ILog log = LogManager.GetLogger<Host>();
-
-        ITransportAdapter adapter;
-
         // TODO: give the adapter an appropriate name
         public string AdapterName => "TransportAdapter.ScAdapterServiceDiffFramework";
 
-        public async Task Start()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -47,11 +42,11 @@ namespace ScAdapterServiceDiffFramework
             }
         }
 
-        public async Task Stop()
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             try
             {
-                // TODO: perform any futher shutdown operations before or after stopping the adapter
+                // TODO: perform any further shutdown operations before or after stopping the adapter
                 await adapter.Stop();
             }
             catch (Exception ex)
@@ -60,7 +55,7 @@ namespace ScAdapterServiceDiffFramework
             }
         }
 
-        void FailFast(string message, Exception exception)
+        static void FailFast(string message, Exception exception)
         {
             try
             {
@@ -74,93 +69,62 @@ namespace ScAdapterServiceDiffFramework
                 Environment.FailFast(message, exception);
             }
         }
+
+        ITransportAdapter adapter;
+
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger<AdapterHostedService>();
     }
 }
-
 
 
 Program.cs =>
-using System;
-using System.Linq;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-
 namespace ScAdapterServiceDiffFramework
 {
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using NServiceBus.Logging;
+
     static class Program
     {
-        // TODO: consider using C# 7.1 or later, which will allow
-        // removal of this method, and renaming of MainAsync to Main
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-
-        public async static Task MainAsync(string[] args)
+        public static void Main(string[] args)
         {
-            var host = new Host();
-
-            // pass this command line option to run as a windows service
-            if (args.Contains("--run-as-service"))
-            {
-                using (var windowsService = new WindowsService(host))
-                {
-                    ServiceBase.Run(windowsService);
-                    return;
-                }
-            }
-
-            Console.Title = host.AdapterName;
-
-            var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += (sender, e) => { e.Cancel = true; tcs.SetResult(null); };
-
-            await host.Start();
-            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
-
-            await tcs.Task;
-            await host.Stop();
+            CreateHostBuilder(args).Build().Run();
         }
+
+        static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .UseWindowsService()
+                .ConfigureServices(services => services.AddHostedService<AdapterHostedService>());
+        }
+
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger(typeof(Program));
     }
 }
 
 
-
 ScAdapterServiceDiffFramework.csproj =>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.2.3" />
     <PackageReference Include="NServiceBus.Raw" Version="3.1.0" />
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
   </ItemGroup>
 
 </Project>
-
-
-WindowsService.cs =>
-using System.ServiceProcess;
-
-namespace ScAdapterServiceDiffFramework
-{
-    class WindowsService : ServiceBase
-    {
-        readonly Host host;
-
-        public WindowsService(Host host) => this.host = host;
-
-        protected override void OnStart(string[] args) => host.Start().GetAwaiter().GetResult();
-
-        protected override void OnStop() => host.Stop().GetAwaiter().GetResult();
-    }
-}
-
 
 
