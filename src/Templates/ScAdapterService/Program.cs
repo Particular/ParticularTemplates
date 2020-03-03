@@ -1,9 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NServiceBus.Logging;
+
 namespace ScAdapterService
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using NServiceBus.Logging;
-
     static class Program
     {
         public static void Main(string[] args)

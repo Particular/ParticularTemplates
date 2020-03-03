@@ -1,12 +1,12 @@
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using NServiceBus;
+using NServiceBus.Logging;
+
 namespace NServiceBusDockerContainer
 {
-    using System;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
-    using NServiceBus;
-    using NServiceBus.Logging;
-
     static class Program
     {
         // TODO: give the endpoint an appropriate name

@@ -1,13 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using NServiceBus;
+using NServiceBus.Logging;
+using ServiceControl.TransportAdapter;
+
 namespace ScAdapterService
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
-    using NServiceBus;
-    using NServiceBus.Logging;
-    using ServiceControl.TransportAdapter;
-
     class AdapterHostedService : IHostedService
     {
         // TODO: give the adapter an appropriate name

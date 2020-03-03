@@ -1,14 +1,14 @@
 AdapterHostedService.cs =>
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using NServiceBus;
+using NServiceBus.Logging;
+using ServiceControl.TransportAdapter;
+
 namespace ScAdapterService
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
-    using NServiceBus;
-    using NServiceBus.Logging;
-    using ServiceControl.TransportAdapter;
-
     class AdapterHostedService : IHostedService
     {
         // TODO: give the adapter an appropriate name
@@ -81,12 +81,12 @@ namespace ScAdapterService
 
 
 Program.cs =>
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NServiceBus.Logging;
+
 namespace ScAdapterService
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using NServiceBus.Logging;
-
     static class Program
     {
         public static void Main(string[] args)
