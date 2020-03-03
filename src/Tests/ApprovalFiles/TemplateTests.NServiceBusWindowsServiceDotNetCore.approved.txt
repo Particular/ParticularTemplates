@@ -1,5 +1,5 @@
 NServiceBusWindowsServiceDotNetCore.csproj =>
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,10 +8,10 @@ NServiceBusWindowsServiceDotNetCore.csproj =>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.2.3" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
+    <PackageReference Include="NServiceBus" Version="7.2.3" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.0.0" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
   </ItemGroup>
 
 </Project>
@@ -29,9 +29,6 @@ namespace NServiceBusWindowsServiceDotNetCore
 {
     static class Program
     {
-        // TODO: give the endpoint an appropriate name
-        static string EndpointName => "NServiceBusWindowsServiceDotNetCore";
-
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -45,7 +42,9 @@ namespace NServiceBusWindowsServiceDotNetCore
                 {
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
-                    var endpointConfiguration = new EndpointConfiguration(EndpointName);
+
+                    // TODO: give the endpoint an appropriate name
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsServiceDotNetCore");
 
                     // TODO: ensure the most appropriate serializer is chosen
                     // https://docs.particular.net/nservicebus/serialization/
@@ -79,7 +78,6 @@ namespace NServiceBusWindowsServiceDotNetCore
             // and consider setting up service recovery
             // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
-
             {
                 await context.Stop();
             }

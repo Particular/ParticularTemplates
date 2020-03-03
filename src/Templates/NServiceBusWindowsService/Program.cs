@@ -9,9 +9,6 @@ namespace NServiceBusWindowsService
 {
     static class Program
     {
-        // TODO: give the endpoint an appropriate name
-        static string EndpointName => "NServiceBusWindowsService";
-
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -25,7 +22,9 @@ namespace NServiceBusWindowsService
                 {
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
-                    var endpointConfiguration = new EndpointConfiguration(EndpointName);
+
+                    // TODO: give the endpoint an appropriate name
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
 
                     // TODO: ensure the most appropriate serializer is chosen
                     // https://docs.particular.net/nservicebus/serialization/
@@ -59,7 +58,6 @@ namespace NServiceBusWindowsService
             // and consider setting up service recovery
             // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
-
             {
                 await context.Stop();
             }
