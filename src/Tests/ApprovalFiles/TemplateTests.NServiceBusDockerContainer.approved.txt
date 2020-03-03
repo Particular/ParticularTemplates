@@ -23,7 +23,6 @@ NServiceBusDockerContainer.csproj =>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
