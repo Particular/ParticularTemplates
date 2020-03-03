@@ -10,14 +10,11 @@ namespace ScAdapterService
 {
     class AdapterHostedService : IHostedService
     {
-        // TODO: give the adapter an appropriate name
-        public string AdapterName => "TransportAdapter.ScAdapterService";
-
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
-                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>(AdapterName);
+                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.ScAdapterService");
 
                 adapterConfig.CustomizeEndpointTransport(t =>
                 {

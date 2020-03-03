@@ -11,14 +11,11 @@ namespace ScAdapterServiceDiffFramework
 {
     class AdapterHostedService : IHostedService
     {
-        // TODO: give the adapter an appropriate name
-        public string AdapterName => "TransportAdapter.ScAdapterServiceDiffFramework";
-
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
-                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>(AdapterName);
+                var adapterConfig = new TransportAdapterConfig<LearningTransport, LearningTransport>("TransportAdapter.ScAdapterServiceDiffFramework");
 
                 adapterConfig.CustomizeEndpointTransport(t =>
                 {
@@ -110,19 +107,19 @@ namespace ScAdapterServiceDiffFramework
 
 
 ScAdapterServiceDiffFramework.csproj =>
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
     <PackageReference Include="NServiceBus" Version="7.2.3" />
     <PackageReference Include="NServiceBus.Raw" Version="3.1.0" />
     <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
   </ItemGroup>
 
 </Project>
