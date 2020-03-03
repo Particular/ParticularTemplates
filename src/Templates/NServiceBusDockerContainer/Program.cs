@@ -9,9 +9,6 @@ namespace NServiceBusDockerContainer
 {
     static class Program
     {
-        // TODO: give the endpoint an appropriate name
-        static string EndpointName => "NServiceBusDockerContainer";
-
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -25,7 +22,9 @@ namespace NServiceBusDockerContainer
                 {
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
-                    var endpointConfiguration = new EndpointConfiguration(EndpointName);
+
+                    // TODO: give the endpoint an appropriate name
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusDockerContainer");
 
                     // TODO: ensure the most appropriate serializer is chosen
                     // https://docs.particular.net/nservicebus/serialization/
@@ -58,10 +57,7 @@ namespace NServiceBusDockerContainer
         {
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
-            // and consider setting up service recovery
-            // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
-
             {
                 await context.Stop();
             }
