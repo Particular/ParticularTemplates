@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 15.0.26730.16
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticularTemplates", "ParticularTemplates\ParticularTemplates.csproj", "{39D942F2-4FF2-4505-86F3-832055C508BB}"
 EndProject
@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScAdapterService", "Templat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2AF749A-F62F-4E32-BB5E-B3128850DCE8}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		..\GitVersion.yml = ..\GitVersion.yml
 	EndProjectSection
 EndProject
