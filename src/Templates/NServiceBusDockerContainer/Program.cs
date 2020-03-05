@@ -1,75 +1,90 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using NServiceBus;
+using NServiceBus.Logging;
 
 namespace NServiceBusDockerContainer
 {
-    class Program
+    static class Program
     {
-        static SemaphoreSlim semaphore = new SemaphoreSlim(0);
-
-        // TODO: consider using C# 7.1 or later, which will allow
-        // removal of this method, and renaming of MainAsync to Main
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-
-        static async Task MainAsync(string[] args)
+        public static void Main(string[] args)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .UseConsoleLifetime()
+                .UseNServiceBus(ctx =>
+                {
+                    // TODO: consider moving common endpoint configuration into a shared project
+                    // for use by all endpoints in the system
+
+                    // TODO: give the endpoint an appropriate name
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusDockerContainer");
+
+                    // TODO: ensure the most appropriate serializer is chosen
+                    // https://docs.particular.net/nservicebus/serialization/
+                    endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+
+                    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+                    // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
+                    if (Environment.UserInteractive && Debugger.IsAttached)
+                    {
+                        // TODO: choose a durable transport for production
+                        // https://docs.particular.net/transports/
+                        var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+
+                        // TODO: choose a durable persistence for production
+                        // https://docs.particular.net/persistence/
+                        endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                        // TODO: create a script for deployment to production
+                        endpointConfiguration.EnableInstallers();
+                    }
+
+                    // TODO: replace the license.xml file with your license file
+
+                    return endpointConfiguration;
+                });
+        }
+
+        static async Task OnCriticalError(ICriticalErrorContext context)
+        {
+            // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
+            // https://docs.particular.net/nservicebus/hosting/critical-errors
+            try
             {
-                SetConsoleCtrlHandler(ConsoleCtrlCheck, true);
+                await context.Stop();
             }
-            else
+            finally
             {
-                Console.CancelKeyPress += CancelKeyPress;
-                AppDomain.CurrentDomain.ProcessExit += ProcessExit;
+                FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
             }
-
-            var host = new Host();
-
-            Console.Title = host.EndpointName;
-
-            await host.Start();
-            await Console.Out.WriteLineAsync("Press Ctrl+C to exit...");
-
-            // wait until notified that the process should exit
-            await semaphore.WaitAsync();
-
-            await host.Stop();
         }
 
-        static void CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        static void FailFast(string message, Exception exception)
         {
-            e.Cancel = true;
-            semaphore.Release();
+            try
+            {
+                log.Fatal(message, exception);
+
+                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+            }
+            finally
+            {
+                Environment.FailFast(message, exception);
+            }
         }
 
-        static void ProcessExit(object sender, EventArgs e)
-        {
-            semaphore.Release();
-        }
-
-        static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
-        {
-            semaphore.Release();
-
-            return true;
-        }
-
-        // imports required for a Windows container to successfully notice when a "docker stop" command
-        // has been run and allow for a graceful shutdown of the endpoint
-        [DllImport("Kernel32")]
-        static extern bool SetConsoleCtrlHandler(HandlerRoutine handler, bool add);
-
-        delegate bool HandlerRoutine(CtrlTypes ctrlType);
-
-        enum CtrlTypes
-        {
-            CTRL_C_EVENT = 0,
-            CTRL_BREAK_EVENT = 1,
-            CTRL_CLOSE_EVENT = 2,
-            CTRL_LOGOFF_EVENT = 5,
-            CTRL_SHUTDOWN_EVENT = 6
-        }
+        // TODO: optionally choose a custom logging library
+        // https://docs.particular.net/nservicebus/logging/#custom-logging
+        // LogManager.Use<TheLoggingFactory>();
+        static readonly ILog log = LogManager.GetLogger(typeof(Program));
     }
 }
