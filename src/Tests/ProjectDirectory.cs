@@ -6,7 +6,7 @@ public static class ProjectDirectory
     static ProjectDirectory()
     {
         ProjectPath = GetCurrentDirectory();
-        SandboxPath = Path.Combine(ProjectPath, "../../sandbox");
+        SandboxPath = Path.Combine(ProjectPath, "../../tempstorage/sandbox");
     }
 
     public static string GetSandboxPath(string suffix)
