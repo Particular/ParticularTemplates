@@ -1,30 +1,27 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
+using NUnit.Framework;
 
 public static class ProjectDirectory
 {
     static ProjectDirectory()
     {
-        ProjectPath = GetCurrentDirectory();
-        SandboxPath = Path.Combine(ProjectPath, "../../tempstorage/sandbox");
+        ProjectPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..");
+        SandboxPath = Path.Combine(ProjectPath, "..", "..", "tempstorage", "sandbox");
     }
 
     public static string GetSandboxPath(string suffix)
     {
         var path = Path.Combine(SandboxPath, suffix);
+
         if (Directory.Exists(path))
         {
             Directory.Delete(path,true);
         }
+
         return path;
     }
 
-    public static string SandboxPath;
+    public static string SandboxPath { get; }
 
-    public static string ProjectPath;
-
-    static string GetCurrentDirectory([CallerFilePath] string callerFilePath = "")
-    {
-        return Directory.GetParent(callerFilePath).FullName;
-    }
+    public static string ProjectPath { get; }
 }
