@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
-using NServiceBus.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace NServiceBusWindowsService
 {
@@ -18,6 +18,10 @@ namespace NServiceBusWindowsService
         {
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddEventLog();
+                })
                 .UseNServiceBus(ctx =>
                 {
                     // TODO: consider moving common endpoint configuration into a shared project
@@ -71,8 +75,7 @@ namespace NServiceBusWindowsService
         {
             try
             {
-                log.Fatal(message, exception);
-
+                // TODO: decide what kind of last resort logging is necessary
                 // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
                 // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
             }
@@ -81,10 +84,5 @@ namespace NServiceBusWindowsService
                 Environment.FailFast(message, exception);
             }
         }
-
-        // TODO: optionally choose a custom logging library
-        // https://docs.particular.net/nservicebus/logging/#custom-logging
-        // LogManager.Use<TheLoggingFactory>();
-        static readonly ILog log = LogManager.GetLogger(typeof(Program));
     }
 }

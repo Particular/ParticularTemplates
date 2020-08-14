@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NServiceBus.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace ScAdapterService
 {
@@ -15,12 +15,11 @@ namespace ScAdapterService
         {
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddEventLog();
+                })
                 .ConfigureServices(services => services.AddHostedService<AdapterHostedService>());
         }
-
-        // TODO: optionally choose a custom logging library
-        // https://docs.particular.net/nservicebus/logging/#custom-logging
-        // LogManager.Use<TheLoggingFactory>();
-        static readonly ILog log = LogManager.GetLogger(typeof(Program));
     }
 }
