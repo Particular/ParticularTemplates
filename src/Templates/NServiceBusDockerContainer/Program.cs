@@ -18,11 +18,6 @@ namespace NServiceBusDockerContainer
         {
             return Host.CreateDefaultBuilder(args)
                 .UseConsoleLifetime()
-                // TODO: NServiceBus.Extensions.Hosting comes with built-in logging support for Microsoft.Extensions.Logging
-                // optionally you can use the logging integrations for your logger of choice with the microsoft logging or
-                // choose a custom logging library if you favour the NServiceBus logger
-                // https://docs.particular.net/nservicebus/logging/#custom-logging
-                // LogManager.Use<TheLoggingFactory>();
                 .ConfigureLogging(logging =>
                 {
                     logging.AddConsole();
