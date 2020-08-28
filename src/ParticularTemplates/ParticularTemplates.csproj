@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <Description>dotnet new templates targeting Particular tools and libraries</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageType>Template</PackageType>
