@@ -54,8 +54,8 @@
           "description": "Target net461"
         }
       ],
-      "replaces": "net462",
-      "defaultValue": "net462"
+      "replaces": "net472",
+      "defaultValue": "net472"
     }
   }
 }
