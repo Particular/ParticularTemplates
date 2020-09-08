@@ -34,26 +34,10 @@
         {
           "choice": "net472",
           "description": "Target net472"
-        },
-        {
-          "choice": "net471",
-          "description": "Target net471"
-        },
-        {
-          "choice": "net47",
-          "description": "Target net47"
-        },
-        {
-          "choice": "net462",
-          "description": "Target net462"
-        },
-        {
-          "choice": "net461",
-          "description": "Target net461"
-        }
+        }        
       ],
-      "replaces": "net462",
-      "defaultValue": "net462"
+      "replaces": "net472",
+      "defaultValue": "net472"
     }
   }
 }
