@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticularTemplates", "Part
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{1E6DD700-E344-49F1-9E50-7E3C37BBAB2A}"
 	ProjectSection(SolutionItems) = preProject
+		Templates\.editorconfig = Templates\.editorconfig
 		Templates\Directory.Build.props = Templates\Directory.Build.props
 	EndProjectSection
 EndProject
