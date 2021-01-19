@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*;..\Templates\Directory.Build.props" Pack="true" PackagePath="content" />
+    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*;..\Templates\Directory.Build.props;..\Templates\.editorconfig" Pack="true" PackagePath="content" />
   </ItemGroup>
 
 </Project>
