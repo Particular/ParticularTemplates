@@ -1,0 +1,7 @@
+[*.cs]
+
+# Justification: Don't enforce for template code
+dotnet_diagnostic.CA2007.severity = none
+
+# Justification: Don't enforce for template code
+dotnet_diagnostic.IDE0065.severity = none

@@ -15,7 +15,7 @@ public static class ProjectDirectory
 
         if (Directory.Exists(path))
         {
-            Directory.Delete(path,true);
+            Directory.Delete(path, true);
         }
 
         return path;
