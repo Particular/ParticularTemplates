@@ -10,16 +10,8 @@ env:
   DOTNET_NOLOGO: true
 jobs:
   build:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: windows-2019
-            name: Windows
-          - os: ubuntu-20.04
-            name: Linux
-      fail-fast: false
+    name: Windows
+    runs-on: windows-2019
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -42,9 +34,5 @@ jobs:
           name: NuGet packages
           path: nugets/
           retention-days: 7
-      - name: Run Windows tests
-        if: matrix.name == 'Windows'
+      - name: Run tests (Windows only)
         run: dotnet test src --configuration Release --no-build --logger "GitHubActions;report-warnings=false"
-      - name: Run Linux tests
-        if: matrix.name == 'Linux'
-        run: dotnet test src --configuration Release --no-build --framework netcoreapp3.1 --logger "GitHubActions;report-warnings=false"
