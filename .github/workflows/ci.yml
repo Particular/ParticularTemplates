@@ -34,5 +34,5 @@ jobs:
           name: NuGet packages
           path: nugets/
           retention-days: 7
-      - name: Run tests (Windows only)
+      - name: Run Windows tests
         run: dotnet test src --configuration Release --no-build --logger "GitHubActions;report-warnings=false"
