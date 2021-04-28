@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace NServiceBusWindowsService
 {
@@ -41,7 +42,7 @@ namespace NServiceBusWindowsService
                     {
                         // TODO: choose a durable transport for production
                         // https://docs.particular.net/transports/
-                        var transportExtensions = endpointConfiguration.UseTransport<LearningTransport>();
+                        var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
 
                         // TODO: choose a durable persistence for production
                         // https://docs.particular.net/persistence/
@@ -55,7 +56,7 @@ namespace NServiceBusWindowsService
                 });
         }
 
-        static async Task OnCriticalError(ICriticalErrorContext context)
+        static async Task OnCriticalError(ICriticalErrorContext context, CancellationToken cancellationToken)
         {
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
@@ -63,7 +64,7 @@ namespace NServiceBusWindowsService
             // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
             {
-                await context.Stop();
+                await context.Stop(cancellationToken);
             }
             finally
             {
