@@ -26,32 +26,12 @@
           "description": "Target netcoreapp3.1"
         },
         {
-          "choice": "netcoreapp2.1",
-          "description": "Target netcoreapp2.1"
-        },
-        {
           "choice": "net48",
           "description": "Target net48"
         },
         {
           "choice": "net472",
           "description": "Target net472"
-        },
-        {
-          "choice": "net471",
-          "description": "Target net471"
-        },
-        {
-          "choice": "net47",
-          "description": "Target net47"
-        },
-        {
-          "choice": "net462",
-          "description": "Target net462"
-        },
-        {
-          "choice": "net461",
-          "description": "Target net461"
         }
       ],
       "replaces": "net472",
