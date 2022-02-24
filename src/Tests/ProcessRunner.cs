@@ -7,6 +7,9 @@ public class ProcessRunner
     public static void RunProcess(string fileName, string arguments)
     {
         var output = new StringBuilder();
+
+        output.AppendLine($"Executing process {fileName} {arguments}");
+
         using (var process = new Process
         {
             StartInfo =
