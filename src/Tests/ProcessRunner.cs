@@ -39,9 +39,14 @@ public class ProcessRunner
             process.Start();
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
-            process.WaitForExit(10000);
-            if (process.ExitCode != 0)
+            var hasExited = process.WaitForExit(10000);
+            if (!hasExited || process.ExitCode != 0)
             {
+                if (!hasExited)
+                {
+                    output.AppendLine("The process failed to exit before the timeout period.");
+                }
+
                 throw new Exception(output.ToString());
             }
         }
