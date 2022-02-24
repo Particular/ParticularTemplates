@@ -30,6 +30,14 @@ namespace NServiceBusWindowsService
 
                     // TODO: give the endpoint an appropriate name
                     var endpointConfiguration = new EndpointConfiguration("NServiceBusWindowsService");
+                    
+                    // TODO: choose a durable transport for production
+                    // https://docs.particular.net/transports/
+                    var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
+
+                    // TODO: choose a durable persistence for production
+                    // https://docs.particular.net/persistence/
+                    endpointConfiguration.UsePersistence<LearningPersistence>();
 
                     // TODO: ensure the most appropriate serializer is chosen
                     // https://docs.particular.net/nservicebus/serialization/
@@ -37,17 +45,8 @@ namespace NServiceBusWindowsService
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-                    // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
                     if (Environment.UserInteractive && Debugger.IsAttached)
                     {
-                        // TODO: choose a durable transport for production
-                        // https://docs.particular.net/transports/
-                        var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
-
-                        // TODO: choose a durable persistence for production
-                        // https://docs.particular.net/persistence/
-                        endpointConfiguration.UsePersistence<LearningPersistence>();
-
                         // TODO: create a script for deployment to production
                         endpointConfiguration.EnableInstallers();
                     }
