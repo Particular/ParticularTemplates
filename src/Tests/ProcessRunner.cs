@@ -42,7 +42,7 @@ public class ProcessRunner
             process.Start();
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
-            var hasExited = process.WaitForExit(10000);
+            var hasExited = process.WaitForExit(60000);
             if (!hasExited || process.ExitCode != 0)
             {
                 if (!hasExited)
