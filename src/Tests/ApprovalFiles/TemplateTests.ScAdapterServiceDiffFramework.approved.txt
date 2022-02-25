@@ -117,7 +117,7 @@ ScAdapterServiceDiffFramework.csproj =>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
     <PackageReference Include="NServiceBus" Version="8.0.0-alpha.3024" />
     <PackageReference Include="NServiceBus.Raw" Version="3.2.5" />
-    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.1" />
+    <PackageReference Include="ServiceControl.TransportAdapter" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
