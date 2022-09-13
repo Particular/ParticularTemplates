@@ -13,10 +13,6 @@ COPY --from=build /app .
 ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
 
 
-license.xml =>
-<!-- this file needs to be replaced with your license file-->
-
-
 NServiceBusDockerContainer.csproj =>
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -130,5 +126,9 @@ namespace NServiceBusDockerContainer
         }
     }
 }
+
+
+license.xml =>
+<!-- this file needs to be replaced with your license file-->
 
 

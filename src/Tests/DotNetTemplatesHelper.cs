@@ -1,30 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using SimpleExec;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 public static class DotNetTemplatesHelper
 {
     static string dotNetCli = "dotnet";
 
-    public static void ExecuteNew(string parameters)
+    public static async Task<(string StandardOutput, string StandardError)> ExecuteNew(string parameters, CancellationToken cancellationToken = default)
     {
-        ProcessRunner.RunProcess(dotNetCli, "new " + parameters);
+        return await Command.ReadAsync(dotNetCli, "new " + parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    public static void Uninstall(string templatePackage)
+    public static async Task Uninstall(string templatePackage, CancellationToken cancellationToken = default)
     {
-        ExecuteNew(" --uninstall " + templatePackage);
+        var (output, _) = await ExecuteNew(" --uninstall ", cancellationToken).ConfigureAwait(false);
+
+        if (output.Contains(templatePackage, StringComparison.OrdinalIgnoreCase))
+        {
+            _ = ExecuteNew(" --uninstall " + templatePackage, cancellationToken).ConfigureAwait(false);
+        }
     }
 
-    public static void Install(string packagePath)
+    public static async Task Install(string packagePath, CancellationToken cancellationToken = default)
     {
-        ExecuteNew(" --install " + packagePath);
+        _ = await ExecuteNew(" --install " + packagePath, cancellationToken).ConfigureAwait(false);
     }
 
-    public static void Run(string templateName, string targetDirectory, Dictionary<string, string> parameters = null)
+    public static async Task Run(string templateName, string targetDirectory, Dictionary<string, string> parameters = null, CancellationToken cancellationToken = default)
     {
-        ExecuteNew($"{templateName} --output {targetDirectory}" + FormatParameters(parameters));
+        _ = await ExecuteNew($"{templateName} --output {targetDirectory}" + FormatParameters(parameters), cancellationToken).ConfigureAwait(false);
     }
 
     static string FormatParameters(Dictionary<string, string> parameters)
@@ -33,17 +42,19 @@ public static class DotNetTemplatesHelper
         {
             return "";
         }
+
         var builder = new StringBuilder();
         foreach (var parameter in parameters)
         {
             builder.Append($" --{parameter.Key} {parameter.Value}");
         }
+
         return builder.ToString();
     }
 
-    public static void Build(string projectDirectory)
+    public static async Task Build(string projectDirectory, CancellationToken cancellationToken = default)
     {
         var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
-        ProcessRunner.RunProcess(dotNetCli, $" build {projectFile}");
+        _ = await Command.ReadAsync(dotNetCli, $" build {projectFile}", cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }
