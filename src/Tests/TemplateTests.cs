@@ -11,10 +11,11 @@ using Particular.Approvals;
 [TestFixture]
 public class TemplateTests : IDisposable
 {
-    public TemplateTests()
+    [SetUp]
+    public async Task Setup()
     {
-        Uninstall(CreateTimeoutToken()).GetAwaiter().GetResult();
-        Install(CreateTimeoutToken()).GetAwaiter().GetResult();
+        await Uninstall(CreateTimeoutToken()).ConfigureAwait(false);
+        await Install(CreateTimeoutToken()).ConfigureAwait(false);
     }
 
     static async Task Install(CancellationToken cancellationToken)
