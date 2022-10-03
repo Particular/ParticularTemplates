@@ -11,7 +11,7 @@ using Particular.Approvals;
 [TestFixture]
 public class TemplateTests : IDisposable
 {
-    [SetUp]
+    [OneTimeSetUp]
     public async Task Setup()
     {
         await Uninstall(CreateTimeoutToken()).ConfigureAwait(false);
