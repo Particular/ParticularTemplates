@@ -7,13 +7,14 @@ NServiceBusWindowsService.csproj =>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
-    <PackageReference Include="NServiceBus" Version="8.0.0-beta.1" />
-    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0-beta.1" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0-beta.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
+    <PackageReference Include="NServiceBus" Version="8.0.0-rc.3" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0-rc.2" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0-rc.3" />
   </ItemGroup>
 
 </Project>
+
 
 
 Program.cs =>
@@ -52,7 +53,7 @@ namespace NServiceBusWindowsService
 
                     // TODO: ensure the most appropriate serializer is chosen
                     // https://docs.particular.net/nservicebus/serialization/
-                    endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
@@ -106,5 +107,6 @@ namespace NServiceBusWindowsService
         }
     }
 }
+
 
 
