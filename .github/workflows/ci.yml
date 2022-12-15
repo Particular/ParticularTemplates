@@ -14,11 +14,11 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.2.0
         with:
           fetch-depth: 0
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v2.1.0
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: |
             5.0.x
@@ -27,10 +27,10 @@ jobs:
         run: dotnet build src --configuration Release
       - name: Upload packages
         if: matrix.name == 'Windows'
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: NuGet packages
           path: nugets/
           retention-days: 7
       - name: Run Windows tests
-        uses: Particular/run-tests-action@v1.3.0
+        uses: Particular/run-tests-action@v1.4.0
