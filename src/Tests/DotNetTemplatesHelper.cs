@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,24 +8,32 @@ public static class DotNetTemplatesHelper
 {
     static string dotNetCli = "dotnet";
 
-    public static void ExecuteNew(string parameters)
+    public static string ExecuteNew(string parameters)
     {
-        ProcessRunner.RunProcess(dotNetCli, "new " + parameters);
+        return ProcessRunner.RunProcess(dotNetCli, "new " + parameters);
     }
 
-    public static void Uninstall(string templatePackage)
+    public static string Uninstall(string templatePackage)
     {
-        ExecuteNew(" --uninstall " + templatePackage);
+        // Check if installed first
+        var output = ExecuteNew(" --uninstall");
+
+        if (output.IndexOf(templatePackage, StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return ExecuteNew(" --uninstall " + templatePackage);
+        }
+
+        return output;
     }
 
-    public static void Install(string packagePath)
+    public static string Install(string packagePath)
     {
-        ExecuteNew(" --install " + packagePath);
+        return ExecuteNew(" --install " + packagePath);
     }
 
-    public static void Run(string templateName, string targetDirectory, Dictionary<string, string> parameters = null)
+    public static string Run(string templateName, string targetDirectory, Dictionary<string, string> parameters = null)
     {
-        ExecuteNew($"{templateName} --output {targetDirectory}" + FormatParameters(parameters));
+        return ExecuteNew($"{templateName} --output {targetDirectory}" + FormatParameters(parameters));
     }
 
     static string FormatParameters(Dictionary<string, string> parameters)
