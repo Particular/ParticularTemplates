@@ -4,7 +4,7 @@ using System.Text;
 
 public class ProcessRunner
 {
-    public static void RunProcess(string fileName, string arguments)
+    public static string RunProcess(string fileName, string arguments)
     {
         var output = new StringBuilder();
         using (var process = new Process
@@ -45,5 +45,7 @@ public class ProcessRunner
                 throw new Exception(output.ToString());
             }
         }
+
+        return output.ToString();
     }
 }
