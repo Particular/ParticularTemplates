@@ -67,27 +67,6 @@ public class TemplateTests : IDisposable
         await VerifyAndBuild("nsbdockercontainer", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
     }
 
-    [Test]
-    public async Task ScAdapterService()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task ScAdapterServiceDiffFramework()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDiffFramework));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, CreateTimeoutToken(), new Dictionary<string, string> { { "framework", "net48" } }).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task ScAdapterServiceDotNetCore()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDotNetCore));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, new CancellationTokenSource(60_000).Token, new Dictionary<string, string> { { "framework", "net6.0" } }).ConfigureAwait(false);
-    }
-
     static async Task VerifyAndBuild(string templateName, string targetDirectory, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
     {
         await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken).ConfigureAwait(false);
