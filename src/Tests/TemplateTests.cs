@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -80,8 +81,16 @@ public class TemplateTests : IDisposable
 
         foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*").OrderBy(file => file, StringComparer.Ordinal))
         {
-            fileText.AppendLine($"{Path.GetFileName(file)} =>");
-            fileText.Append(File.ReadAllText(file));
+            var filename = Path.GetFileName(file);
+            var contents = File.ReadAllText(file);
+
+            if (Path.GetExtension(filename) == ".csproj")
+            {
+                contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+""", "Version=\"(VERSION)\"");
+            }
+
+            fileText.AppendLine($"{filename} =>");
+            fileText.Append(contents);
             fileText.AppendLine();
             fileText.AppendLine();
             fileText.AppendLine();
