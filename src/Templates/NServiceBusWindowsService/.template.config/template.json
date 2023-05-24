@@ -20,6 +20,10 @@
       "datatype": "choice",
       "choices": [
         {
+          "choice": "net7.0",
+          "description": "Target net7.0"
+        },
+        {
           "choice": "net6.0",
           "description": "Target net6.0"
         },
@@ -32,8 +36,8 @@
           "description": "Target net472"
         }
       ],
-      "replaces": "net472",
-      "defaultValue": "net472"
+      "replaces": "net7.0",
+      "defaultValue": "net7.0"
     }
   }
 }
