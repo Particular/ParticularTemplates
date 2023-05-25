@@ -2,7 +2,10 @@
   "author": "Particular Software",
   "classifications": [
     "NServiceBus",
-    "WindowsService"
+    "Cloud",
+    "Console",
+    "Service",
+    "Web"
   ],
   "name": "NServiceBus Endpoint",
   "identity": "NServiceBus.Endpoint",
@@ -63,10 +66,6 @@
         {
           "choice": "SQL",
           "description": "Sql Transport"
-        },
-        {
-          "choice": "MSMQ",
-          "description": "MSMQ"
         }
       ],
       "defaultValue": "LearningTransport"

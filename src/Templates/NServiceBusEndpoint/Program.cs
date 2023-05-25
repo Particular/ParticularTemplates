@@ -1,3 +1,7 @@
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 #if (persistence == "CosmosDB")
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -14,10 +18,6 @@ using NServiceBus.Persistence.CosmosDB;
 #if (persistence == "RavenDB")
 using Raven.Client.Documents;
 #endif
-using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace NServiceBusWindowsService
 {
@@ -49,48 +49,50 @@ namespace NServiceBusWindowsService
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    // TODO: give the endpoint an appropriate name
                     var endpointConfiguration = new EndpointConfiguration("ProjectName");
 
-                    // Message transport: https://docs.particular.net/transports/
 #if (transport == "LearningTransport")
+                    // Learning Transport: https://docs.particular.net/transports/learning/
                     var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
 #elseif (transport == "AzureServiceBus")
-                    // TODO: Provide Azure Service Bus connection string
+                    // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
                     var transport = new AzureServiceBusTransport("CONNECTION_STRING");
                     var transportExtensions = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQS")
+                    // Amazon SQS Transport: https://docs.particular.net/transports/sqs/
                     var transport = new SqsTransport();
                     endpointConfiguration.UseTransport(transport);
 #elseif (transport == "RabbitMQ")
-                    // TODO: Provide Azure Service Bus connection string
+                    // RabbitMQ Transport: https://docs.particular.net/transports/rabbitmq/
                     var rabbitMqConnectionString = "CONNECTION_STRING";
                     var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), rabbitMqConnectionString);
                     var transportExtensions = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQL")
-                    // TODO: Provide Azure Service Bus connection string
+                    // SQL Server Transport: https://docs.particular.net/transports/sql/
                     var transport = new SqlServerTransport("CONNECTION_STRING");
                     var transportExtensions = endpointConfiguration.UseTransport(transport);
-#elseif (transport == "MSMQ")
-                    var transportExtensions = endpointConfiguration.UseTransport(new MsmqTransport());
 #endif
 
-                    // Persistence: https://docs.particular.net/persistence/
 #if (persistence == "LearningPersistence")
+                    // Learning Persistence: https://docs.particular.net/persistence/learning/
                     endpointConfiguration.UsePersistence<LearningPersistence>();
 #elseif (persistence == "SQL")
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
                     var dbConnectionString = "CONNECTION_STRING";
                     var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                     persistence.SqlDialect<SqlDialect.MsSqlServer>();
                     persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
 #elseif (persistence == "CosmosDB")
+                    // Cosmos DB Persistence: https://docs.particular.net/persistence/cosmosdb/
                     var persistence = endpointConfiguration.UsePersistence<CosmosPersistence>();
                     persistence.CosmosClient(new CosmosClient("CONNECTION_STRING"));
                     persistence.DatabaseName("DATABASE_NAME");
 #elseif (persistence == "AzureTable")
+                    // Azure Table Persistence: https://docs.particular.net/persistence/azure-table/
                     var persistence = endpointConfiguration.UsePersistence<AzureTablePersistence>();
                     persistence.ConnectionString("DefaultEndpointsProtocol=https;AccountName=[ACCOUNT];AccountKey=[KEY];");
 #elseif (persistence == "RavenDB")
+                    // RavenDB Persistence: https://docs.particular.net/persistence/ravendb/
                     DocumentStore documentStore;
                     var persistence = endpointConfiguration.UsePersistence<RavenDBPersistence>();
                     persistence.SetDefaultDocumentStore(readOnlySettings =>
@@ -103,11 +105,14 @@ namespace NServiceBusWindowsService
                         return documentStore;
                     });
 #elseif (persistence == "MongoDB")
+                    // MongoDB Persistence: https://docs.particular.net/persistence/mongodb/
                     var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();
                     persistence.DatabaseName("DATABASE_NAME");
 #elseif (persistence == "DynamoDB")
+                    // Amazon DynamoDB Persistence: https://docs.particular.net/persistence/dynamodb/
                     var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();
 #elseif (persistence == "NonDurable")
+                    // Non-Durable Persistence: https://docs.particular.net/persistence/non-durable/
                     var persistence = endpointConfiguration.UsePersistence<NonDurablePersistence>();
 #endif
 
@@ -116,12 +121,9 @@ namespace NServiceBusWindowsService
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-                    // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
-                    if (Environment.UserInteractive && Debugger.IsAttached)
-                    {
-                        // TODO: create a script for deployment to production
-                        endpointConfiguration.EnableInstallers();
-                    }
+                    // Installers are useful in development. Consider disabling in production.
+                    // https://docs.particular.net/nservicebus/operations/installers
+                    endpointConfiguration.EnableInstallers();
 
                     return endpointConfiguration;
                 });

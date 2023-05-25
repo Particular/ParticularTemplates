@@ -24,9 +24,11 @@
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0" />
   </ItemGroup>
+<!--#if (hosting == "Docker")-->
 
   <ItemGroup Condition="'$(hosting)' == 'Docker'">
     <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+<!--#endif-->
 
 </Project>

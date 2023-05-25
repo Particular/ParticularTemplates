@@ -22,7 +22,6 @@ public class TemplateTests : IDisposable
     [OneTimeSetUp]
     public async Task Setup()
     {
-
         await Uninstall(CreateTimeoutToken()).ConfigureAwait(false);
         await Install(CreateTimeoutToken()).ConfigureAwait(false);
     }
@@ -64,7 +63,6 @@ public class TemplateTests : IDisposable
     [TestCase("SQS")]
     [TestCase("RabbitMQ")]
     [TestCase("SQL")]
-    [TestCase("MSMQ")]
     public async Task NServiceBusEndpointTransports(string transport)
     {
         var parameters = new Dictionary<string, string> { { "transport", transport } };
