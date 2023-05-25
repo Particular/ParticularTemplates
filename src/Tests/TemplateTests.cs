@@ -12,9 +12,17 @@ using Particular.Approvals;
 [TestFixture]
 public class TemplateTests : IDisposable
 {
+    static TemplateTests()
+    {
+        // Windows separator char becomes special character in a regex, need to escape it
+        var separator = Path.DirectorySeparatorChar == '\\' ? @"\\" : Path.DirectorySeparatorChar.ToString();
+        IgnorePathRegex = new Regex($@"^{separator}(bin|obj){separator}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    }
+
     [OneTimeSetUp]
     public async Task Setup()
     {
+
         await Uninstall(CreateTimeoutToken()).ConfigureAwait(false);
         await Install(CreateTimeoutToken()).ConfigureAwait(false);
     }
@@ -71,16 +79,22 @@ public class TemplateTests : IDisposable
     static async Task VerifyAndBuild(string templateName, string targetDirectory, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
     {
         await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken).ConfigureAwait(false);
-        VerifyDirectory(targetDirectory);
         await DotNetTemplatesHelper.Build(targetDirectory, cancellationToken).ConfigureAwait(false);
+        VerifyDirectory(targetDirectory);
     }
 
     static void VerifyDirectory(string targetDirectory)
     {
         var fileText = new StringBuilder();
 
-        foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*").OrderBy(file => file, StringComparer.Ordinal))
+        foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*", SearchOption.AllDirectories).OrderBy(file => file, StringComparer.Ordinal))
         {
+            var relativePath = file.Substring(targetDirectory.Length);
+            if (IgnorePathRegex.IsMatch(relativePath))
+            {
+                continue;
+            }
+
             var filename = Path.GetFileName(file);
             var contents = File.ReadAllText(file);
 
@@ -98,4 +112,7 @@ public class TemplateTests : IDisposable
 
         Approver.Verify(fileText.ToString());
     }
+
+    static readonly Regex IgnorePathRegex;
+
 }
