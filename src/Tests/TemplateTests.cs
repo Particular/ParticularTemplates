@@ -31,8 +31,12 @@ public class TemplateTests : IDisposable
     {
         //dotnet new --install \nugets\ParticularTemplates.xxx.nupkg
         var nugets = Path.GetFullPath(Path.Combine(ProjectDirectory.ProjectPath, "..", "..", "nugets"));
-        var nugetPath = Directory.EnumerateFiles(nugets, "*.nupkg").Single();
-        await DotNetTemplatesHelper.Install(nugetPath, cancellationToken).ConfigureAwait(false);
+        var directoryInfo = new DirectoryInfo(nugets);
+        var latestNuget = directoryInfo.GetFiles("*.nupkg")
+            .OrderByDescending(f => f.LastWriteTimeUtc)
+            .First();
+
+        await DotNetTemplatesHelper.Install(latestNuget.FullName, cancellationToken).ConfigureAwait(false);
     }
 
     async Task Uninstall(CancellationToken cancellationToken)
@@ -47,6 +51,31 @@ public class TemplateTests : IDisposable
     }
 
     CancellationToken CreateTimeoutToken() => new CancellationTokenSource(60_000).Token;
+
+    [Test]
+    public async Task NServiceBusEndpoint()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint));
+        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCase("LearningTransport")]
+    [TestCase("AzureServiceBus")]
+    [TestCase("SQS")]
+    [TestCase("RabbitMQ")]
+    [TestCase("SQL")]
+    [TestCase("MSMQ")]
+    public async Task NServiceBusEndpointTransports(string transport)
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + transport);
+        var parameters = new Dictionary<string, string> { { "transport", transport } };
+        if (transport == "MSMQ")
+        {
+            parameters.Add("framework", "net48");
+        }
+        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
+    }
 
     [Test]
     public async Task NServiceBusWindowsService()
@@ -95,6 +124,8 @@ public class TemplateTests : IDisposable
                 continue;
             }
 
+            const string hr = "---------------------------------------------------------------";
+
             var filename = Path.GetFileName(file);
             var contents = File.ReadAllText(file);
 
@@ -103,14 +134,15 @@ public class TemplateTests : IDisposable
                 contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+""", "Version=\"(VERSION)\"");
             }
 
-            fileText.AppendLine($"{filename} =>");
+            fileText.AppendLine(hr);
+            fileText.AppendLine(filename);
+            fileText.AppendLine(hr);
             fileText.Append(contents);
-            fileText.AppendLine();
-            fileText.AppendLine();
             fileText.AppendLine();
         }
 
-        Approver.Verify(fileText.ToString());
+        var scenario = TestContext.CurrentContext.Test.Arguments.Any() ? string.Join("-", TestContext.CurrentContext.Test.Arguments.Select(arg => arg.ToString())) : null;
+        Approver.Verify(fileText.ToString(), scenario: scenario);
     }
 
     static readonly Regex IgnorePathRegex;
