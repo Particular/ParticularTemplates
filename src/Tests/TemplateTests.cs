@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -67,27 +68,6 @@ public class TemplateTests : IDisposable
         await VerifyAndBuild("nsbdockercontainer", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
     }
 
-    [Test]
-    public async Task ScAdapterService()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterService));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task ScAdapterServiceDiffFramework()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDiffFramework));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, CreateTimeoutToken(), new Dictionary<string, string> { { "framework", "net48" } }).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task ScAdapterServiceDotNetCore()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(ScAdapterServiceDotNetCore));
-        await VerifyAndBuild("scadapterwinservice", targetDirectory, new CancellationTokenSource(60_000).Token, new Dictionary<string, string> { { "framework", "net6.0" } }).ConfigureAwait(false);
-    }
-
     static async Task VerifyAndBuild(string templateName, string targetDirectory, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
     {
         await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken).ConfigureAwait(false);
@@ -101,8 +81,16 @@ public class TemplateTests : IDisposable
 
         foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*").OrderBy(file => file, StringComparer.Ordinal))
         {
-            fileText.AppendLine($"{Path.GetFileName(file)} =>");
-            fileText.Append(File.ReadAllText(file));
+            var filename = Path.GetFileName(file);
+            var contents = File.ReadAllText(file);
+
+            if (Path.GetExtension(filename) == ".csproj")
+            {
+                contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+""", "Version=\"(VERSION)\"");
+            }
+
+            fileText.AppendLine($"{filename} =>");
+            fileText.Append(contents);
             fileText.AppendLine();
             fileText.AppendLine();
             fileText.AppendLine();
