@@ -1,6 +1,19 @@
+#if (persistence == "CosmosDB")
+using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Fluent;
+#endif
+#if UsesSQL
+using Microsoft.Data.SqlClient;
+#endif
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+#if (persistence == "CosmosDB")
+using NServiceBus.Persistence.CosmosDB;
+#endif
+#if (persistence == "RavenDB")
+using Raven.Client.Documents;
+#endif
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -62,6 +75,42 @@ namespace NServiceBusWindowsService
                     var transportExtensions = endpointConfiguration.UseTransport(new MsmqTransport());
 #endif
 
+                    // Persistence: https://docs.particular.net/persistence/
+#if (persistence == "LearningPersistence")
+                    endpointConfiguration.UsePersistence<LearningPersistence>();
+#elseif (persistence == "SQL")
+                    var dbConnectionString = "CONNECTION_STRING";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.MsSqlServer>();
+                    persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
+#elseif (persistence == "CosmosDB")
+                    var persistence = endpointConfiguration.UsePersistence<CosmosPersistence>();
+                    persistence.CosmosClient(new CosmosClient("CONNECTION_STRING"));
+                    persistence.DatabaseName("DATABASE_NAME");
+#elseif (persistence == "AzureTable")
+                    var persistence = endpointConfiguration.UsePersistence<AzureTablePersistence>();
+                    persistence.ConnectionString("DefaultEndpointsProtocol=https;AccountName=[ACCOUNT];AccountKey=[KEY];");
+#elseif (persistence == "RavenDB")
+                    DocumentStore documentStore;
+                    var persistence = endpointConfiguration.UsePersistence<RavenDBPersistence>();
+                    persistence.SetDefaultDocumentStore(readOnlySettings =>
+                    {
+                        documentStore = new DocumentStore
+                        {
+                            Urls = new[] { "http://localhost:8080" },
+                            Database = readOnlySettings.EndpointName()
+                        };
+                        return documentStore;
+                    });
+#elseif (persistence == "MongoDB")
+                    var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();
+                    persistence.DatabaseName("DATABASE_NAME");
+#elseif (persistence == "DynamoDB")
+                    var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();
+#elseif (persistence == "NonDurable")
+                    var persistence = endpointConfiguration.UsePersistence<NonDurablePersistence>();
+#endif
+
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
@@ -70,10 +119,6 @@ namespace NServiceBusWindowsService
                     // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
                     if (Environment.UserInteractive && Debugger.IsAttached)
                     {
-                        // TODO: choose a durable persistence for production
-                        // https://docs.particular.net/persistence/
-                        endpointConfiguration.UsePersistence<LearningPersistence>();
-
                         // TODO: create a script for deployment to production
                         endpointConfiguration.EnableInstallers();
                     }

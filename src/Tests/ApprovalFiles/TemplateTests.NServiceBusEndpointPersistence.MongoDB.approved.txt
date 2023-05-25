@@ -1,16 +1,17 @@
 ---------------------------------------------------------------
-NServiceBusEndpointTargetFrameworknet48.csproj
+NServiceBusEndpointPersistenceMongoDB.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Storage.MongoDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -51,13 +52,14 @@ namespace NServiceBusWindowsService
                     // for use by all endpoints in the system
 
                     // TODO: give the endpoint an appropriate name
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet48");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceMongoDB");
 
                     // Message transport: https://docs.particular.net/transports/
                     var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
 
                     // Persistence: https://docs.particular.net/persistence/
-                    endpointConfiguration.UsePersistence<LearningPersistence>();
+                    var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();
+                    persistence.DatabaseName("DATABASE_NAME");
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();

@@ -55,8 +55,7 @@ public class TemplateTests : IDisposable
     [Test]
     public async Task NServiceBusEndpoint()
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint));
-        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken()).ConfigureAwait(false);
     }
 
     [Test]
@@ -68,13 +67,12 @@ public class TemplateTests : IDisposable
     [TestCase("MSMQ")]
     public async Task NServiceBusEndpointTransports(string transport)
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + transport);
         var parameters = new Dictionary<string, string> { { "transport", transport } };
         if (transport == "MSMQ")
         {
             parameters.Add("framework", "net48");
         }
-        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
     }
 
     [Test]
@@ -83,9 +81,8 @@ public class TemplateTests : IDisposable
     [TestCase("Docker")]
     public async Task NServiceBusEndpointHosting(string hosting)
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + hosting);
         var parameters = new Dictionary<string, string> { { "hosting", hosting } };
-        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
     }
 
     [Test]
@@ -95,13 +92,28 @@ public class TemplateTests : IDisposable
     [TestCase("net472")]
     public async Task NServiceBusEndpointTargetFramework(string framework)
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + framework);
         var parameters = new Dictionary<string, string> { { "framework", framework } };
-        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
     }
 
-    static async Task VerifyAndBuild(string templateName, string targetDirectory, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
+    [Test]
+    [TestCase("LearningPersistence")]
+    [TestCase("SQL")]
+    [TestCase("CosmosDB")]
+    [TestCase("AzureTable")]
+    [TestCase("RavenDB")]
+    [TestCase("MongoDB")]
+    [TestCase("DynamoDB")]
+    [TestCase("NonDurable")]
+    public async Task NServiceBusEndpointPersistence(string persistence)
     {
+        var parameters = new Dictionary<string, string> { { "persistence", persistence } };
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
+    }
+
+    static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath();
         await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken).ConfigureAwait(false);
         await DotNetTemplatesHelper.Build(targetDirectory, cancellationToken).ConfigureAwait(false);
         VerifyDirectory(targetDirectory);
@@ -136,8 +148,7 @@ public class TemplateTests : IDisposable
             fileText.AppendLine();
         }
 
-        var scenario = TestContext.CurrentContext.Test.Arguments.Any() ? string.Join("-", TestContext.CurrentContext.Test.Arguments.Select(arg => arg.ToString())) : null;
-        Approver.Verify(fileText.ToString(), scenario: scenario);
+        Approver.Verify(fileText.ToString(), scenario: ProjectDirectory.GetScenarioFromTestArguments());
     }
 
     static readonly Regex IgnorePathRegex;

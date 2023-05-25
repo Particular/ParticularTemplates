@@ -71,6 +71,46 @@
       ],
       "defaultValue": "LearningTransport"
     },
+    "persistence": {
+      "type": "parameter",
+      "description": "Where to store data. This should be the same as your business data.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "LearningPersistence",
+          "description": "Learning Persistence"
+        },
+        {
+          "choice": "SQL",
+          "description": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+        },
+        {
+          "choice": "CosmosDB",
+          "description": "Cosmos DB"
+        },
+        {
+          "choice": "AzureTable",
+          "description": "Azure Table Storage"
+        },
+        {
+          "choice": "RavenDB",
+          "description": "RavenDB"
+        },
+        {
+          "choice": "MongoDB",
+          "description": "MongoDB"
+        },
+        {
+          "choice": "DynamoDB",
+          "description": "DynamoDB"
+        },
+        {
+          "choice": "NonDurable",
+          "description": "NonDurable Storage"
+        }
+      ],
+      "defaultValue": "LearningPersistence"
+    },
     "hosting": {
       "type": "parameter",
       "description": "The hosting model to use.",
@@ -90,6 +130,10 @@
         }
       ],
       "defaultValue": "ConsoleApp"
+    },
+    "UsesSQL": {
+      "type": "computed",
+      "value": "(transport == \"SQL\" || persistence == \"SQL\")"
     }
   },
   "sources": [

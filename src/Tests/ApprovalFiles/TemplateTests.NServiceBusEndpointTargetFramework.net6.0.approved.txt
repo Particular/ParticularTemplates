@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpointnet6.0.csproj
+NServiceBusEndpointTargetFrameworknet6.0.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -51,10 +51,13 @@ namespace NServiceBusWindowsService
                     // for use by all endpoints in the system
 
                     // TODO: give the endpoint an appropriate name
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointnet6._0");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet6._0");
 
                     // Message transport: https://docs.particular.net/transports/
                     var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
+
+                    // Persistence: https://docs.particular.net/persistence/
+                    endpointConfiguration.UsePersistence<LearningPersistence>();
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
@@ -64,10 +67,6 @@ namespace NServiceBusWindowsService
                     // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
                     if (Environment.UserInteractive && Debugger.IsAttached)
                     {
-                        // TODO: choose a durable persistence for production
-                        // https://docs.particular.net/persistence/
-                        endpointConfiguration.UsePersistence<LearningPersistence>();
-
                         // TODO: create a script for deployment to production
                         endpointConfiguration.EnableInstallers();
                     }
