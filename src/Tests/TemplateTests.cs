@@ -78,31 +78,26 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
-    public async Task NServiceBusWindowsService()
+    [TestCase("ConsoleApp")]
+    [TestCase("WindowsService")]
+    [TestCase("Docker")]
+    public async Task NServiceBusEndpointHosting(string hosting)
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsService));
-        await VerifyAndBuild("nsbwinservice", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + hosting);
+        var parameters = new Dictionary<string, string> { { "hosting", hosting } };
+        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task NServiceBusWindowsServiceDiffFramework()
+    [TestCase("net7.0")]
+    [TestCase("net6.0")]
+    [TestCase("net48")]
+    [TestCase("net472")]
+    public async Task NServiceBusEndpointTargetFramework(string framework)
     {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDiffFramework));
-        await VerifyAndBuild("nsbwinservice", targetDirectory, CreateTimeoutToken(), new Dictionary<string, string> { { "framework", "net48" } }).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task NServiceBusWindowsServiceDotNetCore()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusWindowsServiceDotNetCore));
-        await VerifyAndBuild("nsbwinservice", targetDirectory, CreateTimeoutToken(), new Dictionary<string, string> { { "framework", "net6.0" } }).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task NServiceBusDockerContainer()
-    {
-        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusDockerContainer));
-        await VerifyAndBuild("nsbdockercontainer", targetDirectory, CreateTimeoutToken()).ConfigureAwait(false);
+        var targetDirectory = ProjectDirectory.GetSandboxPath(nameof(NServiceBusEndpoint) + framework);
+        var parameters = new Dictionary<string, string> { { "framework", framework } };
+        await VerifyAndBuild("nsbendpoint", targetDirectory, CreateTimeoutToken(), parameters).ConfigureAwait(false);
     }
 
     static async Task VerifyAndBuild(string templateName, string targetDirectory, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)

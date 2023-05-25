@@ -15,6 +15,7 @@ NServiceBusEndpointLearningTransport.csproj
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
+
 </Project>
 ---------------------------------------------------------------
 Program.cs
@@ -39,10 +40,10 @@ namespace NServiceBusWindowsService
         static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseWindowsService()
+                .UseConsoleLifetime()
                 .ConfigureLogging(logging =>
                 {
-                    logging.AddEventLog();
+                    logging.AddConsole();
                 })
                 .UseNServiceBus(ctx =>
                 {

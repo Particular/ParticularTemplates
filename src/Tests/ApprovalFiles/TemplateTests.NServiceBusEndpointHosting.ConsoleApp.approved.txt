@@ -1,3 +1,25 @@
+---------------------------------------------------------------
+NServiceBusEndpointConsoleApp.csproj
+---------------------------------------------------------------
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
+  </ItemGroup>
+
+
+</Project>
+---------------------------------------------------------------
+Program.cs
+---------------------------------------------------------------
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
@@ -18,49 +40,21 @@ namespace NServiceBusWindowsService
         static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-#if (hosting == "WindowsService")
-                .UseWindowsService()
-                .ConfigureLogging(logging =>
-                {
-                    logging.AddEventLog();
-                })
-#else
                 .UseConsoleLifetime()
                 .ConfigureLogging(logging =>
                 {
                     logging.AddConsole();
                 })
-#endif
                 .UseNServiceBus(ctx =>
                 {
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
                     // TODO: give the endpoint an appropriate name
-                    var endpointConfiguration = new EndpointConfiguration("ProjectName");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointConsoleApp");
 
                     // Message transport: https://docs.particular.net/transports/
-#if (transport == "LearningTransport")
                     var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
-#elseif (transport == "AzureServiceBus")
-                    // TODO: Provide Azure Service Bus connection string
-                    var transport = new AzureServiceBusTransport("CONNECTION_STRING");
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
-#elseif (transport == "SQS")
-                    var transport = new SqsTransport();
-                    endpointConfiguration.UseTransport(transport);
-#elseif (transport == "RabbitMQ")
-                    // TODO: Provide Azure Service Bus connection string
-                    var rabbitMqConnectionString = "CONNECTION_STRING";
-                    var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), rabbitMqConnectionString);
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
-#elseif (transport == "SQL")
-                    // TODO: Provide Azure Service Bus connection string
-                    var transport = new SqlServerTransport("CONNECTION_STRING");
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
-#elseif (transport == "MSMQ")
-                    var transportExtensions = endpointConfiguration.UseTransport(new MsmqTransport());
-#endif
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
@@ -113,3 +107,4 @@ namespace NServiceBusWindowsService
         }
     }
 }
+

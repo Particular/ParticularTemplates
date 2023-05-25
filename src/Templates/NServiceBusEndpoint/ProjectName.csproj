@@ -17,4 +17,8 @@
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(hosting)' == 'Docker'">
+    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

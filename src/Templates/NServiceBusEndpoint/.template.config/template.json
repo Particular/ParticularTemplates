@@ -70,6 +70,39 @@
         }
       ],
       "defaultValue": "LearningTransport"
+    },
+    "hosting": {
+      "type": "parameter",
+      "description": "The hosting model to use.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "ConsoleApp",
+          "description": "Console Application"
+        },
+        {
+          "choice": "WindowsService",
+          "description": "Windows Service"
+        },
+        {
+          "choice": "Docker",
+          "description": "Docker Container"
+        }
+      ],
+      "defaultValue": "ConsoleApp"
     }
-  }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(hosting != 'Docker')",
+          "exclude": [
+            "Dockerfile",
+            "license.xml"
+          ]
+        }
+      ]
+    }
+  ]
 }

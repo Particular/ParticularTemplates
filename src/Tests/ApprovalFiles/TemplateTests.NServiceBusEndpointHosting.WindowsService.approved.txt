@@ -1,51 +1,34 @@
-Dockerfile =>
-FROM mcr.microsoft.com/dotnet/core/runtime:6.0 AS base
-
-FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
-WORKDIR /src
-COPY . .
-WORKDIR /src/NServiceBusDockerContainer
-RUN dotnet publish -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
-
-
-NServiceBusDockerContainer.csproj =>
+---------------------------------------------------------------
+NServiceBusEndpointWindowsService.csproj
+---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
 
 </Project>
-
-
-
-Program.cs =>
+---------------------------------------------------------------
+Program.cs
+---------------------------------------------------------------
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NServiceBus;
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using NServiceBus;
-using Microsoft.Extensions.Logging;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace NServiceBusDockerContainer
+namespace NServiceBusWindowsService
 {
     static class Program
     {
@@ -57,10 +40,10 @@ namespace NServiceBusDockerContainer
         static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseConsoleLifetime()
+                .UseWindowsService()
                 .ConfigureLogging(logging =>
                 {
-                    logging.AddConsole();
+                    logging.AddEventLog();
                 })
                 .UseNServiceBus(ctx =>
                 {
@@ -68,10 +51,12 @@ namespace NServiceBusDockerContainer
                     // for use by all endpoints in the system
 
                     // TODO: give the endpoint an appropriate name
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusDockerContainer");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointWindowsService");
 
-                    // TODO: ensure the most appropriate serializer is chosen
-                    // https://docs.particular.net/nservicebus/serialization/
+                    // Message transport: https://docs.particular.net/transports/
+                    var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
+
+                    // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
@@ -79,10 +64,6 @@ namespace NServiceBusDockerContainer
                     // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
                     if (Environment.UserInteractive && Debugger.IsAttached)
                     {
-                        // TODO: choose a durable transport for production
-                        // https://docs.particular.net/transports/
-                        var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
-
                         // TODO: choose a durable persistence for production
                         // https://docs.particular.net/persistence/
                         endpointConfiguration.UsePersistence<LearningPersistence>();
@@ -90,8 +71,6 @@ namespace NServiceBusDockerContainer
                         // TODO: create a script for deployment to production
                         endpointConfiguration.EnableInstallers();
                     }
-
-                    // TODO: replace the license.xml file with your license file
 
                     return endpointConfiguration;
                 });
@@ -101,6 +80,8 @@ namespace NServiceBusDockerContainer
         {
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
+            // and consider setting up service recovery
+            // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
             {
                 await context.Stop(cancellationToken);
@@ -126,10 +107,4 @@ namespace NServiceBusDockerContainer
         }
     }
 }
-
-
-
-license.xml =>
-<!-- this file needs to be replaced with your license file-->
-
 
