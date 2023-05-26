@@ -8,7 +8,7 @@ public static class ProjectDirectory
     {
         ProjectPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", ".."));
         var srcPath = Path.GetFullPath(Path.Combine(ProjectPath, ".."));
-        var templatesPath = Path.Combine(srcPath, "Templates");
+        var templatesPath = Path.Combine(srcPath, "ParticularTemplates");
         var tempStorage = Path.GetFullPath(Path.Combine(ProjectPath, "..", "..", "tempstorage"));
         SandboxPath = Path.Combine(tempStorage, "sandbox");
 

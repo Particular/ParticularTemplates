@@ -5,6 +5,8 @@
     <Description>dotnet new templates targeting Particular tools and libraries</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageType>Template</PackageType>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <NoWarn>$(NoWarn);NU5119</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Templates\**\*.*" Exclude="**\bin\**\*.*;**\obj\**\*.*;..\Templates\Directory.Build.props;..\Templates\.editorconfig" Pack="true" PackagePath="content" />
+    <None Include="**/*" Exclude="$(BaseOutputPath)/**;$(BaseIntermediateOutputPath)/**" Pack="true" PackagePath="content" />
   </ItemGroup>
 
 </Project>
