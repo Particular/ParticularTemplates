@@ -15,7 +15,7 @@ namespace NamespaceName
 
         public async Task Handle(MessageType message, IMessageHandlerContext context)
         {
-
+            // Business logic here
         }
     }
 }

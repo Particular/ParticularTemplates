@@ -22,8 +22,8 @@ public class TemplateTests : IDisposable
     [OneTimeSetUp]
     public async Task Setup()
     {
-        await Uninstall(CreateTimeoutToken()).ConfigureAwait(false);
-        await Install(CreateTimeoutToken()).ConfigureAwait(false);
+        await Uninstall(CreateTimeoutToken());
+        await Install(CreateTimeoutToken());
     }
 
     static async Task Install(CancellationToken cancellationToken)
@@ -35,13 +35,13 @@ public class TemplateTests : IDisposable
             .OrderByDescending(f => f.LastWriteTimeUtc)
             .First();
 
-        await DotNetTemplatesHelper.Install(latestNuget.FullName, cancellationToken).ConfigureAwait(false);
+        await DotNetTemplatesHelper.Install(latestNuget.FullName, cancellationToken);
     }
 
     async Task Uninstall(CancellationToken cancellationToken)
     {
         // dotnet new --uninstall ParticularTemplates
-        await DotNetTemplatesHelper.Uninstall("ParticularTemplates", cancellationToken).ConfigureAwait(false);
+        await DotNetTemplatesHelper.Uninstall("ParticularTemplates", cancellationToken);
     }
 
     public void Dispose()
@@ -54,7 +54,7 @@ public class TemplateTests : IDisposable
     [Test]
     public async Task NServiceBusEndpoint()
     {
-        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken()).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken());
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class TemplateTests : IDisposable
         {
             parameters.Add("framework", "net48");
         }
-        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class TemplateTests : IDisposable
     public async Task NServiceBusEndpointHosting(string hosting)
     {
         var parameters = new Dictionary<string, string> { { "hosting", hosting } };
-        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
     }
 
     [Test]
@@ -91,7 +91,7 @@ public class TemplateTests : IDisposable
     public async Task NServiceBusEndpointTargetFramework(string framework)
     {
         var parameters = new Dictionary<string, string> { { "framework", framework } };
-        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
     }
 
     [Test]
@@ -106,14 +106,30 @@ public class TemplateTests : IDisposable
     public async Task NServiceBusEndpointPersistence(string persistence)
     {
         var parameters = new Dictionary<string, string> { { "persistence", persistence } };
-        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters).ConfigureAwait(false);
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
+    }
+
+    [Test]
+    public async Task Handler()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath();
+        var token = CreateTimeoutToken();
+        var messageClass = @"
+using NServiceBus;
+
+public class TestMessage : ICommand { }";
+
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
+        await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
+        await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
+        VerifyDirectory(targetDirectory);
     }
 
     static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
-        await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken).ConfigureAwait(false);
-        await DotNetTemplatesHelper.Build(targetDirectory, cancellationToken).ConfigureAwait(false);
+        await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken);
+        await DotNetTemplatesHelper.Build(targetDirectory, cancellationToken);
         VerifyDirectory(targetDirectory);
     }
 
