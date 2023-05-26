@@ -14,3 +14,6 @@ dotnet_diagnostic.PS0018.severity = none
 
 # CancellationToken parameter should be optional on non-private methods/delegates
 dotnet_diagnostic.PS0003.severity = none
+
+# It's ok for templates to lack await operators
+dotnet_diagnostic.CS1998.severity = none

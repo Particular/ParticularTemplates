@@ -122,6 +122,7 @@ public class TestMessage : ICommand { }";
         await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
         await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
+        await DotNetTemplatesHelper.Build(targetDirectory, token);
         VerifyDirectory(targetDirectory);
     }
 
@@ -135,17 +136,18 @@ using NServiceBus;
 
 public class OrderPlaced : IEvent
 {
-    public string Correlationid { get; set; }
+    public string CorrelationId { get; set; }
 }
 
 public class OrderBilled : IEvent
 {
-    public string Correlationid { get; set; }
+    public string CorrelationId { get; set; }
 }";
 
         await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
         await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);
+        await DotNetTemplatesHelper.Build(targetDirectory, token);
         VerifyDirectory(targetDirectory);
     }
 

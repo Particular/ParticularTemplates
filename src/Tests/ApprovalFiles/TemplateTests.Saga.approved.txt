@@ -6,12 +6,12 @@ using NServiceBus;
 
 public class OrderPlaced : IEvent
 {
-    public string Correlationid { get; set; }
+    public string CorrelationId { get; set; }
 }
 
 public class OrderBilled : IEvent
 {
-    public string Correlationid { get; set; }
+    public string CorrelationId { get; set; }
 }
 ---------------------------------------------------------------
 Program.cs
