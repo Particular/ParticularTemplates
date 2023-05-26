@@ -5,6 +5,7 @@
     <Description>dotnet new templates targeting Particular tools and libraries</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageType>Template</PackageType>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <EnableDefaultItems>false</EnableDefaultItems>
     <NoWarn>$(NoWarn);NU5119</NoWarn>
   </PropertyGroup>
