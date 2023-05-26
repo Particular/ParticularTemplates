@@ -31,7 +31,7 @@ using Microsoft.Extensions.Logging;
 using NServiceBus;
 using NServiceBus.Persistence.CosmosDB;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusEndpointPersistenceCosmosDB
 {
     static class Program
     {

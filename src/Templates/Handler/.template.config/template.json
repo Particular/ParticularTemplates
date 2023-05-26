@@ -1,0 +1,30 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Particular Software",
+  "classifications": [
+    "NServiceBus",
+    "Code"
+  ],
+  "name": "NServiceBus Message Handler",
+  "identity": "NServiceBus.Handler",
+  "shortName": "nsbhandler",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "sourceName": "ClassName",
+  "symbols": {
+    "defaultNamespace": {
+      "type": "bind",
+      "binding": "msbuild:RootNamespace",
+      "replaces": "NamespaceName",
+      "defaultValue": "Handlers"
+    },
+    "messagetype": {
+      "type": "parameter",
+      "description": "The type of message that will be handled by the message handler.",
+      "datatype": "string",
+      "replaces": "MessageType"
+    }
+  }
+}

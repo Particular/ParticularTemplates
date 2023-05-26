@@ -19,7 +19,7 @@ using NServiceBus.Persistence.CosmosDB;
 using Raven.Client.Documents;
 #endif
 
-namespace NServiceBusWindowsService
+namespace ProjectName
 {
     static class Program
     {

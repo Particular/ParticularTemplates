@@ -27,7 +27,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusEndpointTransportsLearningTransport
 {
     static class Program
     {

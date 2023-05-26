@@ -29,7 +29,7 @@ using Microsoft.Extensions.Logging;
 using NServiceBus;
 using Raven.Client.Documents;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusEndpointPersistenceRavenDB
 {
     static class Program
     {

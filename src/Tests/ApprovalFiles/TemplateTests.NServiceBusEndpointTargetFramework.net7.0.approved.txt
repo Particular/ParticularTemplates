@@ -27,7 +27,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 
-namespace NServiceBusWindowsService
+namespace NServiceBusEndpointTargetFrameworknet7._0
 {
     static class Program
     {
