@@ -1,0 +1,38 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Particular Software",
+  "classifications": [
+    "NServiceBus",
+    "Code"
+  ],
+  "name": "NServiceBus Saga",
+  "identity": "NServiceBus.Saga",
+  "shortName": "nsbsaga",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "sourceName": "SagaName",
+  "symbols": {
+    "defaultNamespace": {
+      "type": "bind",
+      "binding": "msbuild:RootNamespace",
+      "replaces": "NamespaceName",
+      "defaultValue": "Handlers"
+    },
+    "messagetype1": {
+      "type": "parameter",
+      "description": "The first message type that will be handled by the saga.",
+      "datatype": "string",
+      "defaultValue": "MessageType1",
+      "replaces": "MessageType1"
+    },
+    "messagetype2": {
+      "type": "parameter",
+      "description": "The second message type that will be handled by the saga.",
+      "datatype": "string",
+      "defaultValue": "MessageType2",
+      "replaces": "MessageType2"
+    }
+  }
+}

@@ -125,6 +125,30 @@ public class TestMessage : ICommand { }";
         VerifyDirectory(targetDirectory);
     }
 
+    [Test]
+    public async Task Saga()
+    {
+        var targetDirectory = ProjectDirectory.GetSandboxPath();
+        var token = CreateTimeoutToken();
+        var messagesClass = @"
+using NServiceBus;
+
+public class OrderPlaced : IEvent
+{
+    public string Correlationid { get; set; }
+}
+
+public class OrderBilled : IEvent
+{
+    public string Correlationid { get; set; }
+}";
+
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
+        await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
+        await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);
+        VerifyDirectory(targetDirectory);
+    }
+
     static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
