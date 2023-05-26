@@ -1,12 +1,13 @@
 using System;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace NamespaceName
 {
     public class ClassName : IHandleMessages<MessageType>
     {
-        private readonly ILog log;
+        private readonly ILogger log;
 
         public ClassName(ILogger<ClassName> log)
         {

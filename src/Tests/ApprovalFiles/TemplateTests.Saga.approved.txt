@@ -123,6 +123,7 @@ ShippingPolicy.cs
 using System;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace Handlers
 {
@@ -131,7 +132,7 @@ namespace Handlers
         IAmStartedByMessages<OrderBilled>,
         IHandleTimeouts<MyCustomTimeout>
     {
-        private readonly ILog log;
+        private readonly ILogger log;
 
         public ShippingPolicy(ILogger<ClassName> log)
         {

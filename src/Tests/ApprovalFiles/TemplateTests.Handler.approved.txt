@@ -4,12 +4,13 @@ Handler.cs
 using System;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace Handlers
 {
     public class Handler : IHandleMessages<TestMessage>
     {
-        private readonly ILog log;
+        private readonly ILogger log;
 
         public Handler(ILogger<Handler> log)
         {

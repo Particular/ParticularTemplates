@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace NamespaceName
 {
@@ -9,7 +10,7 @@ namespace NamespaceName
         IAmStartedByMessages<MessageType2>,
         IHandleTimeouts<MyCustomTimeout>
     {
-        private readonly ILog log;
+        private readonly ILogger log;
 
         public SagaName(ILogger<ClassName> log)
         {
