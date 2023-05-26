@@ -1,9 +1,16 @@
+# These overrides are copied to the tempstorage/sandbox directory to
+# define overrides for rules in the company-wide editorconfig file
+
 [*.cs]
 
-# Justification: Don't enforce for template code
+# ConfigureAwait
 dotnet_diagnostic.CA2007.severity = none
 
-# Justification: Don't enforce for template code
+# Placement of using statements
 dotnet_diagnostic.IDE0065.severity = none
+
+# CancellationToken on Task-returning method
 dotnet_diagnostic.PS0018.severity = none
+
+# CancellationToken parameter should be optional on non-private methods/delegates
 dotnet_diagnostic.PS0003.severity = none

@@ -1,9 +1,0 @@
-<Project>
-
-  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..))" Condition="Exists($([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..)))" />
-
-  <PropertyGroup>
-    <LangVersion>7.0</LangVersion>
-  </PropertyGroup>
-
-</Project>
