@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace NamespaceName
 {
-    public class SagaName : Saga<SagaNameData>,
+    class SagaName : Saga<SagaNameData>,
         IAmStartedByMessages<MessageType1>,
         IAmStartedByMessages<MessageType2>,
         IHandleTimeouts<MyCustomTimeout>
     {
         private readonly ILogger log;
 
-        public SagaName(ILogger<ClassName> log)
+        public SagaName(ILogger<SagaName> log)
         {
             this.log = log;
         }
@@ -28,11 +28,6 @@ namespace NamespaceName
         public async Task Handle(MessageType1 message, IMessageHandlerContext context)
         {
             // Business logic here
-        }
-
-        public async Task Timeout(TimeoutType timeout, IMessageHandlerContext context)
-        {
-            // Remove if saga does not require timeouts
         }
 
         public async Task Handle(MessageType2 message, IMessageHandlerContext context)
@@ -51,6 +46,11 @@ namespace NamespaceName
 
             // Ending a saga: https://docs.particular.net/nservicebus/sagas/#ending-a-saga
             // MarkAsComplete();
+        }
+
+        public async Task Timeout(MyCustomTimeout timeout, IMessageHandlerContext context)
+        {
+            // Remove if saga does not require timeouts
         }
     }
 

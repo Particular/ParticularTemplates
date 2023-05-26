@@ -127,14 +127,14 @@ using System.Threading.Tasks;
 
 namespace Handlers
 {
-    public class ShippingPolicy : Saga<ShippingPolicyData>,
+    class ShippingPolicy : Saga<ShippingPolicyData>,
         IAmStartedByMessages<OrderPlaced>,
         IAmStartedByMessages<OrderBilled>,
         IHandleTimeouts<MyCustomTimeout>
     {
         private readonly ILogger log;
 
-        public ShippingPolicy(ILogger<ClassName> log)
+        public ShippingPolicy(ILogger<ShippingPolicy> log)
         {
             this.log = log;
         }
@@ -150,11 +150,6 @@ namespace Handlers
         public async Task Handle(OrderPlaced message, IMessageHandlerContext context)
         {
             // Business logic here
-        }
-
-        public async Task Timeout(TimeoutType timeout, IMessageHandlerContext context)
-        {
-            // Remove if saga does not require timeouts
         }
 
         public async Task Handle(OrderBilled message, IMessageHandlerContext context)
@@ -173,6 +168,11 @@ namespace Handlers
 
             // Ending a saga: https://docs.particular.net/nservicebus/sagas/#ending-a-saga
             // MarkAsComplete();
+        }
+
+        public async Task Timeout(MyCustomTimeout timeout, IMessageHandlerContext context)
+        {
+            // Remove if saga does not require timeouts
         }
     }
 
