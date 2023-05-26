@@ -17,7 +17,7 @@ namespace NamespaceName
             this.log = log;
         }
 
-        protected override ConfigureHowToFindSaga(SagaPropertyMapper<SagaNameData> mapper)
+        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaNameData> mapper)
         {
             // https://docs.particular.net/nservicebus/sagas/message-correlation
             mapper.MapSaga(saga => saga.CorrelationId)

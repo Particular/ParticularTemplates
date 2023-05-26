@@ -139,7 +139,7 @@ namespace Handlers
             this.log = log;
         }
 
-        protected override ConfigureHowToFindSaga(SagaPropertyMapper<ShippingPolicyData> mapper)
+        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ShippingPolicyData> mapper)
         {
             // https://docs.particular.net/nservicebus/sagas/message-correlation
             mapper.MapSaga(saga => saga.CorrelationId)
