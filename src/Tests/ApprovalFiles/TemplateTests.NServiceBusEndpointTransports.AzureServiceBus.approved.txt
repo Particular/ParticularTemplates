@@ -54,7 +54,11 @@ namespace NServiceBusEndpointTransportsAzureServiceBus
 
                     // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
                     var transport = new AzureServiceBusTransport("CONNECTION_STRING");
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
+                    var routing = endpointConfiguration.UseTransport(transport);
+
+                    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+                    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
                     // Learning Persistence: https://docs.particular.net/persistence/learning/
                     endpointConfiguration.UsePersistence<LearningPersistence>();

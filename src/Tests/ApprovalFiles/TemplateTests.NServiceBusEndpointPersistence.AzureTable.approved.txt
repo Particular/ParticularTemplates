@@ -53,7 +53,11 @@ namespace NServiceBusEndpointPersistenceAzureTable
                     var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceAzureTable");
 
                     // Learning Transport: https://docs.particular.net/transports/learning/
-                    var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
+                    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+
+                    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+                    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
                     // Azure Table Persistence: https://docs.particular.net/persistence/azure-table/
                     var persistence = endpointConfiguration.UsePersistence<AzureTablePersistence>();

@@ -53,25 +53,33 @@ namespace ProjectName
 
 #if (transport == "LearningTransport")
                     // Learning Transport: https://docs.particular.net/transports/learning/
-                    var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
+                    var routing = endpointConfiguration.UseTransport(new LearningTransport());
 #elseif (transport == "AzureServiceBus")
                     // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
                     var transport = new AzureServiceBusTransport("CONNECTION_STRING");
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
+                    var routing = endpointConfiguration.UseTransport(transport);
+#elseif (transport == "AzureStorageQueues")
+                    // Azure Storage Queues Transport: https://docs.particular.net/transports/azure-storage-queues/
+                    var transport = new AzureStorageQueueTransport("DefaultEndpointsProtocol=https;AccountName=[ACCOUNT];AccountKey=[KEY];");
+                    var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQS")
                     // Amazon SQS Transport: https://docs.particular.net/transports/sqs/
                     var transport = new SqsTransport();
-                    endpointConfiguration.UseTransport(transport);
+                    var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "RabbitMQ")
                     // RabbitMQ Transport: https://docs.particular.net/transports/rabbitmq/
                     var rabbitMqConnectionString = "CONNECTION_STRING";
                     var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), rabbitMqConnectionString);
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
+                    var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQL")
                     // SQL Server Transport: https://docs.particular.net/transports/sql/
                     var transport = new SqlServerTransport("CONNECTION_STRING");
-                    var transportExtensions = endpointConfiguration.UseTransport(transport);
+                    var routing = endpointConfiguration.UseTransport(transport);
 #endif
+
+                    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+                    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
 #if (persistence == "LearningPersistence")
                     // Learning Persistence: https://docs.particular.net/persistence/learning/

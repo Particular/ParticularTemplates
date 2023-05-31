@@ -56,6 +56,10 @@
           "description": "Azure Service Bus"
         },
         {
+          "choice": "AzureStorageQueues",
+          "description": "Azure Storage Queues"
+        },
+        {
           "choice": "SQS",
           "description": "Amazon SQS"
         },

@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpointHostingConsoleApp.csproj
+NServiceBusEndpointTransportsAzureStorageQueues.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -11,6 +11,7 @@ NServiceBusEndpointHostingConsoleApp.csproj
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Transport.AzureStorageQueues" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -27,7 +28,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 
-namespace NServiceBusEndpointHostingConsoleApp
+namespace NServiceBusEndpointTransportsAzureStorageQueues
 {
     static class Program
     {
@@ -49,10 +50,11 @@ namespace NServiceBusEndpointHostingConsoleApp
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointHostingConsoleApp");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTransportsAzureStorageQueues");
 
-                    // Learning Transport: https://docs.particular.net/transports/learning/
-                    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+                    // Azure Storage Queues Transport: https://docs.particular.net/transports/azure-storage-queues/
+                    var transport = new AzureStorageQueueTransport("DefaultEndpointsProtocol=https;AccountName=[ACCOUNT];AccountKey=[KEY];");
+                    var routing = endpointConfiguration.UseTransport(transport);
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");

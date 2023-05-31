@@ -60,6 +60,7 @@ public class TemplateTests : IDisposable
     [Test]
     [TestCase("LearningTransport")]
     [TestCase("AzureServiceBus")]
+    [TestCase("AzureStorageQueues")]
     [TestCase("SQS")]
     [TestCase("RabbitMQ")]
     [TestCase("SQL")]

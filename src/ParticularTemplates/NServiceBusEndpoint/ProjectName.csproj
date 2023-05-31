@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
     <PackageReference Include="NServiceBus" Version="8.0.3" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="3.2.0" />
+    <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="12.0.0" />
     <PackageReference Condition="'$(transport)' == 'SQS'" Include="NServiceBus.AmazonSQS" Version="6.1.1" />
     <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="NServiceBus.RabbitMQ" Version="8.0.3" />
     <PackageReference Condition="'$(transport)' == 'SQL'" Include="NServiceBus.Transport.SqlServer" Version="7.0.1" />
