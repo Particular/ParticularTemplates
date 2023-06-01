@@ -1,51 +1,33 @@
-Dockerfile =>
-FROM mcr.microsoft.com/dotnet/core/runtime:6.0 AS base
-
-FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
-WORKDIR /src
-COPY . .
-WORKDIR /src/NServiceBusDockerContainer
-RUN dotnet publish -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "NServiceBusDockerContainer.dll"]
-
-
-NServiceBusDockerContainer.csproj =>
+---------------------------------------------------------------
+NServiceBusEndpointPersistenceLearningPersistence.csproj
+---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
 </Project>
-
-
-
-Program.cs =>
+---------------------------------------------------------------
+Program.cs
+---------------------------------------------------------------
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using NServiceBus;
 using Microsoft.Extensions.Logging;
-using System.Threading;
+using NServiceBus;
 
-namespace NServiceBusDockerContainer
+namespace NServiceBusEndpointPersistenceLearningPersistence
 {
     static class Program
     {
@@ -67,31 +49,26 @@ namespace NServiceBusDockerContainer
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    // TODO: give the endpoint an appropriate name
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusDockerContainer");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceLearningPersistence");
 
-                    // TODO: ensure the most appropriate serializer is chosen
-                    // https://docs.particular.net/nservicebus/serialization/
+                    // Learning Transport: https://docs.particular.net/transports/learning/
+                    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+
+                    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+                    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+
+                    // Learning Persistence: https://docs.particular.net/persistence/learning/
+                    endpointConfiguration.UsePersistence<LearningPersistence>();
+
+                    // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-                    // TODO: remove this condition after choosing a transport, persistence and deployment method suitable for production
-                    if (Environment.UserInteractive && Debugger.IsAttached)
-                    {
-                        // TODO: choose a durable transport for production
-                        // https://docs.particular.net/transports/
-                        var transportExtensions = endpointConfiguration.UseTransport(new LearningTransport());
-
-                        // TODO: choose a durable persistence for production
-                        // https://docs.particular.net/persistence/
-                        endpointConfiguration.UsePersistence<LearningPersistence>();
-
-                        // TODO: create a script for deployment to production
-                        endpointConfiguration.EnableInstallers();
-                    }
-
-                    // TODO: replace the license.xml file with your license file
+                    // Installers are useful in development. Consider disabling in production.
+                    // https://docs.particular.net/nservicebus/operations/installers
+                    endpointConfiguration.EnableInstallers();
 
                     return endpointConfiguration;
                 });
@@ -101,6 +78,8 @@ namespace NServiceBusDockerContainer
         {
             // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
             // https://docs.particular.net/nservicebus/hosting/critical-errors
+            // and consider setting up service recovery
+            // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
             try
             {
                 await context.Stop(cancellationToken);
@@ -126,10 +105,4 @@ namespace NServiceBusDockerContainer
         }
     }
 }
-
-
-
-license.xml =>
-<!-- this file needs to be replaced with your license file-->
-
 

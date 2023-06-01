@@ -1,0 +1,155 @@
+﻿{
+  "author": "Particular Software",
+  "classifications": [
+    "NServiceBus",
+    "Cloud",
+    "Console",
+    "Service",
+    "Web"
+  ],
+  "name": "NServiceBus Endpoint",
+  "identity": "NServiceBus.Endpoint",
+  "shortName": "nsbendpoint",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "sourceName": "ProjectName",
+  "symbols": {
+    "framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0"
+        },
+        {
+          "choice": "net48",
+          "description": "Target net48"
+        },
+        {
+          "choice": "net472",
+          "description": "Target net472"
+        }
+      ],
+      "replaces": "TARGET_FRAMEWORK",
+      "defaultValue": "net7.0"
+    },
+    "transport": {
+      "type": "parameter",
+      "description": "The message queue (transport) to use.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "LearningTransport",
+          "description": "Learning Transport (non-production)"
+        },
+        {
+          "choice": "AzureServiceBus",
+          "description": "Azure Service Bus"
+        },
+        {
+          "choice": "AzureStorageQueues",
+          "description": "Azure Storage Queues"
+        },
+        {
+          "choice": "SQS",
+          "description": "Amazon SQS"
+        },
+        {
+          "choice": "RabbitMQ",
+          "description": "RabbitMQ"
+        },
+        {
+          "choice": "SQL",
+          "description": "Microsoft SQL Server Transport"
+        }
+      ],
+      "defaultValue": "LearningTransport"
+    },
+    "persistence": {
+      "type": "parameter",
+      "description": "Where to store data. This should be the same as your business data.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "LearningPersistence",
+          "description": "Learning Persistence (non production)"
+        },
+        {
+          "choice": "SQL",
+          "description": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+        },
+        {
+          "choice": "CosmosDB",
+          "description": "Azure Cosmos DB"
+        },
+        {
+          "choice": "AzureTable",
+          "description": "Azure Table Storage"
+        },
+        {
+          "choice": "RavenDB",
+          "description": "RavenDB"
+        },
+        {
+          "choice": "MongoDB",
+          "description": "MongoDB"
+        },
+        {
+          "choice": "DynamoDB",
+          "description": "Amazon DynamoDB"
+        },
+        {
+          "choice": "NonDurable",
+          "description": "NonDurable Storage"
+        }
+      ],
+      "defaultValue": "LearningPersistence"
+    },
+    "hosting": {
+      "type": "parameter",
+      "description": "The hosting model to use.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "ConsoleApp",
+          "description": "Console Application"
+        },
+        {
+          "choice": "WindowsService",
+          "description": "Windows Service"
+        },
+        {
+          "choice": "Docker",
+          "description": "Docker Container"
+        }
+      ],
+      "defaultValue": "ConsoleApp"
+    },
+    "UsesSQL": {
+      "type": "computed",
+      "value": "(transport == \"SQL\" || persistence == \"SQL\")"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(hosting != 'Docker')",
+          "exclude": [
+            "Dockerfile",
+            "license.xml"
+          ]
+        }
+      ]
+    }
+  ]
+}
