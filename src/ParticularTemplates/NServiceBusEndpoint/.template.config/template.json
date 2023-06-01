@@ -81,7 +81,7 @@
       "choices": [
         {
           "choice": "LearningPersistence",
-          "description": "Learning Persistence (non production)"
+          "description": "Learning Persistence (non-production)"
         },
         {
           "choice": "SQL",
