@@ -138,9 +138,9 @@
       "type": "computed",
       "value": "(transport == \"SQL\" || persistence == \"SQL\")"
     },
-    "ImplicitUsings": {
+    "IsNetFramework": {
       "type": "computed",
-      "value": "(framework != \"net472\" && framework != \"net48\")"
+      "value": "(framework == \"net472\" || framework == \"net48\")"
     }
   },
   "sources": [

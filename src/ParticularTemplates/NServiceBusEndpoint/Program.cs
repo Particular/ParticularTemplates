@@ -1,4 +1,4 @@
-#if (!ImplicitUsings)
+#if (IsNetFramework)
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ using Microsoft.Data.SqlClient;
 #endif
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-#if (!ImplicitUsings)
+#if (IsNetFramework)
 using NServiceBus;
 #endif
 #if (persistence == "CosmosDB")
