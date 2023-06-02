@@ -22,8 +22,7 @@
     },
     "ImplicitUsings": {
       "type": "bind",
-      "binding": "msbuild:ImplicitUsings",
-      "replaces": "ImplicitUsingsValue"
+      "binding": "msbuild:ImplicitUsings"
     },
     "messagetype1": {
       "type": "parameter",
