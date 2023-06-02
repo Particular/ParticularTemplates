@@ -6,6 +6,7 @@ NServiceBusEndpointTargetFrameworknet6.0.csproj
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,13 +20,8 @@ NServiceBusEndpointTargetFrameworknet6.0.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
-using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 
 namespace NServiceBusEndpointTargetFrameworknet6._0
 {

@@ -137,6 +137,10 @@
     "UsesSQL": {
       "type": "computed",
       "value": "(transport == \"SQL\" || persistence == \"SQL\")"
+    },
+    "ImplicitUsings": {
+      "type": "computed",
+      "value": "(framework != \"net472\" && framework != \"net48\")"
     }
   },
   "sources": [
