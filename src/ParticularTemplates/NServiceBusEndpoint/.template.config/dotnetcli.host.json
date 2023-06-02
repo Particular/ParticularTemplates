@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/dotnetcli.host",
+  "symbolInfo": {
+    "transport": {
+      "shortName": "t"
+    },
+    "persistence": {
+      "shortName": "p"
+    },
+    "hosting": {
+      "shortName": "hm"
+    }
+  }
+}
