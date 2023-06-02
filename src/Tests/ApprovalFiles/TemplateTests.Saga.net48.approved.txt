@@ -18,14 +18,13 @@ Program.cs
 ---------------------------------------------------------------
 Contents ignored by test
 ---------------------------------------------------------------
-Saga.csproj
+Saganet48.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>true</ImplicitUsings>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,9 +38,12 @@ Saga.csproj
 ---------------------------------------------------------------
 ShippingPolicy.cs
 ---------------------------------------------------------------
+using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NServiceBus;
 
-namespace Saga
+namespace Saganet48
 {
     class ShippingPolicy : Saga<ShippingPolicyData>,
         IAmStartedByMessages<OrderPlaced>,

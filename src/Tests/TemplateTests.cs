@@ -111,7 +111,10 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
-    public async Task Handler()
+    [TestCase("Default")]
+    // Tests for ImplicitUsings not available
+    [TestCase("net48")]
+    public async Task Handler(string projectFrameworkVersion)
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
         var token = CreateTimeoutToken();
@@ -120,7 +123,8 @@ using NServiceBus;
 
 public class TestMessage : ICommand { }";
 
-        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
+        var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
         // Required for item template bindings to work
         await DotNetTemplatesHelper.Restore(targetDirectory, token);
 
@@ -131,7 +135,10 @@ public class TestMessage : ICommand { }";
     }
 
     [Test]
-    public async Task Saga()
+    [TestCase("Default")]
+    // Tests for ImplicitUsings not available
+    [TestCase("net48")]
+    public async Task Saga(string projectFrameworkVersion)
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
         var token = CreateTimeoutToken();
@@ -148,7 +155,8 @@ public class OrderBilled : IEvent
     public string CorrelationId { get; set; }
 }";
 
-        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, parameters: null, token);
+        var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
         // Required for item template bindings to work
         await DotNetTemplatesHelper.Restore(targetDirectory, token);
 
