@@ -1,12 +1,9 @@
 ---------------------------------------------------------------
 Handler.cs
 ---------------------------------------------------------------
-using System;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
-using System.Threading.Tasks;
 
-namespace Handlers
+namespace Handler
 {
     public class Handler : IHandleMessages<TestMessage>
     {

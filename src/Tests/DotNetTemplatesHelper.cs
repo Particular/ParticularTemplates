@@ -57,4 +57,10 @@ public static class DotNetTemplatesHelper
         var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
         _ = await Command.ReadAsync(dotNetCli, $" build {projectFile}", cancellationToken: cancellationToken).ConfigureAwait(false);
     }
+
+    public static async Task Restore(string projectDirectory, CancellationToken cancellationToken = default)
+    {
+        var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
+        _ = await Command.ReadAsync(dotNetCli, $" restore {projectFile}", cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
 }

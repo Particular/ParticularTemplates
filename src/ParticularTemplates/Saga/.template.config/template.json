@@ -20,6 +20,11 @@
       "replaces": "NamespaceName",
       "defaultValue": "Handlers"
     },
+    "ImplicitUsings": {
+      "type": "bind",
+      "binding": "msbuild:ImplicitUsings",
+      "replaces": "ImplicitUsingsValue"
+    },
     "messagetype1": {
       "type": "parameter",
       "description": "The first message type that will be handled by the saga.",

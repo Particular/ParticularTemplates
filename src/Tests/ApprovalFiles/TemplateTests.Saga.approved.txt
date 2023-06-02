@@ -120,12 +120,9 @@ Saga.csproj
 ---------------------------------------------------------------
 ShippingPolicy.cs
 ---------------------------------------------------------------
-using System;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
-using System.Threading.Tasks;
 
-namespace Handlers
+namespace Saga
 {
     class ShippingPolicy : Saga<ShippingPolicyData>,
         IAmStartedByMessages<OrderPlaced>,

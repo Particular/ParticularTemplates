@@ -20,6 +20,10 @@
       "replaces": "NamespaceName",
       "defaultValue": "Handlers"
     },
+    "ImplicitUsings": {
+      "type": "bind",
+      "binding": "msbuild:ImplicitUsings"
+    },
     "messagetype": {
       "type": "parameter",
       "description": "The type of message that will be handled by the message handler.",
