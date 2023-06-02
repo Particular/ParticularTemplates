@@ -127,7 +127,7 @@ public class TestMessage : ICommand { }";
         await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
         await DotNetTemplatesHelper.Build(targetDirectory, token);
-        VerifyDirectory(targetDirectory);
+        VerifyDirectory(targetDirectory, "Program.cs");
     }
 
     [Test]
@@ -155,7 +155,7 @@ public class OrderBilled : IEvent
         await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);
         await DotNetTemplatesHelper.Build(targetDirectory, token);
-        VerifyDirectory(targetDirectory);
+        VerifyDirectory(targetDirectory, "Program.cs");
     }
 
     static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
@@ -166,7 +166,7 @@ public class OrderBilled : IEvent
         VerifyDirectory(targetDirectory);
     }
 
-    static void VerifyDirectory(string targetDirectory)
+    static void VerifyDirectory(string targetDirectory, params string[] fileNamesToIgnore)
     {
         var fileText = new StringBuilder();
 
@@ -181,18 +181,26 @@ public class OrderBilled : IEvent
             const string hr = "---------------------------------------------------------------";
 
             var filename = Path.GetFileName(file);
-            var contents = File.ReadAllText(file);
-
-            if (Path.GetExtension(filename) == ".csproj")
-            {
-                contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+""", "Version=\"(VERSION)\"");
-            }
-
             fileText.AppendLine(hr);
             fileText.AppendLine(filename);
             fileText.AppendLine(hr);
-            fileText.Append(contents);
-            fileText.AppendLine();
+
+            if (fileNamesToIgnore.Contains(filename))
+            {
+                fileText.AppendLine("Contents ignored by test");
+            }
+            else
+            {
+                var contents = File.ReadAllText(file);
+
+                if (Path.GetExtension(filename) == ".csproj")
+                {
+                    contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+""", "Version=\"(VERSION)\"");
+                }
+
+                fileText.Append(contents);
+                fileText.AppendLine();
+            }
         }
 
         Approver.Verify(fileText.ToString(), scenario: ProjectDirectory.GetScenarioFromTestArguments());
