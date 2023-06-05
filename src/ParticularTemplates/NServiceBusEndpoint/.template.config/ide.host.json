@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json.schemastore.org/vs-2017.3.host",
+  "order": 0,
+  "defaultPersistenceScope": "shared",
+  "defaultPersistenceScopeName": "ParticularSoftware",
+  "symbolInfo": [
+    {
+      "id": "transport",
+      "name": {
+        "text": "Message Transport"
+      },
+      "choices": [
+        {
+          "id": "LearningTransport",
+          "name": {
+            "text": "Learning Transport (non-production)"
+          }
+        },
+        {
+          "id": "AzureServiceBus",
+          "name": {
+            "text": "Azure Service Bus"
+          }
+        },
+        {
+          "id": "AzureStorageQueues",
+          "name": {
+            "text": "Azure Storage Queues"
+          }
+        },
+        {
+          "id": "SQS",
+          "name": {
+            "text": "Amazon SQS"
+          }
+        },
+        {
+          "id": "RabbitMQ",
+          "name": {
+            "text": "RabbitMQ"
+          }
+        },
+        {
+          "id": "SQL",
+          "name": {
+            "text": "Microsoft SQL Server"
+          }
+        }
+      ]
+    },
+    {
+      "id": "persistence",
+      "name": {
+        "text": "Data Persistence"
+      },
+      "choices": [
+        {
+          "id": "LearningPersistence",
+          "name": {
+            "text": "Learning Persistence (non-production)"
+          }
+        },
+        {
+          "id": "SQL",
+          "name": {
+            "text": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+          }
+        },
+        {
+          "id": "CosmosDB",
+          "name": {
+            "text": "Azure Cosmos DB"
+          }
+        },
+        {
+          "id": "AzureTable",
+          "name": {
+            "text": "Azure Table Storage"
+          }
+        },
+        {
+          "id": "RavenDB",
+          "name": {
+            "text": "RavenDB"
+          }
+        },
+        {
+          "id": "MongoDB",
+          "name": {
+            "text": "MongoDB"
+          }
+        },
+        {
+          "id": "DynamoDB",
+          "name": {
+            "text": "Amazon DynamoDB"
+          }
+        },
+        {
+          "id": "NonDurable",
+          "name": {
+            "text": "NonDurable Storage"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hosting",
+      "name": {
+        "text": "Hosting Model"
+      },
+      "choices": [
+        {
+          "id": "ConsoleApp",
+          "name": {
+            "text": "Console Application"
+          }
+        },
+        {
+          "id": "WindowsService",
+          "name": {
+            "text": "Windows Service"
+          }
+        },
+        {
+          "id": "Docker",
+          "name": {
+            "text": "Docker Container"
+          }
+        }
+      ]
+    }
+  ]
+}

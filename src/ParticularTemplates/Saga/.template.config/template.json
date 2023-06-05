@@ -3,7 +3,8 @@
   "author": "Particular Software",
   "classifications": [
     "NServiceBus",
-    "Code"
+    "Code",
+    "General"
   ],
   "name": "NServiceBus Saga",
   "identity": "NServiceBus.Saga",
