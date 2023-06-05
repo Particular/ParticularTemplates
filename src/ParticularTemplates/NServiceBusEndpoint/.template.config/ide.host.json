@@ -61,9 +61,27 @@
           }
         },
         {
-          "id": "SQL",
+          "id": "MSSQL",
           "name": {
-            "text": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+            "text": "Microsoft SQL Server (using SQL Persistence)"
+          }
+        },
+        {
+          "id": "MySQL",
+          "name": {
+            "text": "MySQL (using SQL Persistence)"
+          }
+        },
+        {
+          "id": "PostgreSQL",
+          "name": {
+            "text": "PostgreSQL (using SQL Persistence)"
+          }
+        },
+        {
+          "id": "Oracle",
+          "name": {
+            "text": "Oracle (using SQL Persistence)"
           }
         },
         {

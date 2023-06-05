@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpointPersistenceSQL.csproj
+NServiceBusEndpointPersistenceOracle.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -12,8 +12,6 @@ NServiceBusEndpointPersistenceSQL.csproj
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -22,11 +20,10 @@ NServiceBusEndpointPersistenceSQL.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace NServiceBusEndpointPersistenceSQL
+namespace NServiceBusEndpointPersistenceOracle
 {
     static class Program
     {
@@ -48,7 +45,7 @@ namespace NServiceBusEndpointPersistenceSQL
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceSQL");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceOracle");
 
                     // Learning Transport: https://docs.particular.net/transports/learning/
                     var routing = endpointConfiguration.UseTransport(new LearningTransport());
@@ -57,11 +54,6 @@ namespace NServiceBusEndpointPersistenceSQL
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
                     // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
-                    // SQL Persistence: https://docs.particular.net/persistence/sql/
-                    var dbConnectionString = "CONNECTION_STRING";
-                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-                    persistence.SqlDialect<SqlDialect.MsSqlServer>();
-                    persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();

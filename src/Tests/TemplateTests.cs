@@ -97,7 +97,10 @@ public class TemplateTests : IDisposable
 
     [Test]
     [TestCase("LearningPersistence")]
-    [TestCase("SQL")]
+    [TestCase("MSSQL")]
+    [TestCase("MySQL")]
+    [TestCase("PostgreSQL")]
+    [TestCase("Oracle")]
     [TestCase("CosmosDB")]
     [TestCase("AzureTable")]
     [TestCase("RavenDB")]

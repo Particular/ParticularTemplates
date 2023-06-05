@@ -84,8 +84,20 @@
           "description": "Learning Persistence (non-production)"
         },
         {
-          "choice": "SQL",
-          "description": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+          "choice": "MSSQL",
+          "description": "Microsoft SQL Server (using SQL Persistence)"
+        },
+        {
+          "choice": "MySQL",
+          "description": "MySQL (using SQL Persistence)"
+        },
+        {
+          "choice": "PostgreSQL",
+          "description": "PostgreSQL (using SQL Persistence)"
+        },
+        {
+          "choice": "Oracle",
+          "description": "Oracle (using SQL Persistence)"
         },
         {
           "choice": "CosmosDB",
