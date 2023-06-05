@@ -21,7 +21,6 @@
     <PackageReference Condition="'$(persistence)' == 'RavenDB'" Include="NServiceBus.RavenDB" Version="8.2.0" />
     <PackageReference Condition="'$(persistence)' == 'MongoDB'" Include="NServiceBus.Storage.MongoDB" Version="3.0.1" />
     <PackageReference Condition="'$(persistence)' == 'DynamoDB'" Include="NServiceBus.Persistence.DynamoDB" Version="1.0.0" />
-    <PackageReference Condition="'$(persistence)' == 'NonDurable'" Include="NServiceBus.Persistence.NonDurable" Version="1.0.0" />
     <PackageReference Condition="'$(UsesMSSQL)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="8.0.33" />
     <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Npgsql" Version="7.0.4" />

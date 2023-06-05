@@ -106,7 +106,6 @@ public class TemplateTests : IDisposable
     [TestCase("RavenDB")]
     [TestCase("MongoDB")]
     [TestCase("DynamoDB")]
-    [TestCase("NonDurable")]
     public async Task NServiceBusEndpointPersistence(string persistence)
     {
         var parameters = new Dictionary<string, string> { { "persistence", persistence } };

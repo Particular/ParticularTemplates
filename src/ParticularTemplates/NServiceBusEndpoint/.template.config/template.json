@@ -118,10 +118,6 @@
         {
           "choice": "DynamoDB",
           "description": "Amazon DynamoDB"
-        },
-        {
-          "choice": "NonDurable",
-          "description": "NonDurable Storage"
         }
       ],
       "defaultValue": "LearningPersistence"

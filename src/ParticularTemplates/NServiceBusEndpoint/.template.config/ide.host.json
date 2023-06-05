@@ -113,12 +113,6 @@
           "name": {
             "text": "Amazon DynamoDB"
           }
-        },
-        {
-          "id": "NonDurable",
-          "name": {
-            "text": "NonDurable Storage"
-          }
         }
       ]
     },

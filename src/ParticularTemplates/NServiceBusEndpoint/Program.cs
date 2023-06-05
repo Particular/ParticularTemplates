@@ -159,9 +159,6 @@ namespace ProjectName
 #elseif (persistence == "DynamoDB")
                     // Amazon DynamoDB Persistence: https://docs.particular.net/persistence/dynamodb/
                     var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();
-#elseif (persistence == "NonDurable")
-                    // Non-Durable Persistence: https://docs.particular.net/persistence/non-durable/
-                    var persistence = endpointConfiguration.UsePersistence<NonDurablePersistence>();
 #endif
 
                     // Message serialization
