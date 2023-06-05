@@ -6,6 +6,7 @@ NServiceBusEndpointTransportsSQL.csproj
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,14 +22,9 @@ NServiceBusEndpointTransportsSQL.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
-using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 
 namespace NServiceBusEndpointTransportsSQL
 {

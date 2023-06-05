@@ -1,7 +1,8 @@
+#if (IsNetFramework)
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 #if (persistence == "CosmosDB")
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -11,7 +12,9 @@ using Microsoft.Data.SqlClient;
 #endif
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+#if (IsNetFramework)
 using NServiceBus;
+#endif
 #if (persistence == "CosmosDB")
 using NServiceBus.Persistence.CosmosDB;
 #endif

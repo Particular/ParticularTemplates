@@ -1,7 +1,11 @@
+#if (!ImplicitUsings)
 using System;
-using Microsoft.Extensions.Logging;
-using NServiceBus;
 using System.Threading.Tasks;
+#endif
+using Microsoft.Extensions.Logging;
+#if (!ImplicitUsings)
+using NServiceBus;
+#endif
 
 namespace NamespaceName
 {

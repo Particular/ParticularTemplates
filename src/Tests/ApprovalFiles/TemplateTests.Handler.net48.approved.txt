@@ -1,0 +1,61 @@
+---------------------------------------------------------------
+Handlernet48.cs
+---------------------------------------------------------------
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NServiceBus;
+
+namespace Handlernet48
+{
+    public class Handlernet48 : IHandleMessages<TestMessage>
+    {
+        private readonly ILogger log;
+
+        public Handlernet48(ILogger<Handlernet48> log)
+        {
+            this.log = log;
+        }
+
+        public async Task Handle(TestMessage message, IMessageHandlerContext context)
+        {
+            // Business logic here
+
+            // Sending commands: https://docs.particular.net/nservicebus/messaging/send-a-message#inside-the-incoming-message-processing-pipeline
+            // await context.Send(...);
+
+            // Publishing events https://docs.particular.net/nservicebus/messaging/publish-subscribe/publish-handle-event
+            // await context.Publish(...);
+        }
+    }
+}
+
+---------------------------------------------------------------
+Handlernet48.csproj
+---------------------------------------------------------------
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
+  </ItemGroup>
+
+</Project>
+---------------------------------------------------------------
+Messages.cs
+---------------------------------------------------------------
+
+using NServiceBus;
+
+public class TestMessage : ICommand { }
+---------------------------------------------------------------
+Program.cs
+---------------------------------------------------------------
+Contents ignored by test

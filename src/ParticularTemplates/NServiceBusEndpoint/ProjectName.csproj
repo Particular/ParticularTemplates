@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
+    <ImplicitUsings Condition="'$(IsNetFramework)' == 'false'">true</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
