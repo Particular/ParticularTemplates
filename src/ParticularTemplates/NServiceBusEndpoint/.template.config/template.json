@@ -146,9 +146,13 @@
       ],
       "defaultValue": "ConsoleApp"
     },
-    "UsesSQL": {
+    "UsesMSSQL": {
       "type": "computed",
-      "value": "(transport == \"SQL\" || persistence == \"SQL\")"
+      "value": "(transport == \"SQL\" || persistence == \"MSSQL\")"
+    },
+    "UsesSqlPersistence": {
+      "type": "computed",
+      "value": "(persistence == \"MSSQL\" || persistence == \"MySQL\" || persistence == \"PostgreSQL\" || persistence == \"Oracle\")"
     },
     "IsNetFramework": {
       "type": "computed",

@@ -11,6 +11,8 @@ NServiceBusEndpointPersistenceMSSQL.csproj
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -19,6 +21,7 @@ NServiceBusEndpointPersistenceMSSQL.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -53,6 +56,12 @@ namespace NServiceBusEndpointPersistenceMSSQL
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
                     // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // Microsoft SQL Server dialect: https://docs.particular.net/persistence/sql/dialect-mssql
+                    var dbConnectionString = "Data Source=.\\SqlExpress;Initial Catalog=dbname;Integrated Security=True;";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.MsSqlServer>();
+                    persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
