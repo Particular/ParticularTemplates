@@ -7,16 +7,26 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 #endif
-#if UsesSQL
+#if UsesMSSQL
 using Microsoft.Data.SqlClient;
 #endif
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+#if (persistence == "MySQL")
+using MySql.Data.MySqlClient;
+#endif
 #if (IsNetFramework)
 using NServiceBus;
 #endif
+#if (persistence == "PostgreSQL")
+using Npgsql;
+using NpgsqlTypes;
+#endif
 #if (persistence == "CosmosDB")
 using NServiceBus.Persistence.CosmosDB;
+#endif
+#if (persistence == "Oracle")
+using Oracle.ManagedDataAccess.Client;
 #endif
 #if (persistence == "RavenDB")
 using Raven.Client.Documents;
@@ -76,7 +86,7 @@ namespace ProjectName
                     var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQL")
                     // SQL Server Transport: https://docs.particular.net/transports/sql/
-                    var transport = new SqlServerTransport("CONNECTION_STRING");
+                    var transport = new SqlServerTransport("Data Source=.\\SqlExpress;Initial Catalog=dbname;Integrated Security=True");
                     var routing = endpointConfiguration.UseTransport(transport);
 #endif
 
@@ -87,12 +97,39 @@ namespace ProjectName
 #if (persistence == "LearningPersistence")
                     // Learning Persistence: https://docs.particular.net/persistence/learning/
                     endpointConfiguration.UsePersistence<LearningPersistence>();
-#elseif (persistence == "SQL")
+#elseif (persistence == "MSSQL")
                     // SQL Persistence: https://docs.particular.net/persistence/sql/
-                    var dbConnectionString = "CONNECTION_STRING";
+                    // Microsoft SQL Server dialect: https://docs.particular.net/persistence/sql/dialect-mssql
+                    var dbConnectionString = "Data Source=.\\SqlExpress;Initial Catalog=dbname;Integrated Security=True;";
                     var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                     persistence.SqlDialect<SqlDialect.MsSqlServer>();
                     persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
+#elseif (persistence == "MySQL")
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // MySQL dialect: https://docs.particular.net/persistence/sql/dialect-mysql
+                    var dbConnectionString = "server=localhost;user=root;database=dbname;port=3306;password=pass;AllowUserVariables=True;AutoEnlist=false";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.MySql>();
+                    persistence.ConnectionBuilder(() => new MySqlConnection(dbConnectionString));
+#elseif (persistence == "PostgreSQL")
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // PostgreSQL dialect: https://docs.particular.net/persistence/sql/dialect-postgresql
+                    var dbConnectionString = "Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
+                    dialect.JsonBParameterModifier(parameter =>
+                    {
+                        var npgsqlParameter = (NpgsqlParameter)parameter;
+                        npgsqlParameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
+                    });
+                    persistence.ConnectionBuilder(() => new NpgsqlConnection(dbConnectionString));
+#elseif (persistence == "Oracle")
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // Oracle dialect: https://docs.particular.net/persistence/sql/dialect-oracle
+                    var dbConnectionString = "Data Source=localhost;User Id=username;Password=pass;Enlist=false;";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.Oracle>();
+                    persistence.ConnectionBuilder(() => new OracleConnection(dbConnectionString));
 #elseif (persistence == "CosmosDB")
                     // Cosmos DB Persistence: https://docs.particular.net/persistence/cosmosdb/
                     var persistence = endpointConfiguration.UsePersistence<CosmosPersistence>();
@@ -122,9 +159,6 @@ namespace ProjectName
 #elseif (persistence == "DynamoDB")
                     // Amazon DynamoDB Persistence: https://docs.particular.net/persistence/dynamodb/
                     var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();
-#elseif (persistence == "NonDurable")
-                    // Non-Durable Persistence: https://docs.particular.net/persistence/non-durable/
-                    var persistence = endpointConfiguration.UsePersistence<NonDurablePersistence>();
 #endif
 
                     // Message serialization

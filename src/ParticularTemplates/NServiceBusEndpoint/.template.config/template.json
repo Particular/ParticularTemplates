@@ -84,8 +84,20 @@
           "description": "Learning Persistence (non-production)"
         },
         {
-          "choice": "SQL",
-          "description": "SQL (MSSQL, PostgreSQL, MySQL, or Oracle)"
+          "choice": "MSSQL",
+          "description": "Microsoft SQL Server (using SQL Persistence)"
+        },
+        {
+          "choice": "MySQL",
+          "description": "MySQL (using SQL Persistence)"
+        },
+        {
+          "choice": "PostgreSQL",
+          "description": "PostgreSQL (using SQL Persistence)"
+        },
+        {
+          "choice": "Oracle",
+          "description": "Oracle (using SQL Persistence)"
         },
         {
           "choice": "CosmosDB",
@@ -106,10 +118,6 @@
         {
           "choice": "DynamoDB",
           "description": "Amazon DynamoDB"
-        },
-        {
-          "choice": "NonDurable",
-          "description": "NonDurable Storage"
         }
       ],
       "defaultValue": "LearningPersistence"
@@ -134,9 +142,13 @@
       ],
       "defaultValue": "ConsoleApp"
     },
-    "UsesSQL": {
+    "UsesMSSQL": {
       "type": "computed",
-      "value": "(transport == \"SQL\" || persistence == \"SQL\")"
+      "value": "(transport == \"SQL\" || persistence == \"MSSQL\")"
+    },
+    "UsesSqlPersistence": {
+      "type": "computed",
+      "value": "(persistence == \"MSSQL\" || persistence == \"MySQL\" || persistence == \"PostgreSQL\" || persistence == \"Oracle\")"
     },
     "IsNetFramework": {
       "type": "computed",

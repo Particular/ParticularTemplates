@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpointPersistenceNonDurable.csproj
+NServiceBusEndpointPersistenceMSSQL.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -10,9 +10,9 @@ NServiceBusEndpointPersistenceNonDurable.csproj
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Persistence.NonDurable" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -21,10 +21,11 @@ NServiceBusEndpointPersistenceNonDurable.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace NServiceBusEndpointPersistenceNonDurable
+namespace NServiceBusEndpointPersistenceMSSQL
 {
     static class Program
     {
@@ -46,7 +47,7 @@ namespace NServiceBusEndpointPersistenceNonDurable
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceNonDurable");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceMSSQL");
 
                     // Learning Transport: https://docs.particular.net/transports/learning/
                     var routing = endpointConfiguration.UseTransport(new LearningTransport());
@@ -55,8 +56,12 @@ namespace NServiceBusEndpointPersistenceNonDurable
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
                     // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
-                    // Non-Durable Persistence: https://docs.particular.net/persistence/non-durable/
-                    var persistence = endpointConfiguration.UsePersistence<NonDurablePersistence>();
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // Microsoft SQL Server dialect: https://docs.particular.net/persistence/sql/dialect-mssql
+                    var dbConnectionString = "Data Source=.\\SqlExpress;Initial Catalog=dbname;Integrated Security=True;";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.MsSqlServer>();
+                    persistence.ConnectionBuilder(() => new SqlConnection(dbConnectionString));
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();

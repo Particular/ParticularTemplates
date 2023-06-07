@@ -97,13 +97,15 @@ public class TemplateTests : IDisposable
 
     [Test]
     [TestCase("LearningPersistence")]
-    [TestCase("SQL")]
+    [TestCase("MSSQL")]
+    [TestCase("MySQL")]
+    [TestCase("PostgreSQL")]
+    [TestCase("Oracle")]
     [TestCase("CosmosDB")]
     [TestCase("AzureTable")]
     [TestCase("RavenDB")]
     [TestCase("MongoDB")]
     [TestCase("DynamoDB")]
-    [TestCase("NonDurable")]
     public async Task NServiceBusEndpointPersistence(string persistence)
     {
         var parameters = new Dictionary<string, string> { { "persistence", persistence } };

@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpoint.csproj
+NServiceBusEndpointPersistenceMySQL.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -11,6 +11,8 @@ NServiceBusEndpoint.csproj
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
+    <PackageReference Include="MySql.Data" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
@@ -21,8 +23,9 @@ Program.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
-namespace NServiceBusEndpoint
+namespace NServiceBusEndpointPersistenceMySQL
 {
     static class Program
     {
@@ -44,7 +47,7 @@ namespace NServiceBusEndpoint
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpoint");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceMySQL");
 
                     // Learning Transport: https://docs.particular.net/transports/learning/
                     var routing = endpointConfiguration.UseTransport(new LearningTransport());
@@ -53,8 +56,12 @@ namespace NServiceBusEndpoint
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
                     // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
 
-                    // Learning Persistence: https://docs.particular.net/persistence/learning/
-                    endpointConfiguration.UsePersistence<LearningPersistence>();
+                    // SQL Persistence: https://docs.particular.net/persistence/sql/
+                    // MySQL dialect: https://docs.particular.net/persistence/sql/dialect-mysql
+                    var dbConnectionString = "server=localhost;user=root;database=dbname;port=3306;password=pass;AllowUserVariables=True;AutoEnlist=false";
+                    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+                    persistence.SqlDialect<SqlDialect.MySql>();
+                    persistence.ConnectionBuilder(() => new MySqlConnection(dbConnectionString));
 
                     // Message serialization
                     endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();

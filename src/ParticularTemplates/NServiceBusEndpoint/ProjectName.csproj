@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
+    <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.1" />
     <PackageReference Include="NServiceBus" Version="8.0.3" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="3.2.0" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="12.0.0" />
@@ -15,14 +15,16 @@
     <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="NServiceBus.RabbitMQ" Version="8.0.3" />
     <PackageReference Condition="'$(transport)' == 'SQL'" Include="NServiceBus.Transport.SqlServer" Version="7.0.1" />
     <PackageReference Condition="'$(transport)' == 'MSMQ'" Include="NServiceBus.Transport.Msmq" Version="2.0.0" />
-    <PackageReference Condition="'$(persistence)' == 'SQL'" Include="NServiceBus.Persistence.Sql" Version="7.0.2" />
+    <PackageReference Condition="'$(UsesSqlPersistence)' == 'true'" Include="NServiceBus.Persistence.Sql" Version="7.0.2" />
     <PackageReference Condition="'$(persistence)' == 'CosmosDB'" Include="NServiceBus.Persistence.CosmosDB" Version="2.0.1" />
     <PackageReference Condition="'$(persistence)' == 'AzureTable'" Include="NServiceBus.Persistence.AzureTable" Version="5.0.1" />
     <PackageReference Condition="'$(persistence)' == 'RavenDB'" Include="NServiceBus.RavenDB" Version="8.2.0" />
     <PackageReference Condition="'$(persistence)' == 'MongoDB'" Include="NServiceBus.Storage.MongoDB" Version="3.0.1" />
     <PackageReference Condition="'$(persistence)' == 'DynamoDB'" Include="NServiceBus.Persistence.DynamoDB" Version="1.0.0" />
-    <PackageReference Condition="'$(persistence)' == 'NonDurable'" Include="NServiceBus.Persistence.NonDurable" Version="1.0.0" />
-    <PackageReference Condition="'$(UsesSQL)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Condition="'$(UsesMSSQL)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Npgsql" Version="7.0.4" />
+    <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0" />
   </ItemGroup>
