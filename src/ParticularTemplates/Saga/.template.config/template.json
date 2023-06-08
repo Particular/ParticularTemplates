@@ -21,9 +21,14 @@
       "replaces": "NamespaceName",
       "defaultValue": "Handlers"
     },
-    "ImplicitUsings": {
+    "BindImplicitUsings": {
       "type": "bind",
       "binding": "msbuild:ImplicitUsings"
+    },
+    "ImplicitUsings": {
+      "type": "computed",
+      "datatype": "bool",
+      "value": "(BindImplicitUsings == \"true\" || BindImplicitUsings == \"enable\")"
     },
     "messagetype1": {
       "type": "parameter",
