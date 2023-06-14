@@ -127,8 +127,6 @@ public class TestMessage : ICommand { }";
 
         var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
         await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
-        // Required for item template bindings to work
-        await DotNetTemplatesHelper.Restore(targetDirectory, token);
 
         await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
@@ -159,8 +157,6 @@ public class OrderBilled : IEvent
 
         var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
         await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
-        // Required for item template bindings to work
-        await DotNetTemplatesHelper.Restore(targetDirectory, token);
 
         await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);

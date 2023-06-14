@@ -43,7 +43,8 @@
     },
     "BindImplicitUsings": {
       "type": "bind",
-      "binding": "msbuild:ImplicitUsings"
+      "binding": "msbuild:ImplicitUsings",
+      "defaultValue": "false"
     },
     "HostIdentifier": {
       "type": "bind",
