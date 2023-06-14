@@ -1,10 +1,10 @@
 {
   "$schema": "http://json.schemastore.org/vs-2017.3.host",
   "name": {
-    "text": "NServiceBus Saga"
+    "text": "NServiceBus Message Handler"
   },
   "description": {
-    "text": "An NServiceBus saga class pre-populated with two message types and a timeout"
+    "text": "An NServiceBus message handler class"
   },
   "order": 1,
   "defaultPersistenceScope": "shared",
