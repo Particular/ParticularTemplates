@@ -14,6 +14,7 @@
     "type": "item"
   },
   "sourceName": "ClassName",
+  "defaultName": "NewHandler1",
   "symbols": {
     "defaultNamespace": {
       "type": "bind",
