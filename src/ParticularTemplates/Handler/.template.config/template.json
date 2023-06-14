@@ -15,6 +15,25 @@
   },
   "sourceName": "ClassName",
   "defaultName": "NewHandler1",
+  "primaryOutputs": [
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "path": "ClassName.cs"
+    }
+  ],
+  "postActions": [
+    {
+      "id": "openInEditor",
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "description": "Opens ClassName.cs in the editor.",
+      "manualInstructions": [],
+      "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+      "args": {
+        "files": "0"
+      },
+      "continueOnError": true
+    }
+  ],
   "symbols": {
     "defaultNamespace": {
       "type": "bind",
@@ -25,6 +44,10 @@
     "BindImplicitUsings": {
       "type": "bind",
       "binding": "msbuild:ImplicitUsings"
+    },
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "HostIdentifier"
     },
     "ImplicitUsings": {
       "type": "computed",
