@@ -11,10 +11,9 @@ NServiceBusEndpointPersistenceRavenDB.csproj
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="8.1.0-*" />
     <PackageReference Include="NServiceBus.RavenDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -70,7 +69,7 @@ namespace NServiceBusEndpointPersistenceRavenDB
                     });
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 

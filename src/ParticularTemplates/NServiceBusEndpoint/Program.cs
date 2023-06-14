@@ -162,7 +162,7 @@ namespace ProjectName
 #endif
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 

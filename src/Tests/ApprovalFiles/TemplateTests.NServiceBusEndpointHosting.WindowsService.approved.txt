@@ -12,9 +12,8 @@ NServiceBusEndpointHostingWindowsService.csproj
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="8.1.0-*" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -59,7 +58,7 @@ namespace NServiceBusEndpointHostingWindowsService
                     endpointConfiguration.UsePersistence<LearningPersistence>();
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 

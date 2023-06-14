@@ -11,11 +11,10 @@ NServiceBusEndpointPersistencePostgreSQL.csproj
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="8.1.0-*" />
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
     <PackageReference Include="Npgsql" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -71,7 +70,7 @@ namespace NServiceBusEndpointPersistencePostgreSQL
                     persistence.ConnectionBuilder(() => new NpgsqlConnection(dbConnectionString));
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 

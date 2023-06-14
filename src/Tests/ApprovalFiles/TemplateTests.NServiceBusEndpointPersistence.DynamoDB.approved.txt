@@ -11,10 +11,9 @@ NServiceBusEndpointPersistenceDynamoDB.csproj
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus" Version="8.1.0-*" />
     <PackageReference Include="NServiceBus.Persistence.DynamoDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -59,7 +58,7 @@ namespace NServiceBusEndpointPersistenceDynamoDB
                     var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
