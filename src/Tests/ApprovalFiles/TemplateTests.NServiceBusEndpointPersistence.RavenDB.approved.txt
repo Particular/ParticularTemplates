@@ -11,7 +11,7 @@ NServiceBusEndpointPersistenceRavenDB.csproj
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="8.1.0-*" />
+    <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.RavenDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
   </ItemGroup>
