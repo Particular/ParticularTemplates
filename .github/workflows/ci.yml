@@ -28,7 +28,9 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version:  7.0.x
+          dotnet-version: |
+            7.0.x
+            6.0.x
       - name: Build
         run: dotnet build src --configuration Release
       - name: Upload packages
@@ -38,5 +40,5 @@ jobs:
           name: NuGet packages
           path: nugets/
           retention-days: 7
-      - name: Run Windows tests
+      - name: Run tests
         uses: Particular/run-tests-action@v1.6.0
