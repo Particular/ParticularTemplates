@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <!-- The "target framework" of a template package doesn't impact the resulting package, and doesn't need to be changed -->
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>dotnet new templates targeting Particular tools and libraries</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageType>Template</PackageType>
