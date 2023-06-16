@@ -15,7 +15,6 @@ NServiceBusEndpointTransportsSQL.csproj
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="(VERSION)" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -62,7 +61,7 @@ namespace NServiceBusEndpointTransportsSQL
                     endpointConfiguration.UsePersistence<LearningPersistence>();
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 

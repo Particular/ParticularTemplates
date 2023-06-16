@@ -1,11 +1,12 @@
 ﻿using System;
-using SimpleExec;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NUnit.Framework;
+using SimpleExec;
 
 public static class DotNetTemplatesHelper
 {
@@ -13,22 +14,31 @@ public static class DotNetTemplatesHelper
 
     public static async Task<(string StandardOutput, string StandardError)> ExecuteNew(string parameters, CancellationToken cancellationToken = default)
     {
-        return await Command.ReadAsync(dotNetCli, "new " + parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var (stdout, stderr) = await Command.ReadAsync(dotNetCli, "new " + parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        Console.WriteLine(stdout);
+        if (!string.IsNullOrWhiteSpace(stderr))
+        {
+            Console.Error.WriteLine(stderr);
+            Assert.Fail("Information received on StandardError stream.");
+        }
+
+        return (stdout, stderr);
     }
 
     public static async Task Uninstall(string templatePackage, CancellationToken cancellationToken = default)
     {
-        var (output, _) = await ExecuteNew(" --uninstall ", cancellationToken).ConfigureAwait(false);
+        var (output, _) = await ExecuteNew(" uninstall ", cancellationToken).ConfigureAwait(false);
 
         if (output.Contains(templatePackage, StringComparison.OrdinalIgnoreCase))
         {
-            _ = ExecuteNew(" --uninstall " + templatePackage, cancellationToken).ConfigureAwait(false);
+            _ = ExecuteNew("uninstall " + templatePackage, cancellationToken).ConfigureAwait(false);
         }
     }
 
     public static async Task Install(string packagePath, CancellationToken cancellationToken = default)
     {
-        _ = await ExecuteNew(" --install " + packagePath, cancellationToken).ConfigureAwait(false);
+        _ = await ExecuteNew("install " + packagePath, cancellationToken).ConfigureAwait(false);
     }
 
     public static async Task Run(string templateName, string targetDirectory, Dictionary<string, string> parameters = null, CancellationToken cancellationToken = default)

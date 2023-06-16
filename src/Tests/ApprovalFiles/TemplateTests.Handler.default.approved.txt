@@ -42,7 +42,6 @@ HandlerDefault.csproj
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>

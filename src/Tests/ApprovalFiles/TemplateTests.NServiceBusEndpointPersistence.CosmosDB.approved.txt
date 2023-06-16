@@ -14,7 +14,6 @@ NServiceBusEndpointPersistenceCosmosDB.csproj
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Persistence.CosmosDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="(VERSION)" />
   </ItemGroup>
 
 </Project>
@@ -64,7 +63,7 @@ namespace NServiceBusEndpointPersistenceCosmosDB
                     persistence.DatabaseName("DATABASE_NAME");
 
                     // Message serialization
-                    endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
