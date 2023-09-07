@@ -1,8 +1,3 @@
-#if (IsNetFramework)
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-#endif
 #if (persistence == "CosmosDB")
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -14,9 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 #if (persistence == "MySQL")
 using MySql.Data.MySqlClient;
-#endif
-#if (IsNetFramework)
-using NServiceBus;
 #endif
 #if (persistence == "PostgreSQL")
 using Npgsql;

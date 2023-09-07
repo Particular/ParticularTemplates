@@ -67,10 +67,6 @@ public class TemplateTests : IDisposable
     public async Task NServiceBusEndpointTransports(string transport)
     {
         var parameters = new Dictionary<string, string> { { "transport", transport } };
-        if (transport == "MSMQ")
-        {
-            parameters.Add("framework", "net48");
-        }
         await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
     }
 
@@ -85,10 +81,7 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
-    [TestCase("net7.0")]
-    [TestCase("net6.0")]
-    [TestCase("net48")]
-    [TestCase("net472")]
+    [TestCase("net8.0")]
     public async Task NServiceBusEndpointTargetFramework(string framework)
     {
         var parameters = new Dictionary<string, string> { { "framework", framework } };
@@ -113,10 +106,7 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
-    [TestCase("Default")]
-    // Tests for ImplicitUsings not available
-    [TestCase("net48")]
-    public async Task Handler(string projectFrameworkVersion)
+    public async Task Handler()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
         var token = CreateTimeoutToken();
@@ -125,8 +115,7 @@ using NServiceBus;
 
 public class TestMessage : ICommand { }";
 
-        var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
-        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, cancellationToken: token);
 
         await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
@@ -135,10 +124,7 @@ public class TestMessage : ICommand { }";
     }
 
     [Test]
-    [TestCase("Default")]
-    // Tests for ImplicitUsings not available
-    [TestCase("net48")]
-    public async Task Saga(string projectFrameworkVersion)
+    public async Task Saga()
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
         var token = CreateTimeoutToken();
@@ -155,8 +141,7 @@ public class OrderBilled : IEvent
     public string CorrelationId { get; set; }
 }";
 
-        var projectParams = (projectFrameworkVersion == "Default") ? null : new Dictionary<string, string> { { "framework", projectFrameworkVersion } };
-        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, projectParams, token);
+        await DotNetTemplatesHelper.Run("nsbendpoint", targetDirectory, cancellationToken: token);
 
         await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);
