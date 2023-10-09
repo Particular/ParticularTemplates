@@ -1,9 +1,9 @@
 ---------------------------------------------------------------
 Dockerfile
 ---------------------------------------------------------------
-FROM mcr.microsoft.com/dotnet/core/runtime:6.0 AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:8.0 AS base
 
-FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src/NServiceBusEndpointHostingDocker
@@ -20,7 +20,7 @@ NServiceBusEndpointHostingDocker.csproj
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

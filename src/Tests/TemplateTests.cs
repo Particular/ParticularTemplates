@@ -186,7 +186,7 @@ public class OrderBilled : IEvent
 
                 if (Path.GetExtension(filename) == ".csproj")
                 {
-                    contents = Regex.Replace(contents, @"Version=""\d+\.\d+\.\d+(-(\*|\w+\.\d+))?""", "Version=\"(VERSION)\"");
+                    contents = Regex.Replace(contents, "[Vv]ersion=\"[^\"]+\"", "Version=\"(VERSION)\"");
                 }
 
                 fileText.Append(contents);
