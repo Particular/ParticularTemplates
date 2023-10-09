@@ -54,7 +54,7 @@ namespace NServiceBusEndpointTransportsRabbitMQ
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // Learning Persistence: https://docs.particular.net/persistence/learning/
                     endpointConfiguration.UsePersistence<LearningPersistence>();

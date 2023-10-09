@@ -52,7 +52,7 @@ namespace NServiceBusEndpointPersistenceMongoDB
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // MongoDB Persistence: https://docs.particular.net/persistence/mongodb/
                     var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();

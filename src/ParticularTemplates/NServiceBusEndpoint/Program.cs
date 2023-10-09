@@ -84,7 +84,7 @@ namespace ProjectName
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 #if (persistence == "LearningPersistence")
                     // Learning Persistence: https://docs.particular.net/persistence/learning/

@@ -52,7 +52,7 @@ namespace NServiceBusEndpointPersistenceDynamoDB
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // Amazon DynamoDB Persistence: https://docs.particular.net/persistence/dynamodb/
                     var persistence = endpointConfiguration.UsePersistence<DynamoPersistence>();

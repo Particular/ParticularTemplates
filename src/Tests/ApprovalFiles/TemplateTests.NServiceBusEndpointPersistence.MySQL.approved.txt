@@ -54,7 +54,7 @@ namespace NServiceBusEndpointPersistenceMySQL
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // SQL Persistence: https://docs.particular.net/persistence/sql/
                     // MySQL dialect: https://docs.particular.net/persistence/sql/dialect-mysql
