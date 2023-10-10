@@ -1,18 +1,15 @@
 ---------------------------------------------------------------
-Handlernet48.cs
+Handler.cs
 ---------------------------------------------------------------
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 
-namespace Handlernet48
+namespace Handler
 {
-    public class Handlernet48 : IHandleMessages<TestMessage>
+    public class Handler : IHandleMessages<TestMessage>
     {
         private readonly ILogger log;
 
-        public Handlernet48(ILogger<Handlernet48> log)
+        public Handler(ILogger<Handler> log)
         {
             this.log = log;
         }
@@ -31,13 +28,15 @@ namespace Handlernet48
 }
 
 ---------------------------------------------------------------
-Handlernet48.csproj
+Handler.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

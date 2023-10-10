@@ -23,24 +23,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "net7.0",
-          "description": "Target net7.0"
-        },
-        {
-          "choice": "net6.0",
-          "description": "Target net6.0"
-        },
-        {
-          "choice": "net48",
-          "description": "Target net48"
-        },
-        {
-          "choice": "net472",
-          "description": "Target net472"
+          "choice": "net8.0",
+          "description": "Target net8.0"
         }
       ],
       "replaces": "TARGET_FRAMEWORK",
-      "defaultValue": "net7.0"
+      "defaultValue": "net8.0"
     },
     "transport": {
       "type": "parameter",
@@ -149,10 +137,6 @@
     "UsesSqlPersistence": {
       "type": "computed",
       "value": "(persistence == \"MSSQL\" || persistence == \"MySQL\" || persistence == \"PostgreSQL\" || persistence == \"Oracle\")"
-    },
-    "IsNetFramework": {
-      "type": "computed",
-      "value": "(framework == \"net472\" || framework == \"net48\")"
     }
   },
   "sources": [

@@ -1,11 +1,13 @@
 ---------------------------------------------------------------
-NServiceBusEndpointTargetFrameworknet48.csproj
+NServiceBusEndpointTargetFrameworknet8.0.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,14 +19,10 @@ NServiceBusEndpointTargetFrameworknet48.csproj
 ---------------------------------------------------------------
 Program.cs
 ---------------------------------------------------------------
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 
-namespace NServiceBusEndpointTargetFrameworknet48
+namespace NServiceBusEndpointTargetFrameworknet8._0
 {
     static class Program
     {
@@ -46,14 +44,14 @@ namespace NServiceBusEndpointTargetFrameworknet48
                     // TODO: consider moving common endpoint configuration into a shared project
                     // for use by all endpoints in the system
 
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet48");
+                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet8._0");
 
                     // Learning Transport: https://docs.particular.net/transports/learning/
                     var routing = endpointConfiguration.UseTransport(new LearningTransport());
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // Learning Persistence: https://docs.particular.net/persistence/learning/
                     endpointConfiguration.UsePersistence<LearningPersistence>();

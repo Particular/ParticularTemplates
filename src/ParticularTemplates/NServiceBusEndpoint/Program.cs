@@ -1,8 +1,3 @@
-#if (IsNetFramework)
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-#endif
 #if (persistence == "CosmosDB")
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -14,9 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 #if (persistence == "MySQL")
 using MySql.Data.MySqlClient;
-#endif
-#if (IsNetFramework)
-using NServiceBus;
 #endif
 #if (persistence == "PostgreSQL")
 using Npgsql;
@@ -92,7 +84,7 @@ namespace ProjectName
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 #if (persistence == "LearningPersistence")
                     // Learning Persistence: https://docs.particular.net/persistence/learning/

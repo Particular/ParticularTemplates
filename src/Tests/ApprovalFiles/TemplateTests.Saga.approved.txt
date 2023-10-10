@@ -18,13 +18,13 @@ Program.cs
 ---------------------------------------------------------------
 Contents ignored by test
 ---------------------------------------------------------------
-SagaDefault.csproj
+Saga.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -40,7 +40,7 @@ ShippingPolicy.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Logging;
 
-namespace SagaDefault
+namespace Saga
 {
     class ShippingPolicy : Saga<ShippingPolicyData>,
         IAmStartedByMessages<OrderPlaced>,

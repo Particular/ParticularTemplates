@@ -5,7 +5,7 @@ NServiceBusEndpointPersistenceAzureTable.csproj
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -52,7 +52,7 @@ namespace NServiceBusEndpointPersistenceAzureTable
 
                     // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
                     // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAsembly");
+                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
                     // Azure Table Persistence: https://docs.particular.net/persistence/azure-table/
                     var persistence = endpointConfiguration.UsePersistence<AzureTablePersistence>();
