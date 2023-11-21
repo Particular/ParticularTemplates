@@ -27,11 +27,12 @@
     <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0-alpha.2" />
   </ItemGroup>
-<!--#if (hosting == "Docker")-->
 
-  <ItemGroup Condition="'$(hosting)' == 'Docker'">
-    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
+  <ItemGroup>
+    <None Condition="'$(hosting)' == 'Docker'" Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="appsettings*.json" />
+    <ProjectCapability Include="DynamicFileNestingEnabled" />
   </ItemGroup>
-<!--#endif-->
 
 </Project>
