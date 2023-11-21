@@ -6,7 +6,6 @@ using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Data.SqlClient;
 #endif
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 #if (persistence == "MySQL")
 using MySql.Data.MySqlClient;
 #endif
@@ -26,8 +25,7 @@ using Raven.Client.Documents;
 
 var builder = Host.CreateApplicationBuilder(args);
 #if (hosting == "WindowsService")
-builder.UseWindowsService();
-builder.Logging.AddEventLog();
+builder.Services.AddWindowsService();
 #endif
 
 builder.UseNServiceBus(() =>
