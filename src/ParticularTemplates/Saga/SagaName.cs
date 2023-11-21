@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NamespaceName
 {
-    class SagaName(ILogger<SagaName> log) : Saga<SagaNameData>,
+    internal class SagaName(ILogger<SagaName> log) : Saga<SagaNameData>,
         IAmStartedByMessages<MessageType1>,
         IAmStartedByMessages<MessageType2>,
         IHandleTimeouts<MyCustomTimeout>
@@ -44,13 +44,13 @@ namespace NamespaceName
         }
     }
 
-    class SagaNameData : ContainSagaData
+    internal class SagaNameData : ContainSagaData
     {
         public string CorrelationId { get; set; }
         // Other properties
     }
 
-    class MyCustomTimeout
+    internal class MyCustomTimeout
     {
         // Optional extra properties
     }

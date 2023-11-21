@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NamespaceName
 {
-    public class ClassName(ILogger<ClassName> log) : IHandleMessages<MessageType>
+    internal class ClassName(ILogger<ClassName> log) : IHandleMessages<MessageType>
     {
         public async Task Handle(MessageType message, IMessageHandlerContext context)
         {
