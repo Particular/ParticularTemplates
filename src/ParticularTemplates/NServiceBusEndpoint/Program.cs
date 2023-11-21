@@ -1,8 +1,7 @@
 #if (persistence == "CosmosDB")
 using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Fluent;
 #endif
-#if UsesMSSQL
+#if (persistence == "MSSQL")
 using Microsoft.Data.SqlClient;
 #endif
 using Microsoft.Extensions.Hosting;
@@ -12,9 +11,6 @@ using MySql.Data.MySqlClient;
 #if (persistence == "PostgreSQL")
 using Npgsql;
 using NpgsqlTypes;
-#endif
-#if (persistence == "CosmosDB")
-using NServiceBus.Persistence.CosmosDB;
 #endif
 #if (persistence == "Oracle")
 using Oracle.ManagedDataAccess.Client;
