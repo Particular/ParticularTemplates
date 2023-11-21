@@ -2,18 +2,11 @@ using Microsoft.Extensions.Logging;
 
 namespace NamespaceName
 {
-    class SagaName : Saga<SagaNameData>,
+    class SagaName(ILogger<SagaName> log) : Saga<SagaNameData>,
         IAmStartedByMessages<MessageType1>,
         IAmStartedByMessages<MessageType2>,
         IHandleTimeouts<MyCustomTimeout>
     {
-        private readonly ILogger log;
-
-        public SagaName(ILogger<SagaName> log)
-        {
-            this.log = log;
-        }
-
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaNameData> mapper)
         {
             // https://docs.particular.net/nservicebus/sagas/message-correlation

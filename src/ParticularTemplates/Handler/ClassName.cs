@@ -2,15 +2,8 @@ using Microsoft.Extensions.Logging;
 
 namespace NamespaceName
 {
-    public class ClassName : IHandleMessages<MessageType>
+    public class ClassName(ILogger<ClassName> log) : IHandleMessages<MessageType>
     {
-        private readonly ILogger log;
-
-        public ClassName(ILogger<ClassName> log)
-        {
-            this.log = log;
-        }
-
         public async Task Handle(MessageType message, IMessageHandlerContext context)
         {
             // Business logic here
