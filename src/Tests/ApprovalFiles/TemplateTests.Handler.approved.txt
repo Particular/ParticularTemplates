@@ -3,27 +3,19 @@ Handler.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Logging;
 
-namespace Handler
+namespace Handler;
+
+internal class Handler(ILogger<Handler> log) : IHandleMessages<TestMessage>
 {
-    public class Handler : IHandleMessages<TestMessage>
+    public async Task Handle(TestMessage message, IMessageHandlerContext context)
     {
-        private readonly ILogger log;
+        // Business logic here
 
-        public Handler(ILogger<Handler> log)
-        {
-            this.log = log;
-        }
+        // Sending commands: https://docs.particular.net/nservicebus/messaging/send-a-message#inside-the-incoming-message-processing-pipeline
+        // await context.Send(...);
 
-        public async Task Handle(TestMessage message, IMessageHandlerContext context)
-        {
-            // Business logic here
-
-            // Sending commands: https://docs.particular.net/nservicebus/messaging/send-a-message#inside-the-incoming-message-processing-pipeline
-            // await context.Send(...);
-
-            // Publishing events https://docs.particular.net/nservicebus/messaging/publish-subscribe/publish-handle-event
-            // await context.Publish(...);
-        }
+        // Publishing events https://docs.particular.net/nservicebus/messaging/publish-subscribe/publish-handle-event
+        // await context.Publish(...);
     }
 }
 
@@ -44,6 +36,12 @@ Handler.csproj
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="appsettings*.json" />
+    <ProjectCapability Include="DynamicFileNestingEnabled" />
+  </ItemGroup>
+
 </Project>
 ---------------------------------------------------------------
 Messages.cs
@@ -56,3 +54,43 @@ public class TestMessage : ICommand { }
 Program.cs
 ---------------------------------------------------------------
 Contents ignored by test
+---------------------------------------------------------------
+launchSettings.json
+---------------------------------------------------------------
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Handler": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.Development.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+
