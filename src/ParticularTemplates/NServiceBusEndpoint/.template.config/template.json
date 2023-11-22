@@ -145,7 +145,6 @@
         {
           "condition": "(hosting != 'Docker')",
           "exclude": [
-            "Dockerfile",
             "license.xml"
           ]
         }
