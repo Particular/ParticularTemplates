@@ -18,6 +18,22 @@ Program.cs
 ---------------------------------------------------------------
 Contents ignored by test
 ---------------------------------------------------------------
+launchSettings.json
+---------------------------------------------------------------
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Saga": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+---------------------------------------------------------------
 Saga.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
@@ -34,72 +50,94 @@ Saga.csproj
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="appsettings*.json" />
+    <ProjectCapability Include="DynamicFileNestingEnabled" />
+  </ItemGroup>
+
 </Project>
 ---------------------------------------------------------------
 ShippingPolicy.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Logging;
 
-namespace Saga
+namespace Saga;
+
+internal class ShippingPolicy(ILogger<ShippingPolicy> log) : Saga<ShippingPolicyData>,
+    IAmStartedByMessages<OrderPlaced>,
+    IAmStartedByMessages<OrderBilled>,
+    IHandleTimeouts<MyCustomTimeout>
 {
-    class ShippingPolicy : Saga<ShippingPolicyData>,
-        IAmStartedByMessages<OrderPlaced>,
-        IAmStartedByMessages<OrderBilled>,
-        IHandleTimeouts<MyCustomTimeout>
+    protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ShippingPolicyData> mapper)
     {
-        private readonly ILogger log;
-
-        public ShippingPolicy(ILogger<ShippingPolicy> log)
-        {
-            this.log = log;
-        }
-
-        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ShippingPolicyData> mapper)
-        {
-            // https://docs.particular.net/nservicebus/sagas/message-correlation
-            mapper.MapSaga(saga => saga.CorrelationId)
-                .ToMessage<OrderPlaced>(message => message.CorrelationId)
-                .ToMessage<OrderBilled>(message => message.CorrelationId);
-        }
-
-        public async Task Handle(OrderPlaced message, IMessageHandlerContext context)
-        {
-            // Business logic here
-        }
-
-        public async Task Handle(OrderBilled message, IMessageHandlerContext context)
-        {
-            // Update saga data: https://docs.particular.net/nservicebus/sagas/#long-running-means-stateful
-            // this.Data.Property = ...
-
-            // Sending commands: https://docs.particular.net/nservicebus/messaging/send-a-message#inside-the-incoming-message-processing-pipeline
-            // await context.Send(...);
-
-            // Publishing events https://docs.particular.net/nservicebus/messaging/publish-subscribe/publish-handle-event
-            // await context.Publish(...);
-
-            // Request a timeout: https://docs.particular.net/nservicebus/sagas/timeouts
-            // await RequestTimeout<MyCustomTimeout>(context, TimeSpan.FromMinutes(10));
-
-            // Ending a saga: https://docs.particular.net/nservicebus/sagas/#ending-a-saga
-            // MarkAsComplete();
-        }
-
-        public async Task Timeout(MyCustomTimeout timeout, IMessageHandlerContext context)
-        {
-            // Remove if saga does not require timeouts
-        }
+        // https://docs.particular.net/nservicebus/sagas/message-correlation
+        mapper.MapSaga(saga => saga.CorrelationId)
+            .ToMessage<OrderPlaced>(message => message.CorrelationId)
+            .ToMessage<OrderBilled>(message => message.CorrelationId);
     }
 
-    class ShippingPolicyData : ContainSagaData
+    public async Task Handle(OrderPlaced message, IMessageHandlerContext context)
     {
-        public string CorrelationId { get; set; }
-        // Other properties
+        // Business logic here
     }
 
-    class MyCustomTimeout
+    public async Task Handle(OrderBilled message, IMessageHandlerContext context)
     {
-        // Optional extra properties
+        // Update saga data: https://docs.particular.net/nservicebus/sagas/#long-running-means-stateful
+        // this.Data.Property = ...
+
+        // Sending commands: https://docs.particular.net/nservicebus/messaging/send-a-message#inside-the-incoming-message-processing-pipeline
+        // await context.Send(...);
+
+        // Publishing events https://docs.particular.net/nservicebus/messaging/publish-subscribe/publish-handle-event
+        // await context.Publish(...);
+
+        // Request a timeout: https://docs.particular.net/nservicebus/sagas/timeouts
+        // await RequestTimeout<MyCustomTimeout>(context, TimeSpan.FromMinutes(10));
+
+        // Ending a saga: https://docs.particular.net/nservicebus/sagas/#ending-a-saga
+        // MarkAsComplete();
     }
+
+    public async Task Timeout(MyCustomTimeout timeout, IMessageHandlerContext context)
+    {
+        // Remove if saga does not require timeouts
+    }
+}
+
+internal class ShippingPolicyData : ContainSagaData
+{
+    public string CorrelationId { get; set; }
+    // Other properties
+}
+
+internal class MyCustomTimeout
+{
+    // Optional extra properties
+}
+
+---------------------------------------------------------------
+appsettings.Development.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
 }
 

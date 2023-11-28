@@ -12,8 +12,14 @@ NServiceBusEndpointPersistenceMongoDB.csproj
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
-    <PackageReference Include="NServiceBus.Storage.MongoDB" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Storage.MongoDB" Version="(VERSION)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="appsettings*.json" />
+    <ProjectCapability Include="DynamicFileNestingEnabled" />
   </ItemGroup>
 
 </Project>
@@ -21,85 +27,109 @@ NServiceBusEndpointPersistenceMongoDB.csproj
 Program.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace NServiceBusEndpointPersistenceMongoDB
+var builder = Host.CreateApplicationBuilder(args);
+
+builder.UseNServiceBus(() =>
 {
-    static class Program
+    // TODO: consider moving common endpoint configuration into a shared project
+    // for use by all endpoints in the system
+
+    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceMongoDB");
+
+    // Learning Transport: https://docs.particular.net/transports/learning/
+    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+
+    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
+
+    // MongoDB Persistence: https://docs.particular.net/persistence/mongodb/
+    var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();
+    persistence.DatabaseName("DATABASE_NAME");
+
+    // Message serialization
+    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
+    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+    // Installers are useful in development. Consider disabling in production.
+    // https://docs.particular.net/nservicebus/operations/installers
+    endpointConfiguration.EnableInstallers();
+
+    return endpointConfiguration;
+});
+
+var app = builder.Build();
+app.Run();
+
+static async Task OnCriticalError(ICriticalErrorContext context, CancellationToken cancellationToken)
+{
+    // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
+    // https://docs.particular.net/nservicebus/hosting/critical-errors
+    // and consider setting up service recovery
+    // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
+    try
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .UseConsoleLifetime()
-                .ConfigureLogging(logging =>
-                {
-                    logging.AddConsole();
-                })
-                .UseNServiceBus(ctx =>
-                {
-                    // TODO: consider moving common endpoint configuration into a shared project
-                    // for use by all endpoints in the system
-
-                    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceMongoDB");
-
-                    // Learning Transport: https://docs.particular.net/transports/learning/
-                    var routing = endpointConfiguration.UseTransport(new LearningTransport());
-
-                    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
-                    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-                    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
-
-                    // MongoDB Persistence: https://docs.particular.net/persistence/mongodb/
-                    var persistence = endpointConfiguration.UsePersistence<MongoPersistence>();
-                    persistence.DatabaseName("DATABASE_NAME");
-
-                    // Message serialization
-                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
-
-                    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-
-                    // Installers are useful in development. Consider disabling in production.
-                    // https://docs.particular.net/nservicebus/operations/installers
-                    endpointConfiguration.EnableInstallers();
-
-                    return endpointConfiguration;
-                });
-        }
-
-        static async Task OnCriticalError(ICriticalErrorContext context, CancellationToken cancellationToken)
-        {
-            // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
-            // https://docs.particular.net/nservicebus/hosting/critical-errors
-            // and consider setting up service recovery
-            // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
-            try
-            {
-                await context.Stop(cancellationToken);
-            }
-            finally
-            {
-                FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
-            }
-        }
-
-        static void FailFast(string message, Exception exception)
-        {
-            try
-            {
-                // TODO: decide what kind of last resort logging is necessary
-                // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
-                // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
-            }
-            finally
-            {
-                Environment.FailFast(message, exception);
-            }
-        }
+        await context.Stop(cancellationToken);
     }
+    finally
+    {
+        FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
+    }
+}
+
+static void FailFast(string message, Exception exception)
+{
+    try
+    {
+        // TODO: decide what kind of last resort logging is necessary
+        // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+        // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+    }
+    finally
+    {
+        Environment.FailFast(message, exception);
+    }
+}
+
+---------------------------------------------------------------
+launchSettings.json
+---------------------------------------------------------------
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "NServiceBusEndpointPersistenceMongoDB": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.Development.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
 }
 

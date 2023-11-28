@@ -130,9 +130,9 @@
       ],
       "defaultValue": "ConsoleApp"
     },
-    "UsesMSSQL": {
+    "NeedsSqlClient": {
       "type": "computed",
-      "value": "(transport == \"SQL\" || persistence == \"MSSQL\")"
+      "value": "(transport != \"SQL\" && persistence == \"MSSQL\")"
     },
     "UsesSqlPersistence": {
       "type": "computed",
@@ -145,7 +145,6 @@
         {
           "condition": "(hosting != 'Docker')",
           "exclude": [
-            "Dockerfile",
             "license.xml"
           ]
         }
