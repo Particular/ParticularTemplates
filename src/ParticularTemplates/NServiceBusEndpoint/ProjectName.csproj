@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="9.0.0-alpha.9" />
-    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0-alpha.2" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0-alpha.3" />
     <PackageReference Condition="'$(hosting)' == 'Docker'" Include="Microsoft.Net.Build.Containers" Version="8.0.100" />
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="4.0.0-alpha.2" />

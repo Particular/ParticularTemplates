@@ -32,38 +32,35 @@ using Oracle.ManagedDataAccess.Client;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.UseNServiceBus(() =>
-{
-    // TODO: consider moving common endpoint configuration into a shared project
-    // for use by all endpoints in the system
+// TODO: consider moving common endpoint configuration into a shared project
+// for use by all endpoints in the system
 
-    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceOracle");
+var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceOracle");
 
-    // Learning Transport: https://docs.particular.net/transports/learning/
-    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+// Learning Transport: https://docs.particular.net/transports/learning/
+var routing = endpointConfiguration.UseTransport(new LearningTransport());
 
-    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
-    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
+// Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+// routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+// routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
-    // SQL Persistence: https://docs.particular.net/persistence/sql/
-    // Oracle dialect: https://docs.particular.net/persistence/sql/dialect-oracle
-    var dbConnectionString = "Data Source=localhost;User Id=username;Password=pass;Enlist=false;";
-    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-    persistence.SqlDialect<SqlDialect.Oracle>();
-    persistence.ConnectionBuilder(() => new OracleConnection(dbConnectionString));
+// SQL Persistence: https://docs.particular.net/persistence/sql/
+// Oracle dialect: https://docs.particular.net/persistence/sql/dialect-oracle
+var dbConnectionString = "Data Source=localhost;User Id=username;Password=pass;Enlist=false;";
+var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+persistence.SqlDialect<SqlDialect.Oracle>();
+persistence.ConnectionBuilder(() => new OracleConnection(dbConnectionString));
 
-    // Message serialization
-    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+// Message serialization
+endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
-    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-    // Installers are useful in development. Consider disabling in production.
-    // https://docs.particular.net/nservicebus/operations/installers
-    endpointConfiguration.EnableInstallers();
+// Installers are useful in development. Consider disabling in production.
+// https://docs.particular.net/nservicebus/operations/installers
+endpointConfiguration.EnableInstallers();
 
-    return endpointConfiguration;
-});
+builder.UseNServiceBus(endpointConfiguration);
 
 var app = builder.Build();
 app.Run();

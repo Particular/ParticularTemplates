@@ -31,36 +31,33 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.UseNServiceBus(() =>
-{
-    // TODO: consider moving common endpoint configuration into a shared project
-    // for use by all endpoints in the system
+// TODO: consider moving common endpoint configuration into a shared project
+// for use by all endpoints in the system
 
-    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceCosmosDB");
+var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistenceCosmosDB");
 
-    // Learning Transport: https://docs.particular.net/transports/learning/
-    var routing = endpointConfiguration.UseTransport(new LearningTransport());
+// Learning Transport: https://docs.particular.net/transports/learning/
+var routing = endpointConfiguration.UseTransport(new LearningTransport());
 
-    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
-    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
+// Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+// routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+// routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
-    // Cosmos DB Persistence: https://docs.particular.net/persistence/cosmosdb/
-    var persistence = endpointConfiguration.UsePersistence<CosmosPersistence>();
-    persistence.CosmosClient(new CosmosClient("CONNECTION_STRING"));
-    persistence.DatabaseName("DATABASE_NAME");
+// Cosmos DB Persistence: https://docs.particular.net/persistence/cosmosdb/
+var persistence = endpointConfiguration.UsePersistence<CosmosPersistence>();
+persistence.CosmosClient(new CosmosClient("CONNECTION_STRING"));
+persistence.DatabaseName("DATABASE_NAME");
 
-    // Message serialization
-    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+// Message serialization
+endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
-    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-    // Installers are useful in development. Consider disabling in production.
-    // https://docs.particular.net/nservicebus/operations/installers
-    endpointConfiguration.EnableInstallers();
+// Installers are useful in development. Consider disabling in production.
+// https://docs.particular.net/nservicebus/operations/installers
+endpointConfiguration.EnableInstallers();
 
-    return endpointConfiguration;
-});
+builder.UseNServiceBus(endpointConfiguration);
 
 var app = builder.Build();
 app.Run();
