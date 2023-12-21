@@ -33,43 +33,40 @@ using NpgsqlTypes;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.UseNServiceBus(() =>
+// TODO: consider moving common endpoint configuration into a shared project
+// for use by all endpoints in the system
+
+var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistencePostgreSQL");
+
+// Learning Transport: https://docs.particular.net/transports/learning/
+var routing = endpointConfiguration.UseTransport(new LearningTransport());
+
+// Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+// routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+// routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
+
+// SQL Persistence: https://docs.particular.net/persistence/sql/
+// PostgreSQL dialect: https://docs.particular.net/persistence/sql/dialect-postgresql
+var dbConnectionString = "Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;";
+var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
+dialect.JsonBParameterModifier(parameter =>
 {
-    // TODO: consider moving common endpoint configuration into a shared project
-    // for use by all endpoints in the system
-
-    var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointPersistencePostgreSQL");
-
-    // Learning Transport: https://docs.particular.net/transports/learning/
-    var routing = endpointConfiguration.UseTransport(new LearningTransport());
-
-    // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
-    // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
-    // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
-
-    // SQL Persistence: https://docs.particular.net/persistence/sql/
-    // PostgreSQL dialect: https://docs.particular.net/persistence/sql/dialect-postgresql
-    var dbConnectionString = "Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;";
-    var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-    var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
-    dialect.JsonBParameterModifier(parameter =>
-    {
-        var npgsqlParameter = (NpgsqlParameter)parameter;
-        npgsqlParameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
-    });
-    persistence.ConnectionBuilder(() => new NpgsqlConnection(dbConnectionString));
-
-    // Message serialization
-    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
-
-    endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-
-    // Installers are useful in development. Consider disabling in production.
-    // https://docs.particular.net/nservicebus/operations/installers
-    endpointConfiguration.EnableInstallers();
-
-    return endpointConfiguration;
+    var npgsqlParameter = (NpgsqlParameter)parameter;
+    npgsqlParameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
 });
+persistence.ConnectionBuilder(() => new NpgsqlConnection(dbConnectionString));
+
+// Message serialization
+endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
+endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+// Installers are useful in development. Consider disabling in production.
+// https://docs.particular.net/nservicebus/operations/installers
+endpointConfiguration.EnableInstallers();
+
+builder.UseNServiceBus(endpointConfiguration);
 
 var app = builder.Build();
 app.Run();
