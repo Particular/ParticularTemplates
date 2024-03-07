@@ -85,6 +85,7 @@ public class TemplateTests : IDisposable
     }
 
     [Test]
+    [TestCase("net8.0")]
     [TestCase("net7.0")]
     [TestCase("net6.0")]
     [TestCase("net48")]
