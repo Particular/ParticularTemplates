@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="**/*" Exclude="$(BaseOutputPath)/**;$(BaseIntermediateOutputPath)/**" Pack="true" PackagePath="content" />
+    <None Include="**/*" Exclude="$(BaseOutputPath)/**;$(BaseIntermediateOutputPath)/**;ParticularTemplates.csproj" Pack="true" PackagePath="content" />
   </ItemGroup>
 
 </Project>
