@@ -8,11 +8,13 @@ NServiceBusEndpointHostingDocker.csproj
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
+    <!-- The Microsoft.Net.Build.Containers package can be removed if using .NET SDK 8.0.200 or newer -->
     <PackageReference Include="Microsoft.Net.Build.Containers" Version="(VERSION)" />
   </ItemGroup>
 
@@ -29,6 +31,8 @@ Program.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Hosting;
 
+// To create a docker container, use the following command: dotnet publish /t:PublishContainer
+// See https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container?pivots=dotnet-8-0#publish-net-app for details
 var builder = Host.CreateApplicationBuilder(args);
 
 // TODO: consider moving common endpoint configuration into a shared project
