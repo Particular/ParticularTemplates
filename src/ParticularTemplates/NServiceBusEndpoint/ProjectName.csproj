@@ -5,12 +5,16 @@
     <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableSdkContainerSupport Condition="'$(hosting)' == 'Docker'">true</EnableSdkContainerSupport>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="9.0.0" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0" />
-    <PackageReference Condition="'$(hosting)' == 'Docker'" Include="Microsoft.Net.Build.Containers" Version="8.0.100" />
+    <!--#if (hosting == "Docker") -->
+    <!-- The Microsoft.Net.Build.Containers package can be removed if using .NET SDK 8.0.200 or newer -->
+    <PackageReference Include="Microsoft.Net.Build.Containers" Version="8.0.100" />
+    <!--#endif -->
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="4.0.0" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="13.0.0" />

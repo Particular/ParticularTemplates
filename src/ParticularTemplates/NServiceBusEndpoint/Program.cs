@@ -19,6 +19,10 @@ using Oracle.ManagedDataAccess.Client;
 using Raven.Client.Documents;
 #endif
 
+#if (hosting == "Docker")
+// To create a docker container, use the following command: dotnet publish /t:PublishContainer
+// See https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container?pivots=dotnet-8-0#publish-net-app for details
+#endif
 var builder = Host.CreateApplicationBuilder(args);
 #if (hosting == "WindowsService")
 builder.Services.AddWindowsService();
