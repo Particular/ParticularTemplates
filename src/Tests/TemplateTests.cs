@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -120,7 +121,7 @@ public class TestMessage : ICommand { }";
         await DotNetTemplatesHelper.Run("nsbhandler", targetDirectory, new() { { "messagetype", "TestMessage" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messageClass, token);
         await DotNetTemplatesHelper.Build(targetDirectory, token);
-        VerifyDirectory(targetDirectory, "Program.cs");
+        VerifyDirectory(targetDirectory, ["Program.cs"]);
     }
 
     [Test]
@@ -146,19 +147,21 @@ public class OrderBilled : IEvent
         await DotNetTemplatesHelper.Run("nsbsaga", targetDirectory, new() { { "name", "ShippingPolicy" }, { "messagetype1", "OrderPlaced" }, { "messagetype2", "OrderBilled" } }, token);
         await File.WriteAllTextAsync(Path.Combine(targetDirectory, "Messages.cs"), messagesClass, token);
         await DotNetTemplatesHelper.Build(targetDirectory, token);
-        VerifyDirectory(targetDirectory, "Program.cs");
+        VerifyDirectory(targetDirectory, ["Program.cs"]);
     }
 
-    static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null)
+    static async Task VerifyAndBuild(string templateName, CancellationToken cancellationToken, Dictionary<string, string> parameters = null, [CallerMemberName] string callerMemberName = null)
     {
         var targetDirectory = ProjectDirectory.GetSandboxPath();
         await DotNetTemplatesHelper.Run(templateName, targetDirectory, parameters, cancellationToken);
         await DotNetTemplatesHelper.Build(targetDirectory, cancellationToken);
-        VerifyDirectory(targetDirectory);
+        VerifyDirectory(targetDirectory, callerMemberName: callerMemberName);
     }
 
-    static void VerifyDirectory(string targetDirectory, params string[] fileNamesToIgnore)
+    static void VerifyDirectory(string targetDirectory, string[] fileNamesToIgnore = null, [CallerMemberName] string callerMemberName = null)
     {
+        fileNamesToIgnore ??= [];
+
         var fileText = new StringBuilder();
 
         foreach (var file in Directory.EnumerateFiles(targetDirectory, "*.*", SearchOption.AllDirectories).OrderBy(file => file, StringComparer.Ordinal))
@@ -194,7 +197,7 @@ public class OrderBilled : IEvent
             }
         }
 
-        Approver.Verify(fileText.ToString(), scenario: ProjectDirectory.GetScenarioFromTestArguments());
+        Approver.Verify(fileText.ToString(), scenario: ProjectDirectory.GetScenarioFromTestArguments(), callerMemberName: callerMemberName);
     }
 
     static readonly Regex IgnorePathRegex;
