@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="9.0.0-alpha.9" />
-    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0-alpha.3" />
+    <PackageReference Include="NServiceBus" Version="9.0.0" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Condition="'$(hosting)' == 'Docker'" Include="Microsoft.Net.Build.Containers" Version="8.0.100" />
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="4.0.0" />
@@ -24,9 +24,9 @@
     <PackageReference Condition="'$(persistence)' == 'RavenDB'" Include="NServiceBus.RavenDB" Version="9.0.0" />
     <PackageReference Condition="'$(UsesSqlPersistence)' == 'true'" Include="NServiceBus.Persistence.Sql" Version="8.0.0" />
     <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="8.2.0" />
-    <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />
-    <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Npgsql" Version="8.0.0" />
+    <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="8.3.0" />
+    <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="3.21.130" />
+    <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Npgsql" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
