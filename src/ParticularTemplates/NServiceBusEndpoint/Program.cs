@@ -141,8 +141,8 @@ endpointConfiguration.EnableInstallers();
 
 builder.UseNServiceBus(endpointConfiguration);
 
-var app = builder.Build();
-app.Run();
+var host = builder.Build();
+await host.RunAsync();
 
 static async Task OnCriticalError(ICriticalErrorContext context, CancellationToken cancellationToken)
 {
