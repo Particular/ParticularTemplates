@@ -135,9 +135,20 @@ endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
 endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
 
-// Installers are useful in development. Consider disabling in production.
-// https://docs.particular.net/nservicebus/operations/installers
-endpointConfiguration.EnableInstallers();
+var isSetup = false; // e.g. args.Contains("/s")
+var isDevelopment = true;
+
+if (isSetup)
+{
+    await Installer.Setup(endpointConfiguration);
+    return; // Run setup and exit application
+}
+else if (isDevelopment)
+{
+    // Installers are useful in development. Consider disabling in production.
+    // https://docs.particular.net/nservicebus/operations/installers
+    endpointConfiguration.EnableInstallers();
+}
 
 builder.UseNServiceBus(endpointConfiguration);
 
