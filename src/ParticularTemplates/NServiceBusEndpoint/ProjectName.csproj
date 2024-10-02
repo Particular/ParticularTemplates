@@ -15,10 +15,6 @@
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="9.*" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.*" />
-    <!--#if (hosting == "Docker") -->
-    <!-- The Microsoft.Net.Build.Containers package can be removed if using .NET SDK 8.0.200 or newer -->
-    <PackageReference Include="Microsoft.Net.Build.Containers" Version="8.0.100" />
-    <!--#endif -->
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="4.*" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="13.*" />
