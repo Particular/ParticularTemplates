@@ -18,6 +18,7 @@
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="4.*" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="13.*" />
+    <PackageReference Condition="'$(transport)' == 'PostgreSQL'" Include="NServiceBus.Transport.PostgreSql" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="NServiceBus.RabbitMQ" Version="9.*" />
     <PackageReference Condition="'$(transport)' == 'SQL'" Include="NServiceBus.Transport.SqlServer" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'SQS'" Include="NServiceBus.AmazonSQS" Version="7.*" />
@@ -30,7 +31,7 @@
     <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.*" />
     <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="9.*" />
     <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="23.*" />
-    <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Npgsql" Version="8.*" />
+    <PackageReference Condition="'$(NeedsPostgreSql)' == 'true'" Include="Npgsql" Version="8.*" />
   </ItemGroup>
 
   <ItemGroup>

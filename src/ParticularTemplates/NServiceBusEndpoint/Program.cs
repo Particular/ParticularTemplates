@@ -44,6 +44,10 @@ var routing = endpointConfiguration.UseTransport(transport);
 // Azure Storage Queues Transport: https://docs.particular.net/transports/azure-storage-queues/
 var transport = new AzureStorageQueueTransport("DefaultEndpointsProtocol=https;AccountName=[ACCOUNT];AccountKey=[KEY];");
 var routing = endpointConfiguration.UseTransport(transport);
+#elseif (transport == "PostgreSQL")
+// PostgreSQL Transport
+var transport = new PostgreSqlTransport("Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;");
+var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQS")
 // Amazon SQS Transport: https://docs.particular.net/transports/sqs/
 var transport = new SqsTransport();

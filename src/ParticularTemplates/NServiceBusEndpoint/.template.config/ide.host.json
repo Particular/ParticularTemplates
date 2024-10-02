@@ -45,6 +45,12 @@
           "name": {
             "text": "Microsoft SQL Server"
           }
+        },
+        {
+          "id": "PostgreSQL",
+          "name": {
+            "text": "PostgreSQL"
+          }
         }
       ]
     },
