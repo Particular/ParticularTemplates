@@ -11,8 +11,8 @@ NServiceBusEndpointPersistenceCosmosDB.csproj
   </PropertyGroup>
 
   <!--
-  Wildcard versions used to ensure templated projects receive newest versions.
-  Consider changing wildcard version references to explicit versions.
+  Wildcards are used in PackageReferences below to ensure projects created from the template reference the latest versions of packages.
+  Consider changing the wildcard versions to explicit versions to have more control over which versions are being used.
   -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
