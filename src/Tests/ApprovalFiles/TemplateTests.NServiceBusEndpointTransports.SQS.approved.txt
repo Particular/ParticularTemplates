@@ -10,6 +10,10 @@ NServiceBusEndpointTransportsSQS.csproj
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!--
+  Wildcard versions used to ensure templated projects receive newest versions.
+  Consider changing wildcard version references to explicit versions.
+  -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
