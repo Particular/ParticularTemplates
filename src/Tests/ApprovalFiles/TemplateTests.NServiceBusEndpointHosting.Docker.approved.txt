@@ -11,11 +11,13 @@ NServiceBusEndpointHostingDocker.csproj
     <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
   </PropertyGroup>
 
+  <!--
+  Wildcards are used in PackageReferences below to ensure projects created from the template reference the latest versions of packages.
+  Consider changing the wildcard versions to explicit versions to have more control over which versions are being used.
+  -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
-    <!-- The Microsoft.Net.Build.Containers package can be removed if using .NET SDK 8.0.200 or newer -->
-    <PackageReference Include="Microsoft.Net.Build.Containers" Version="(VERSION)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -45,6 +45,10 @@ Saga.csproj
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!--
+  Wildcards are used in PackageReferences below to ensure projects created from the template reference the latest versions of packages.
+  Consider changing the wildcard versions to explicit versions to have more control over which versions are being used.
+  -->
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
