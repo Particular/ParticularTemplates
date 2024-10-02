@@ -1,7 +1,9 @@
 version: 2
 updates:
 - package-ecosystem: nuget
-  directory: "/src"
+  directories:
+    # Temporarily different than repo standards, remember this file is currently excluded in .reposync.yml
+    - "/src/**/*"
   schedule:
     interval: daily
   open-pull-requests-limit: 1000
