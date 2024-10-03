@@ -1,0 +1,148 @@
+---------------------------------------------------------------
+Program.cs
+---------------------------------------------------------------
+using Microsoft.Extensions.Hosting;
+using Npgsql;
+using NpgsqlTypes;
+
+var builder = Host.CreateApplicationBuilder(args);
+
+// TODO: consider moving common endpoint configuration into a shared project
+// for use by all endpoints in the system
+
+var endpointConfiguration = new EndpointConfiguration("TransportPersistenceCombinationsPostgreSQL_PostgreSQL");
+
+// PostgreSQL Transport: https://docs.particular.net/transports/postgresql/
+var transport = new PostgreSqlTransport("Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;");
+var routing = endpointConfiguration.UseTransport(transport);
+
+// Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
+// routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
+// routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
+
+// SQL Persistence: https://docs.particular.net/persistence/sql/
+// PostgreSQL dialect: https://docs.particular.net/persistence/sql/dialect-postgresql
+var dbConnectionString = "Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;";
+var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
+dialect.JsonBParameterModifier(parameter =>
+{
+    var npgsqlParameter = (NpgsqlParameter)parameter;
+    npgsqlParameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
+});
+persistence.ConnectionBuilder(() => new NpgsqlConnection(dbConnectionString));
+
+// Message serialization
+endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
+endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
+
+// Installers are useful in development. Consider disabling in production.
+// https://docs.particular.net/nservicebus/operations/installers
+endpointConfiguration.EnableInstallers();
+
+builder.UseNServiceBus(endpointConfiguration);
+
+var app = builder.Build();
+app.Run();
+
+static async Task OnCriticalError(ICriticalErrorContext context, CancellationToken cancellationToken)
+{
+    // TODO: decide if stopping the endpoint and exiting the process is the best response to a critical error
+    // https://docs.particular.net/nservicebus/hosting/critical-errors
+    // and consider setting up service recovery
+    // https://docs.particular.net/nservicebus/hosting/windows-service#installation-restart-recovery
+    try
+    {
+        await context.Stop(cancellationToken);
+    }
+    finally
+    {
+        FailFast($"Critical error, shutting down: {context.Error}", context.Exception);
+    }
+}
+
+static void FailFast(string message, Exception exception)
+{
+    try
+    {
+        // TODO: decide what kind of last resort logging is necessary
+        // TODO: when using an external logging framework it is important to flush any pending entries prior to calling FailFast
+        // https://docs.particular.net/nservicebus/hosting/critical-errors#when-to-override-the-default-critical-error-action
+    }
+    finally
+    {
+        Environment.FailFast(message, exception);
+    }
+}
+
+---------------------------------------------------------------
+launchSettings.json
+---------------------------------------------------------------
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "TransportPersistenceCombinationsPostgreSQL_PostgreSQL": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+---------------------------------------------------------------
+TransportPersistenceCombinationsPostgreSQL-PostgreSQL.csproj
+---------------------------------------------------------------
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!--
+  Wildcards are used in PackageReferences below to ensure projects created from the template reference the latest versions of packages.
+  Consider changing the wildcard versions to explicit versions to have more control over which versions are being used.
+  -->
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Transport.PostgreSql" Version="(VERSION)" />
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="appsettings*.json" />
+    <ProjectCapability Include="DynamicFileNestingEnabled" />
+  </ItemGroup>
+
+</Project>
+---------------------------------------------------------------
+appsettings.Development.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+
+---------------------------------------------------------------
+appsettings.json
+---------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+

@@ -58,6 +58,10 @@
         {
           "choice": "SQL",
           "description": "Microsoft SQL Server Transport"
+        },
+        {
+          "choice": "PostgreSQL",
+          "description": "PostgreSQL"
         }
       ],
       "defaultValue": "LearningTransport"
@@ -133,6 +137,10 @@
     "NeedsSqlClient": {
       "type": "computed",
       "value": "(transport != \"SQL\" && persistence == \"MSSQL\")"
+    },
+    "NeedsPostgreSql": {
+      "type": "computed",
+      "value": "(transport != \"PostgreSQL\" && persistence == \"PostgreSQL\")"
     },
     "UsesSqlPersistence": {
       "type": "computed",

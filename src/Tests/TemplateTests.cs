@@ -65,6 +65,7 @@ public class TemplateTests : IDisposable
     [TestCase("SQS")]
     [TestCase("RabbitMQ")]
     [TestCase("SQL")]
+    [TestCase("PostgreSQL")]
     public async Task NServiceBusEndpointTransports(string transport)
     {
         var parameters = new Dictionary<string, string> { { "transport", transport } };
@@ -103,6 +104,15 @@ public class TemplateTests : IDisposable
     public async Task NServiceBusEndpointPersistence(string persistence)
     {
         var parameters = new Dictionary<string, string> { { "persistence", persistence } };
+        await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
+    }
+
+    [Test]
+    [TestCase("SQL", "MSSQL")]
+    [TestCase("PostgreSQL", "PostgreSQL")]
+    public async Task TransportPersistenceCombinations(string transport, string persistence)
+    {
+        var parameters = new Dictionary<string, string> { { "transport", transport }, { "persistence", persistence } };
         await VerifyAndBuild("nsbendpoint", CreateTimeoutToken(), parameters);
     }
 
