@@ -140,7 +140,7 @@
     },
     "NeedsPostgreSql": {
       "type": "computed",
-      "value": "(transport == \"PostgreSQL\" || persistence == \"PostgreSQL\")"
+      "value": "(transport != \"PostgreSQL\" && persistence == \"PostgreSQL\")"
     },
     "UsesSqlPersistence": {
       "type": "computed",

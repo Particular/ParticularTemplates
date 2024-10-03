@@ -113,7 +113,6 @@ TransportPersistenceCombinationsPostgreSQL-PostgreSQL.csproj
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Transport.PostgreSql" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="(VERSION)" />
-    <PackageReference Include="Npgsql" Version="(VERSION)" />
   </ItemGroup>
 
   <ItemGroup>

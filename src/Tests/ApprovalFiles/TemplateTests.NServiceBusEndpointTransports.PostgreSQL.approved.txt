@@ -18,7 +18,6 @@ NServiceBusEndpointTransportsPostgreSQL.csproj
     <PackageReference Include="NServiceBus" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="(VERSION)" />
     <PackageReference Include="NServiceBus.Transport.PostgreSql" Version="(VERSION)" />
-    <PackageReference Include="Npgsql" Version="(VERSION)" />
   </ItemGroup>
 
   <ItemGroup>
