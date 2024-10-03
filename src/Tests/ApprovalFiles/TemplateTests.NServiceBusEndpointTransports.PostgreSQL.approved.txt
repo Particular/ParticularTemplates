@@ -39,7 +39,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTransportsPostgreSQL");
 
-// PostgreSQL Transport
+// PostgreSQL Transport: https://docs.particular.net/transports/postgresql/
 var transport = new PostgreSqlTransport("Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;");
 var routing = endpointConfiguration.UseTransport(transport);
 
