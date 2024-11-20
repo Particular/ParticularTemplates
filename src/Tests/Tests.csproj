@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -11,6 +11,10 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Particular.Approvals" Version="0.5.0" />
     <PackageReference Include="SimpleExec" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Direct references to transitive dependencies to avoid versions with CVE">
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
 </Project>
