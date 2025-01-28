@@ -23,6 +23,10 @@
       "datatype": "choice",
       "choices": [
         {
+          "choice": "net9.0",
+          "description": "Target net9.0"
+        },
+        {
           "choice": "net8.0",
           "description": "Target net8.0"
         }
