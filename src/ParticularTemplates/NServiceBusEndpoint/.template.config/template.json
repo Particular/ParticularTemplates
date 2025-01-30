@@ -32,7 +32,7 @@
         }
       ],
       "replaces": "TARGET_FRAMEWORK",
-      "defaultValue": "net8.0"
+      "defaultValue": "net9.0"
     },
     "transport": {
       "type": "parameter",
