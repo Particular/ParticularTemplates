@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
-NServiceBusEndpointHostingDocker.csproj
+NServiceBusEndpointTargetFrameworknet9.0.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -8,7 +8,6 @@ NServiceBusEndpointHostingDocker.csproj
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
   </PropertyGroup>
 
   <!--
@@ -21,7 +20,6 @@ NServiceBusEndpointHostingDocker.csproj
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="license.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
     <None Remove="appsettings*.json" />
     <ProjectCapability Include="DynamicFileNestingEnabled" />
@@ -33,14 +31,12 @@ Program.cs
 ---------------------------------------------------------------
 using Microsoft.Extensions.Hosting;
 
-// To create a docker container, use the following command: dotnet publish /t:PublishContainer
-// See https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container?pivots=dotnet-8-0#publish-net-app for details
 var builder = Host.CreateApplicationBuilder(args);
 
 // TODO: consider moving common endpoint configuration into a shared project
 // for use by all endpoints in the system
 
-var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointHostingDocker");
+var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet9._0");
 
 // Learning Transport: https://docs.particular.net/transports/learning/
 var routing = endpointConfiguration.UseTransport(new LearningTransport());
@@ -102,7 +98,7 @@ launchSettings.json
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "NServiceBusEndpointHostingDocker": {
+    "NServiceBusEndpointTargetFrameworknet9._0": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
@@ -136,7 +132,3 @@ appsettings.json
   }
 }
 
----------------------------------------------------------------
-license.xml
----------------------------------------------------------------
-<!-- this file needs to be replaced with your license file-->
