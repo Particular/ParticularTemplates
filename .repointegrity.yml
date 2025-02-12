@@ -1,0 +1,7 @@
+ignore:
+  # Templates must have wildcards by design, also this csproj is not what is compiled
+  - test: NoWildcards
+    path: src/ParticularTemplates/NServiceBusEndpoint/ProjectName.csproj
+  # The project references are by necessity arranged logically and inside if statements
+  - test: SortPackageReferences
+    path: src/ParticularTemplates/NServiceBusEndpoint/ProjectName.csproj
