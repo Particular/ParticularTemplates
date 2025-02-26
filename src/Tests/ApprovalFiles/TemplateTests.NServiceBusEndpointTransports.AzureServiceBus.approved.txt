@@ -40,7 +40,7 @@ var builder = Host.CreateApplicationBuilder(args);
 var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTransportsAzureServiceBus");
 
 // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
-var transport = new AzureServiceBusTransport("CONNECTION_STRING");
+var transport = new AzureServiceBusTransport("CONNECTION_STRING", TopicTopology.Default);
 var routing = endpointConfiguration.UseTransport(transport);
 
 // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
