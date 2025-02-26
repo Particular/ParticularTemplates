@@ -38,7 +38,7 @@ var endpointConfiguration = new EndpointConfiguration("ProjectName");
 var routing = endpointConfiguration.UseTransport(new LearningTransport());
 #elseif (transport == "AzureServiceBus")
 // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
-var transport = new AzureServiceBusTransport("CONNECTION_STRING");
+var transport = new AzureServiceBusTransport("CONNECTION_STRING", TopicTopology.Default);
 var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "AzureStorageQueues")
 // Azure Storage Queues Transport: https://docs.particular.net/transports/azure-storage-queues/
