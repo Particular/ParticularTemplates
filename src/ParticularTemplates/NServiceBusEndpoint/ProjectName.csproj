@@ -19,7 +19,7 @@
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="5.*" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="13.*" />
     <PackageReference Condition="'$(transport)' == 'PostgreSQL'" Include="NServiceBus.Transport.PostgreSql" Version="8.*" />
-    <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="NServiceBus.RabbitMQ" Version="9.*" />
+    <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="NServiceBus.RabbitMQ" Version="10.*" />
     <PackageReference Condition="'$(transport)' == 'SQL'" Include="NServiceBus.Transport.SqlServer" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'SQS'" Include="NServiceBus.AmazonSQS" Version="7.*" />
     <PackageReference Condition="'$(persistence)' == 'AzureTable'" Include="NServiceBus.Persistence.AzureTable" Version="6.*" />
