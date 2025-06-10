@@ -25,7 +25,7 @@
     <PackageReference Condition="'$(persistence)' == 'AzureTable'" Include="NServiceBus.Persistence.AzureTable" Version="6.*" />
     <PackageReference Condition="'$(persistence)' == 'CosmosDB'" Include="NServiceBus.Persistence.CosmosDB" Version="3.*" />
     <PackageReference Condition="'$(persistence)' == 'DynamoDB'" Include="NServiceBus.Persistence.DynamoDB" Version="3.*" />
-    <PackageReference Condition="'$(persistence)' == 'MongoDB'" Include="NServiceBus.Storage.MongoDB" Version="4.*" />
+    <PackageReference Condition="'$(persistence)' == 'MongoDB'" Include="NServiceBus.Storage.MongoDB" Version="5.*" />
     <PackageReference Condition="'$(persistence)' == 'RavenDB'" Include="NServiceBus.RavenDB" Version="9.*" />
     <PackageReference Condition="'$(UsesSqlPersistence)' == 'true'" Include="NServiceBus.Persistence.Sql" Version="8.*" />
     <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="5.*" />
