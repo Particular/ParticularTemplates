@@ -13,6 +13,6 @@
 After building the project, the templates can be installed using the following:
 
 ```
-dotnet new -u ParticularTemplates
-dotnet new -i <path to project>\nugets\ParticularTemplates.<version>.nupkg
+dotnet new uninstall ParticularTemplates
+dotnet new install <path to project>\nugets\ParticularTemplates.<version>.nupkg
 ```
