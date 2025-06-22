@@ -18,5 +18,8 @@
   <ItemGroup>
     <None Include="**/*" Exclude="$(BaseOutputPath)/**;$(BaseIntermediateOutputPath)/**;ParticularTemplates.csproj" Pack="true" PackagePath="content" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="NServiceBusEndpoint\AspireAppHost\Properties\" />
+    <Folder Include="NServiceBusEndpoint\AspireServiceDefaults\Properties\" />
+  </ItemGroup>
 </Project>

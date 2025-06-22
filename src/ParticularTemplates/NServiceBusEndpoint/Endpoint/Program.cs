@@ -27,6 +27,9 @@ var builder = Host.CreateApplicationBuilder(args);
 #if (hosting == "WindowsService")
 builder.Services.AddWindowsService();
 #endif
+#if (hosting == "Aspire") 
+builder.AddServiceDefaults();
+#endif
 
 // TODO: consider moving common endpoint configuration into a shared project
 // for use by all endpoints in the system

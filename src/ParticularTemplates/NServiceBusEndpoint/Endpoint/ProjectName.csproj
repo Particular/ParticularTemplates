@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="9.*" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.*" />
+    <ProjectReference Condition="'$(hosting)' == 'Aspire'" Include="..\AspireServiceDefaults\AspireServiceDefaults.csproj" />
     <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.*" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="5.*" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="13.*" />

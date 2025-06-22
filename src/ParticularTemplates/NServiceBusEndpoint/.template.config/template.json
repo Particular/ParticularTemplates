@@ -5,6 +5,7 @@
     "Cloud",
     "Console",
     "Service",
+    "Aspire",
     "Web"
   ],
   "name": "NServiceBus Endpoint",
@@ -14,7 +15,7 @@
     "language": "C#",
     "type": "project"
   },
-  "preferNameDirectory": true,
+  "preferNameDirectory": false,
   "sourceName": "ProjectName",
   "symbols": {
     "framework": {
@@ -134,6 +135,10 @@
         {
           "choice": "Docker",
           "description": "Docker Container"
+        },
+        {
+          "choice": "Aspire",
+          "description": ".NET Aspire orchestration"
         }
       ],
       "defaultValue": "ConsoleApp"
@@ -159,13 +164,33 @@
           "exclude": [
             "license.xml"
           ]
-        }
+        },
+        {
+          "condition": "(hosting != 'Aspire')",
+          "exclude": [
+            "AspireServiceDefaults/**",
+            "AspireAppHost/**"
+          ]
+        },
+        {
+          "condition": "(hosting == 'Aspire')",
+          "exclude": [],
+          "rename": {}
+       }
       ]
     }
   ],
   "primaryOutputs": [
     {
       "path": "ProjectName.csproj"
+    },
+    {
+      "path": "/AspireServiceDefaults/AspireServiceDefaults.csproj",
+      "condition": "(hosting == \"Aspire\")"
+    },
+    {
+      "path": "/AspireAppHost/AspireAppHost.csproj",
+      "condition": "(hosting == \"Aspire\")"
     }
   ],
   "postActions": [
@@ -173,6 +198,19 @@
       "description": "Restore NuGet packages required by this project.",
       "manualInstructions": [],
       "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    },
+    {
+      "description": "Create a solution and add all projects.",
+      "manualInstructions": [],
+      "actionId": "196092FF-F1BD-4E08-914A-BAF0BD4A3376",
+      "args": {
+        "executable": "cmd",
+        "args": [
+          "/c",
+           "dotnet new sln -n \"%SAFE_PROJECT_NAME%\" && dotnet sln \"%SAFE_PROJECT_NAME%.sln\" add \"Endpoint\\ProjectName.csproj\" AspireServiceDefaults\\AspireServiceDefaults.csproj AspireAppHost\\AspireAppHost.csproj"
+        ]
+      },
       "continueOnError": true
     }
   ]
