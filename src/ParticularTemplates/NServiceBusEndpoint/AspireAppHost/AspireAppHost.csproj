@@ -15,6 +15,8 @@
     <ProjectReference Include="..\AspireServiceDefaults\AspireServiceDefaults.csproj" IsAspireProjectResource="false"  />
     <ProjectReference Include="..\Endpoint\ProjectName.csproj" />
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
+    <PackageReference Condition="'$(transport)' == 'RabbitMQ'" Include="Aspire.Hosting.RabbitMQ" Version="9.*" />
+    <PackageReference Condition="'$(persistence)' == 'PostgreSQL'" Include="Aspire.Hosting.PostgreSQL" Version="9.*" />
   </ItemGroup>
 
 </Project>
