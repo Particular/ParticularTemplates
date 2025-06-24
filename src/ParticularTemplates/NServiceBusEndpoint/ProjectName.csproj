@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="10.*-*" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="4.*-*" />
-    <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.*" />
+    <PackageReference Condition="'$(hosting)' == 'WindowsService'" Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.*-*" />
     <PackageReference Condition="'$(transport)' == 'AzureServiceBus'" Include="NServiceBus.Transport.AzureServiceBus" Version="6.*-*" />
     <PackageReference Condition="'$(transport)' == 'AzureStorageQueues'" Include="NServiceBus.Transport.AzureStorageQueues" Version="14.*-*" />
     <PackageReference Condition="'$(transport)' == 'PostgreSQL'" Include="NServiceBus.Transport.PostgreSql" Version="9.*-*" />
