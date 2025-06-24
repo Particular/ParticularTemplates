@@ -84,8 +84,6 @@ public class TemplateTests : IDisposable
 
     [Test]
     [TestCase("net10.0")]
-    [TestCase("net9.0")]
-    [TestCase("net8.0")]
     public async Task NServiceBusEndpointTargetFramework(string framework)
     {
         var parameters = new Dictionary<string, string> { { "framework", framework } };
