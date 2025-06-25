@@ -5,7 +5,6 @@
     <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <EnableSdkContainerSupport Condition="'$(hosting)' == 'Docker'">true</EnableSdkContainerSupport>
   </PropertyGroup>
 
   <!--
