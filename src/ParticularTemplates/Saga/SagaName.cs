@@ -2,10 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NamespaceName;
 
-internal class SagaName(ILogger<SagaName> log) : Saga<SagaNameData>,
-    IAmStartedByMessages<MessageType1>,
-    IAmStartedByMessages<MessageType2>,
-    IHandleTimeouts<MyCustomTimeout>
+internal class SagaName(ILogger<SagaName> log) : Saga<SagaNameData>, IAmStartedByMessages<MessageType1>, IAmStartedByMessages<MessageType2>, IHandleTimeouts<MyCustomTimeout>
 {
     protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaNameData> mapper)
     {

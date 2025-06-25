@@ -5,10 +5,9 @@ NServiceBusEndpointHostingDocker.csproj
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
   </PropertyGroup>
 
   <!--
@@ -34,7 +33,7 @@ Program.cs
 using Microsoft.Extensions.Hosting;
 
 // To create a docker container, use the following command: dotnet publish /t:PublishContainer
-// See https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container?pivots=dotnet-8-0#publish-net-app for details
+// See https://learn.microsoft.com/en-us/dotnet/core/containers/sdk-publish#publish-net-app for details
 var builder = Host.CreateApplicationBuilder(args);
 
 // TODO: consider moving common endpoint configuration into a shared project
@@ -43,14 +42,15 @@ var builder = Host.CreateApplicationBuilder(args);
 var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointHostingDocker");
 
 // Learning Transport: https://docs.particular.net/transports/learning/
-var routing = endpointConfiguration.UseTransport(new LearningTransport());
+var transport = new LearningTransport();
+var routing = endpointConfiguration.UseTransport(transport);
 
 // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
 // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
 // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 // Learning Persistence: https://docs.particular.net/persistence/learning/
-endpointConfiguration.UsePersistence<LearningPersistence>();
+var persistence = endpointConfiguration.UsePersistence<LearningPersistence>();
 
 // Message serialization
 endpointConfiguration.UseSerialization<SystemJsonSerializer>();

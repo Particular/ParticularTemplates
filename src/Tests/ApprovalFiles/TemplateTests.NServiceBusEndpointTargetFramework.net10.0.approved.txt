@@ -1,11 +1,11 @@
 ---------------------------------------------------------------
-NServiceBusEndpointTargetFrameworknet9.0.csproj
+NServiceBusEndpointTargetFrameworknet10.0.csproj
 ---------------------------------------------------------------
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -36,17 +36,18 @@ var builder = Host.CreateApplicationBuilder(args);
 // TODO: consider moving common endpoint configuration into a shared project
 // for use by all endpoints in the system
 
-var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet9._0");
+var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTargetFrameworknet10._0");
 
 // Learning Transport: https://docs.particular.net/transports/learning/
-var routing = endpointConfiguration.UseTransport(new LearningTransport());
+var transport = new LearningTransport();
+var routing = endpointConfiguration.UseTransport(transport);
 
 // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
 // routing.RouteToEndpoint(typeof(MessageType), "DestinationEndpointForType");
 // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 // Learning Persistence: https://docs.particular.net/persistence/learning/
-endpointConfiguration.UsePersistence<LearningPersistence>();
+var persistence = endpointConfiguration.UsePersistence<LearningPersistence>();
 
 // Message serialization
 endpointConfiguration.UseSerialization<SystemJsonSerializer>();
@@ -98,7 +99,7 @@ launchSettings.json
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "NServiceBusEndpointTargetFrameworknet9._0": {
+    "NServiceBusEndpointTargetFrameworknet10._0": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
