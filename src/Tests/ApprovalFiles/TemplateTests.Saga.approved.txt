@@ -68,10 +68,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Saga;
 
-internal class ShippingPolicy(ILogger<ShippingPolicy> log) : Saga<ShippingPolicyData>,
-    IAmStartedByMessages<OrderPlaced>,
-    IAmStartedByMessages<OrderBilled>,
-    IHandleTimeouts<MyCustomTimeout>
+internal class ShippingPolicy(ILogger<ShippingPolicy> log) : Saga<ShippingPolicyData>, IAmStartedByMessages<OrderPlaced>, IAmStartedByMessages<OrderBilled>, IHandleTimeouts<MyCustomTimeout>
 {
     protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ShippingPolicyData> mapper)
     {

@@ -48,7 +48,7 @@ var routing = endpointConfiguration.UseTransport(transport);
 // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 // Learning Persistence: https://docs.particular.net/persistence/learning/
-endpointConfiguration.UsePersistence<LearningPersistence>();
+var persistence = endpointConfiguration.UsePersistence<LearningPersistence>();
 
 // Message serialization
 endpointConfiguration.UseSerialization<SystemJsonSerializer>();

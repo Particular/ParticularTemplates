@@ -40,8 +40,7 @@ var builder = Host.CreateApplicationBuilder(args);
 var endpointConfiguration = new EndpointConfiguration("NServiceBusEndpointTransportsRabbitMQ");
 
 // RabbitMQ Transport: https://docs.particular.net/transports/rabbitmq/
-var rabbitMqConnectionString = "CONNECTION_STRING";
-var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), rabbitMqConnectionString);
+var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), "CONNECTION_STRING");
 var routing = endpointConfiguration.UseTransport(transport);
 
 // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
@@ -49,7 +48,7 @@ var routing = endpointConfiguration.UseTransport(transport);
 // routing.RouteToEndpoint(typeof(MessageType).Assembly, "DestinationForAllCommandsInAssembly");
 
 // Learning Persistence: https://docs.particular.net/persistence/learning/
-endpointConfiguration.UsePersistence<LearningPersistence>();
+var persistence = endpointConfiguration.UsePersistence<LearningPersistence>();
 
 // Message serialization
 endpointConfiguration.UseSerialization<SystemJsonSerializer>();
