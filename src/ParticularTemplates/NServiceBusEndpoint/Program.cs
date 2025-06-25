@@ -35,7 +35,8 @@ var endpointConfiguration = new EndpointConfiguration("ProjectName");
 
 #if (transport == "LearningTransport")
 // Learning Transport: https://docs.particular.net/transports/learning/
-var routing = endpointConfiguration.UseTransport(new LearningTransport());
+var transport = new LearningTransport();
+var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "AzureServiceBus")
 // Azure Service Bus Transport: https://docs.particular.net/transports/azure-service-bus/
 var transport = new AzureServiceBusTransport("CONNECTION_STRING", TopicTopology.Default);
@@ -50,8 +51,7 @@ var transport = new SqsTransport();
 var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "RabbitMQ")
 // RabbitMQ Transport: https://docs.particular.net/transports/rabbitmq/
-var rabbitMqConnectionString = "CONNECTION_STRING";
-var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), rabbitMqConnectionString);
+var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Quorum), "CONNECTION_STRING");
 var routing = endpointConfiguration.UseTransport(transport);
 #elseif (transport == "SQL")
 // SQL Server Transport: https://docs.particular.net/transports/sql/
@@ -69,7 +69,7 @@ var routing = endpointConfiguration.UseTransport(transport);
 
 #if (persistence == "LearningPersistence")
 // Learning Persistence: https://docs.particular.net/persistence/learning/
-endpointConfiguration.UsePersistence<LearningPersistence>();
+var persistence = endpointConfiguration.UsePersistence<LearningPersistence>();
 #elseif (persistence == "MSSQL")
 // SQL Persistence: https://docs.particular.net/persistence/sql/
 // Microsoft SQL Server dialect: https://docs.particular.net/persistence/sql/dialect-mssql
