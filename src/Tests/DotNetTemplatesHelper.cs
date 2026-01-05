@@ -14,7 +14,7 @@ public static class DotNetTemplatesHelper
 
     public static async Task<(string StandardOutput, string StandardError)> ExecuteNew(string parameters, CancellationToken cancellationToken = default)
     {
-        var (stdout, stderr) = await Command.ReadAsync(dotNetCli, "new " + parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var (stdout, stderr) = await Command.ReadAsync(dotNetCli, "new " + parameters, ct: cancellationToken).ConfigureAwait(false);
 
         Console.WriteLine(stdout);
         if (!string.IsNullOrWhiteSpace(stderr))
@@ -65,12 +65,12 @@ public static class DotNetTemplatesHelper
     public static async Task Build(string projectDirectory, CancellationToken cancellationToken = default)
     {
         var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
-        _ = await Command.ReadAsync(dotNetCli, $" build {projectFile}", cancellationToken: cancellationToken).ConfigureAwait(false);
+        _ = await Command.ReadAsync(dotNetCli, $" build {projectFile}", ct: cancellationToken).ConfigureAwait(false);
     }
 
     public static async Task Restore(string projectDirectory, CancellationToken cancellationToken = default)
     {
         var projectFile = Directory.EnumerateFiles(projectDirectory, "*.csproj").Single();
-        _ = await Command.ReadAsync(dotNetCli, $" restore {projectFile}", cancellationToken: cancellationToken).ConfigureAwait(false);
+        _ = await Command.ReadAsync(dotNetCli, $" restore {projectFile}", ct: cancellationToken).ConfigureAwait(false);
     }
 }
