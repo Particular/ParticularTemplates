@@ -62,6 +62,10 @@
         {
           "choice": "PostgreSQL",
           "description": "PostgreSQL"
+        },
+        {
+          "choice": "IBMMQ",
+          "description": "IBM MQ"
         }
       ],
       "defaultValue": "LearningTransport"
