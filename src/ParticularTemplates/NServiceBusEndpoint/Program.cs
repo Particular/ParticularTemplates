@@ -61,6 +61,18 @@ var routing = endpointConfiguration.UseTransport(transport);
 // PostgreSQL Transport: https://docs.particular.net/transports/postgresql/
 var transport = new PostgreSqlTransport("Server=localhost;Port=5432;Database=dbname;User Id=user;Password=pass;");
 var routing = endpointConfiguration.UseTransport(transport);
+#elseif (transport == "IBMMQ")
+// IBM MQ Transport: https://docs.particular.net/transports/ibmmq/
+var transport = new IBMMQTransport
+{
+    Host = "localhost",
+    Port = 1414,
+    Channel = "DEV.ADMIN.SVRCONN",
+    QueueManagerName = "QM1",
+    User = "admin",
+    Password = "passw0rd"
+};
+var routing = endpointConfiguration.UseTransport(transport);
 #endif
 
 // Define routing for commands: https://docs.particular.net/nservicebus/messaging/routing#command-routing
