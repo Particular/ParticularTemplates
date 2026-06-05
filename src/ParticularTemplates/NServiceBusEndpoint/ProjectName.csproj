@@ -31,7 +31,7 @@
     <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="6.*" />
     <PackageReference Condition="'$(NeedsPostgreSql)' == 'true'" Include="Npgsql" Version="10.*" />
     <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="9.*" />
-    <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="23.*" />
+    <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="23.2*" />
   </ItemGroup>
 
   <ItemGroup>
