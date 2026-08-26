@@ -28,7 +28,7 @@
     <PackageReference Condition="'$(persistence)' == 'MongoDB'" Include="NServiceBus.Storage.MongoDB" Version="7.*" />
     <PackageReference Condition="'$(persistence)' == 'RavenDB'" Include="NServiceBus.RavenDB" Version="11.*" />
     <PackageReference Condition="'$(UsesSqlPersistence)' == 'true'" Include="NServiceBus.Persistence.Sql" Version="9.*" />
-    <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="6.*" />
+    <PackageReference Condition="'$(NeedsSqlClient)' == 'true'" Include="Microsoft.Data.SqlClient" Version="7.*" />
     <PackageReference Condition="'$(NeedsPostgreSql)' == 'true'" Include="Npgsql" Version="10.*" />
     <PackageReference Condition="'$(persistence)' == 'MySQL'" Include="MySql.Data" Version="9.*" />
     <PackageReference Condition="'$(persistence)' == 'Oracle'" Include="Oracle.ManagedDataAccess.Core" Version="23.*" />
